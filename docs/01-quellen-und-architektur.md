@@ -22,8 +22,21 @@ mit `403` abgewiesen (u. a. `api.congress.gov`, `www.senate.gov`, `feeds.npr.org
 Nur die eingebaute Websuche funktioniert – und die lieferte für „diese Woche im Kongress“ nur veraltete
 Treffer. **Websuche allein reicht also nicht**, die Agenten brauchen direkten Zugriff auf Feeds und APIs.
 
-Da die tägliche Aufgabe in derselben Umgebung läuft, muss der Netzwerkzugang erweitert werden
-(Umgebungseinstellungen → Network access → breitere Stufe oder die Domains unten als „Allowed domains“).
+Da die tägliche Aufgabe in derselben Umgebung läuft, muss der Netzwerkzugang erweitert werden.
+Empfehlung: Stufe **Full** – die Agenten folgen Links zu vielen wechselnden Nachrichtenseiten, eine feste
+Liste würde ständig Lücken reißen. Alternative: **Custom** mit der Liste unten.
+
+So geht es (am zuverlässigsten im Browser am Windows-Laptop, nicht in der iPhone-App):
+1. claude.ai/code öffnen und diese Sitzung („US-Kongress Dashboard“) anklicken.
+2. Oben auf den kleinen Pfeil (⌄) direkt hinter dem Sitzungstitel klicken → **Edit cloud environment**.
+   Alternativ: Neue Sitzung → unter dem Eingabefeld das erste Bedienelement (Umgebung „Andreas Cloud“)
+   → mit der Maus über die Zeile fahren → Zahnrad-Symbol rechts.
+3. Im Dialog **Network access** auf **Full** stellen (oder **Custom** + Domains) → speichern.
+4. Wirkt in laufenden Sitzungen nach etwa einer Minute.
+
+Den Congress.gov-Key am besten als **Network secret** im selben Dialog hinterlegen
+(Host `api.congress.gov`, Header-Name `X-Api-Key`, Präfix leeren, Wert = Key). Dann sehen ihn
+weder Chat noch Repository.
 Anleitung: https://code.claude.com/docs/en/cloud-environments#network-access
 
 Danach führt `scripts/check_sources.sh` den Praxistest erneut aus.
@@ -108,7 +121,7 @@ Viele Online-Tutorials nutzen diese noch – bewusst ausgeschlossen.
 | Politico (frei) | RSS | hoch | Pro-Inhalte nicht zugänglich |
 | Punchbowl News | Paywall | hoch | nur Schlagzeilen, wenn überhaupt |
 
-Offene Frage: Mit „NP News“ war vermutlich **AP News** gemeint – oder eine andere Seite?
+Geklärt: Gemeint war **AP News**.
 
 ### Stufe 3 – Fachmedien für Kontext (vor allem Außen- & Sicherheitspolitik)
 
@@ -178,6 +191,11 @@ Realistisch: **1–3 ausgewählte Clips pro Tag mit Zeitmarke**, Einstieg genau 
    tägliche Aufgabe verbraucht spürbar Kontingent. Wir starten schlank und messen.
 4. **Endlosschleifen vermeiden.** Gegenagenten dürfen nur eine Runde widersprechen; danach entscheidet
    der Schiedsrichter. Sonst diskutieren Agenten ohne Ergebnis.
+5. **Modell-Vielfalt.** Wo möglich laufen Agent und Gegenagent auf *unterschiedlichen* Claude-Modellen
+   (z. B. großes Modell bewertet, anderes Modell greift an). Das verringert gemeinsame blinde Flecken
+   zusätzlich zu den getrennten Informationen.
+6. **Nachvollziehbarkeit.** Jeder Dissens (was Gegenagent B beanstandet hat, wie der Schiedsrichter
+   entschieden hat) wird im Briefing-Datensatz gespeichert und ist im Dashboard aufklappbar.
 
 ---
 
@@ -200,6 +218,6 @@ Jeder Eintrag zeigt Lesezeit, Wichtigkeitsstufe und Prüfstatus (verified / mult
 
 - [ ] Netzwerkzugang der Umgebung erweitern (Blocker)
 - [ ] Kostenlosen Congress.gov-API-Key beantragen (api.data.gov/signup) und als Secret hinterlegen
-- [ ] Klären: Was ist „NP News“?
+- [x] Klären: Was ist „NP News“? → AP News
 - [ ] Nach Freigabe: `scripts/check_sources.sh` laufen lassen, Katalog mit echten Ergebnissen aktualisieren
 - [ ] Weiter mit Schritt 2: Design
