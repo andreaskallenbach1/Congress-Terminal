@@ -55,7 +55,7 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 | 1 | Quellen und Agenten-Architektur | **abgeschlossen** (66 Quellen getestet, Architektur v2 freigegeben) |
 | 2 | Design des Dashboards: Aufbau, Optik, Interaktion | **abgeschlossen** (Runde 6 „Federal Program“ freigegeben, 17.10.2026) |
 | 3 | Kritische Prüfung in mehreren Iterationen (Design, Architektur, Risiken) | **abgeschlossen** (Prüfdokument mit Nachtrag „Knopfdruck“, 17.10.2026) |
-| 4 | Bau: Web-App, Pipeline, Skills, Routine mit Knopf, GitHub Pages | **als Nächstes** |
+| 4 | Bau: Web-App, Pipeline, Skills, Routine mit Knopf, GitHub Pages | **läuft** (Start 17.10.2026, Freigabe Gesamtbild v3 durch Andreas) |
 | 5 | Betrieb: erste Woche messen (Qualität, Verbrauch), nachschärfen | offen |
 
 Keine Phase überspringen. Vor Phase 4 muss Andreas Design und Prüfergebnis freigegeben haben.
@@ -214,7 +214,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
   für Rubrik, Faktenprüfung, Story-Format), `dataviz` (Diagramme), `deep-research` (Vorbild für Sammler).
   Keine Skills aus ungeprüften Sammelportalen.
 - **Verbrauch und Token-Sparen (Pro-Abo):** 25 Rollen. Hebel: Code statt KI für Fleißarbeit · Modell je Aufgabe (klein: Türsteher, Faktenkarten, Sammler, Verfahren · mittel: Story-Builder, Relevanz, Gegenagent, Historiker, Prüfer B, Neutralität · groß: Schiedsrichter, Redakteure, Prüfer A, Chefredaktion) · Türsteher · Faktenkarten · nur das Neue · Regeln als Skills. **Keine** gebündelte Prüfung: jede Kernaussage wird einzeln geprüft (Andreas' Entscheidung).
-- **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe (Stimme offen: Browser-Stimmen und Kokoro am 17.10.2026 getestet und von Andreas als zu künstlich abgelehnt; Kandidaten OpenAI gpt-4o-mini-tts, Google Chirp 3 HD, ElevenLabs – Audio per API-Schlüssel in der GitHub Action, keine Claude-Tokens); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
+- **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe (Stimme, Stand 17.10.2026: Favoriten **Google Chirp 3 HD „Iapetus“ und „Algenib“**, en-US; im Gratiskontingent von 1 Mio. Zeichen/Monat, Code stoppt bei 950.000 Zeichen, Erzeugung per API-Schlüssel in der GitHub Action, keine Claude-Tokens. Browser-Stimmen und Kokoro getestet und abgelehnt. Umsetzung später, blockiert den Bau nicht); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
 - **Konnektoren (Entscheidung 17.10.2026, getestet 17.10.2026):** Andreas verbindet sie unter claude.ai/customize/connectors; wirksam erst in einer neu gestarteten Sitzung bzw. im Lauf, wenn sie in der Routine ausgewählt sind. Praxistest:
   | Konnektor | Test | Rolle im Lauf |
   |---|---|---|
