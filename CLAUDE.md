@@ -230,3 +230,5 @@ Ein Arbeitsschritt ist erst fertig, wenn:
 - Washington Post war beim Test nicht erreichbar (Serverfehler) – erneut prüfen
 - Genaue Uhrzeit des Morgenlaufs mit Andreas festlegen
 - Verbrauch eines Laufs im Abo messen
+- Federal Register sperrte am 17.10.2026 nach mehreren Volltext-Abrufen diese IP („Your IP address has been blocked“): Abrufe drosseln, Volltexte nur einzeln und zwischengespeichert holen
+- Designrichtung: „Federal Program“ gewählt (17.10.2026); Kopf/Emblem-Variante noch offen
