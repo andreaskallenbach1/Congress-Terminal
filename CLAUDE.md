@@ -250,6 +250,7 @@ Ein Arbeitsschritt ist erst fertig, wenn:
 
 - YouTube-Kanäle der Ausschüsse (SFRC, HFAC, SASC, HASC) finden; bis dahin Videos über Ausschuss-Websites
 - Washington Post war beim Test nicht erreichbar (Serverfehler) – erneut prüfen
-- Verbrauch eines Laufs im Abo messen
+- Verbrauch eines Laufs im Abo messen – erster Lauf 17.10.2026: Pro-Sitzungslimit in Stufe 4 erreicht (siehe `docs/05-erster-lauf.md`); Entscheidung über Hebel offen
+- Eigener kostenloser FEC-API-Schlüssel (api.data.gov) nötig; DEMO_KEY reicht nicht
 - Federal Register sperrte am 17.10.2026 nach mehreren Volltext-Abrufen diese IP („Your IP address has been blocked“): Abrufe drosseln, Volltexte nur einzeln und zwischengespeichert holen
 - Design (17.10.2026): „Federal Program“; Kopf = rundes Siegel mit Plenarsaal-Emblem neben zentriertem Caslon-Namen „The Congress Terminal“ (`design/brand/`); Reihenfolge unter dem Leitartikel: Floor & Committees, Midterms (mit Karte), Foreign Policy Desk (mit Karte). Endgültige Freigabe durch Andreas steht aus.

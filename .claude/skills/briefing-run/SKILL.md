@@ -112,6 +112,18 @@ Both must pass. If not: one correction (R5), then both again. If it still fails,
 and stop (never publish a half-checked edition). Then commit only `briefings/<run-id>.json` to `main`
 with the message `Edition <run-id>` and push. The GitHub Action publishes the site.
 
+## Lessons from the first run (17.10.2026)
+
+- Start writers **one or two at a time**, not all four at once: the Pro session limit was hit with four large writers in parallel.
+- After the writers: `python3 pipeline/merge_drafts.py <run-id>` (joins drafts, restores quote capitalisation); after the
+  checkers: `python3 pipeline/apply_verdicts.py <run-id>` (writes checkA/checkB, lists R3 revisions). Fact-checker
+  instructions: copy `run/2026-10-17-daily/checker-brief.md` as the template; writer instructions: `writer-brief.md`.
+- Checker B gets only the core claims' text (blind file), never the quotes or A's verdicts.
+- After R3 the fixed rule applies strictly: a core claim not confirmed by both → story dropped (may appear as an
+  attributed one-line "notable" item). Never re-weight a claim to save a story.
+- Forecasters (Cook, Sabato, Inside Elections) are primary only for their own ratings, and the claim must name them.
+- Federal Register full texts are blocked from the session IP: use API metadata only, never retry. FEC needs its own key.
+
 ## Budget
 
 Pro subscription: keep subagent prompts short and pass file paths instead of pasting data. Small models for
