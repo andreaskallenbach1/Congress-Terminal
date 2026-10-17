@@ -39,7 +39,7 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 | Textumfang | Jede Story ausführlich, ca. 500–800 Wörter (Andreas' Entscheidung vom 17.10.2026) |
 | Bilder | Gemeinfreie Porträts der Abgeordneten, gemeinfreie Kapitol-/Kongressfotos (Library of Congress, Architect of the Capitol, Wikimedia Commons), Unsplash über Konnektor; eigenes Logo, nie das offizielle Siegel; keine Agenturfotos |
 | Hosting | Öffentliches Repository `andreaskallenbach1/Congress-Terminal` + GitHub Pages (wird eingeschaltet, sobald die App existiert) |
-| Automatik | Geplante Claude-Aufgabe (Variante A, über Andreas' Claude-Abo), täglich morgens; zusätzlich ein Sonntagslauf |
+| Automatik | **Auf Knopfdruck** (Entscheidung 17.10.2026): Knopf „Update now“ in der Web-App → GitHub `workflow_dispatch` → GitHub Action ruft den API-Trigger der Claude-Routine auf (Start-Token als GitHub-Secret). Ersatzweg: „Run now“ auf claude.ai. Kein fester Morgenlauf. Sonntagsausgabe mit eigenem Knopf. Läuft über Andreas' Claude-Abo |
 | Netzwerk | Cloud-Umgebung „Andreas Cloud“, Netzwerkzugang **Full** |
 | Congress.gov-Key | Als **Network secret** hinterlegt (Header `X-Api-Key` für `api.congress.gov`). Nie in Code, URLs, Logs oder Chat schreiben. Requests einfach ohne Key senden – die Umgebung hängt ihn an. |
 | Inhaltssprache | Englisch |
@@ -53,8 +53,8 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 |---|---|---|
 | 1 | Quellen und Agenten-Architektur | **abgeschlossen** (66 Quellen getestet, Architektur v2 freigegeben) |
 | 2 | Design des Dashboards: Aufbau, Optik, Interaktion | **abgeschlossen** (Runde 6 „Federal Program“ freigegeben, 17.10.2026) |
-| 3 | Kritische Prüfung in mehreren Iterationen (Design, Architektur, Risiken) | **zur Freigabe** (Prüfdokument, siehe Abschnitt 10) |
-| 4 | Bau: Web-App, Pipeline, Skills, geplante Aufgabe, GitHub Pages | offen |
+| 3 | Kritische Prüfung in mehreren Iterationen (Design, Architektur, Risiken) | **abgeschlossen** (Prüfdokument mit Nachtrag „Knopfdruck“, 17.10.2026) |
+| 4 | Bau: Web-App, Pipeline, Skills, Routine mit Knopf, GitHub Pages | **als Nächstes** |
 | 5 | Betrieb: erste Woche messen (Qualität, Verbrauch), nachschärfen | offen |
 
 Keine Phase überspringen. Vor Phase 4 muss Andreas Design und Prüfergebnis freigegeben haben.
@@ -199,7 +199,8 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
 
 - **Web-App:** statische PWA, gehostet über GitHub Pages aus diesem Repository; installierbar über Edge/Chrome.
 - **Daten:** Briefings als Dateien im Repository (ein Briefing pro Tag + Archiv).
-- **Geplante Läufe** pushen auf `claude/`-Branches; die Veröffentlichung muss genau damit funktionieren.
+- **Läufe** schreiben Briefings fest auf `main`; eine GitHub Action baut und veröffentlicht die Seite. Der Routine-Endpunkt erlaubt keine Browser-Aufrufe (CORS-Vorabfrage → 405), daher der Weg über GitHub.
+- **Phase-3-Maßnahmen (17.10.2026):** 40 Minuten sind Obergrenze; nur GitHub-Konnektor im Lauf; Statusdatei je Lauf; Kernaussagen (8–12 je Story) doppelt prüfen; Abrufe drosseln und zwischenspeichern; stufenweise bauen und testen, Betrieb mit voller Pipeline.
 - **Git:** Entwicklung auf dem zugewiesenen `claude/…`-Branch; keine Pull Requests ohne Andreas' Auftrag.
 - **Quellentest:** `./scripts/check_sources.sh` vor Änderungen an der Pipeline und bei Verdacht auf Ausfälle.
 - **Design-Skills im Repository** (`.claude/skills/`, geprüft, Lizenzen beigelegt): `impeccable` (Apache-2.0, Design-Prozess und Detektor gegen KI-Standardoptik), `frontend-design` (Anthropic), `ui-ux-pro-max` (MIT, Paletten- und Schriftdatenbank). Produktwahrheit für das Design: `PRODUCT.md`.
@@ -231,7 +232,6 @@ Ein Arbeitsschritt ist erst fertig, wenn:
 
 - YouTube-Kanäle der Ausschüsse (SFRC, HFAC, SASC, HASC) finden; bis dahin Videos über Ausschuss-Websites
 - Washington Post war beim Test nicht erreichbar (Serverfehler) – erneut prüfen
-- Genaue Uhrzeit des Morgenlaufs mit Andreas festlegen
 - Verbrauch eines Laufs im Abo messen
 - Federal Register sperrte am 17.10.2026 nach mehreren Volltext-Abrufen diese IP („Your IP address has been blocked“): Abrufe drosseln, Volltexte nur einzeln und zwischengespeichert holen
 - Design (17.10.2026): „Federal Program“; Kopf = rundes Siegel mit Plenarsaal-Emblem neben zentriertem Caslon-Namen „The Congress Terminal“ (`design/brand/`); Reihenfolge unter dem Leitartikel: Floor & Committees, Midterms (mit Karte), Foreign Policy Desk (mit Karte). Endgültige Freigabe durch Andreas steht aus.
