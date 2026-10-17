@@ -52,8 +52,8 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 | Phase | Inhalt | Stand |
 |---|---|---|
 | 1 | Quellen und Agenten-Architektur | **abgeschlossen** (66 Quellen getestet, Architektur v2 freigegeben) |
-| 2 | Design des Dashboards: Aufbau, Optik, Interaktion | **als Nächstes** |
-| 3 | Kritische Prüfung in mehreren Iterationen (Design, Architektur, Risiken) | offen |
+| 2 | Design des Dashboards: Aufbau, Optik, Interaktion | **abgeschlossen** (Runde 6 „Federal Program“ freigegeben, 17.10.2026) |
+| 3 | Kritische Prüfung in mehreren Iterationen (Design, Architektur, Risiken) | **zur Freigabe** (Prüfdokument, siehe Abschnitt 10) |
 | 4 | Bau: Web-App, Pipeline, Skills, geplante Aufgabe, GitHub Pages | offen |
 | 5 | Betrieb: erste Woche messen (Qualität, Verbrauch), nachschärfen | offen |
 
@@ -212,6 +212,8 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
 
 ## 10. Projektdokumente
 
+- Design-Leinwand (Runden 1–6, maßgeblich: Runde 6 „Federal Program, Feinschliff“ und „Sources“): https://claude.ai/artifact/YWnrQiqgwwCvrWXq7vCYh9
+- Phase 3 – Kritische Prüfung (Befunde, Risikomatrix, Maßnahmen): https://claude.ai/code/artifact/1d03596c-3b3d-4af4-aedb-016de20be5c1
 - Projektbild v2 (aktuell, mit Schemata, Quellenstatus, Feintuning): https://claude.ai/code/artifact/aceb575b-e2b3-4556-8ca1-9444a4d9e085
 - Architektur & Feintuning v1 (Entscheidungsgrundlage): https://claude.ai/code/artifact/aa180f36-b7f0-473c-9946-088917b173ef
 - `docs/01-quellen-und-architektur.md` – erster Quellenkatalog (teilweise überholt durch Projektbild v2)
