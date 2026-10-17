@@ -36,7 +36,8 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 |---|---|
 | Form | Installierbare Web-App (PWA), zuerst Windows (Edge/Chrome), Handy später |
 | Technik | Astro (statische Seiten), gehostet über GitHub Pages |
-| Textumfang | Jede Story ausführlich, ca. 500–800 Wörter (Andreas' Entscheidung vom 17.10.2026) |
+| Textumfang | Gestaffelt (17.10.2026): Leitartikel 1.000–1.500 Wörter · Top Story/Foreign Policy 600–900 · kleinere Meldung 300–500 · aufklappbarer Background ohne Grenze (zählt nicht zur Lesezeit) |
+| Abo | Claude **Pro** → Token-Sparmaßnahmen sind Pflicht (Abschnitt 9) |
 | Bilder | Gemeinfreie Porträts der Abgeordneten, gemeinfreie Kapitol-/Kongressfotos (Library of Congress, Architect of the Capitol, Wikimedia Commons), Unsplash über Konnektor; eigenes Logo, nie das offizielle Siegel; keine Agenturfotos |
 | Hosting | Öffentliches Repository `andreaskallenbach1/Congress-Terminal` + GitHub Pages (wird eingeschaltet, sobald die App existiert) |
 | Automatik | **Auf Knopfdruck** (Entscheidung 17.10.2026): Knopf „Update now“ in der Web-App → GitHub `workflow_dispatch` → GitHub Action ruft den API-Trigger der Claude-Routine auf (Start-Token als GitHub-Secret). Ersatzweg: „Run now“ auf claude.ai. Kein fester Morgenlauf. Zweiter Knopf „Weekly edition“ (Rückblick über die letzten 7 Tage + Deep-Dive), an jedem Tag nutzbar. Beim Öffnen bleibt die letzte Ausgabe sichtbar, mit Hinweis, wie alt sie ist; während eines Laufs Fortschritt in 6 Stufen (Emblem füllt sich), danach Hinweis „neue Ausgabe bereit“. Knöpfe im rechten Teil des Kopfs. Läuft über Andreas' Claude-Abo |
@@ -149,12 +150,15 @@ Schema: Projektbild v2. Stufen:
 | Stufe | Wer | Aufgabe |
 |---|---|---|
 | 0 Vorbereitung | Code | Feeds und APIs laden, Vortags-Briefing, Watchlist, Feedback-Issues; Vorfilter auf Kongressbezug |
-| 1 Sammeln | 7 Agenten parallel | Floor & Votes · Legislation · Committees · Foreign Policy · Midterms · News-Scan · Video-Scout; jeder mit präzisem Auftrag (Ziel, Ausgabeformat, Quellen, Grenzen) |
+| 0 Türsteher | kleines Modell | Sortiert Meldungen ohne Kongress- oder Machtbezug früh aus |
+| 1 Sammeln | 8 Agenten parallel | Floor & Votes · Legislation · Committees · Foreign Policy · Midterms · News-Scan · Video-Scout · **Executive & Courts** (Weißes Haus, Ministerien, Gerichte – wenn Kongressbezug oder sehr bedeutend); jeder mit präzisem Auftrag |
+| 1 Faktenkarten | kleines Modell | Lange Quellen einmal in Karten zerlegen (Aussage, wörtliches Zitat, Link); spätere Agenten arbeiten nur damit |
 | 2 Bündeln | Code + Story-Builder | Dubletten entfernen, Storys bilden, mit Vortag und Watchlist verknüpfen |
 | 3a Relevanz | Relevanz-Agent | Rangliste nach Rubrik (5.2) mit Begründung |
 | 3b Gegenrelevanz | Gegenagent | Greift die Auswahl an, sucht fehlende Storys – in einem **anderen Quellenpool** als 3a |
 | 3c Entscheidung | Schiedsrichter | Entscheidet endgültig, Dissens wird protokolliert und im Dashboard aufklappbar |
 | 4 Schreiben | Redakteur je Säule | Story-Format; jede Aussage als Claim mit Beleg-Zitat; Kern- vs. Nebenaussage |
+| 4 Fachleute | Historiker · Verfahrens-Erklärer · Abgeordneten-Profile | Präzedenzfälle; Verfahren erklären und Glossar speisen; Porträt, Ausschüsse, Abstimmungen, Voteview-Werte |
 | 5a Prüfer A | Agent | Claim für Claim gegen die Quelle |
 | 5b Prüfer B | Agent, **anderes Modell**, blind | Sieht A's Urteil nicht; leitet Prüffragen aus der Aussage ab und beantwortet sie nur aus Primärquellen (FT 1) |
 | 5c Neutralität | Agent | Parteiische Sprache, einseitiges Framing |
@@ -209,13 +213,16 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
   Design-Plugin mit `design-critique` und `accessibility-review` (Phase 3), `skill-creator` (eigene Skills
   für Rubrik, Faktenprüfung, Story-Format), `dataviz` (Diagramme), `deep-research` (Vorbild für Sammler).
   Keine Skills aus ungeprüften Sammelportalen.
-- **Verbrauch:** ~20 Agenten pro Lauf. In der ersten Betriebswoche messen; Volltexte nur für ausgewählte Storys.
+- **Verbrauch und Token-Sparen (Pro-Abo):** 25 Rollen. Hebel: Code statt KI für Fleißarbeit · Modell je Aufgabe (klein: Türsteher, Faktenkarten, Sammler, Verfahren · mittel: Story-Builder, Relevanz, Gegenagent, Historiker, Prüfer B, Neutralität · groß: Schiedsrichter, Redakteure, Prüfer A, Chefredaktion) · Türsteher · Faktenkarten · nur das Neue · Regeln als Skills. **Keine** gebündelte Prüfung: jede Kernaussage wird einzeln geprüft (Andreas' Entscheidung).
+- **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe über die Browser-Sprachausgabe (kostenlos); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
+- **Konnektoren:** Vorschlag Parallel Search, CourtListener, USAFacts, Tavily (optional Firecrawl, Unsplash); keine Konnektoren mit persönlichen Daten im Lauf. Entscheidung von Andreas offen.
 
 ## 10. Projektdokumente
 
 - Design-Leinwand (Runden 1–6, maßgeblich: Runde 6 „Federal Program, Feinschliff“ und „Sources“): https://claude.ai/artifact/YWnrQiqgwwCvrWXq7vCYh9
 - Phase 3 – Kritische Prüfung (Befunde, Risikomatrix, Maßnahmen): https://claude.ai/code/artifact/1d03596c-3b3d-4af4-aedb-016de20be5c1
-- Projektbild v2 (aktuell, mit Schemata, Quellenstatus, Feintuning): https://claude.ai/code/artifact/aceb575b-e2b3-4556-8ca1-9444a4d9e085
+- **Gesamtbild v3 (aktueller Stand, maßgeblich):** https://claude.ai/code/artifact/4b7c08a1-9c52-4214-bcba-0fceb432797d
+- Projektbild v2 (Vorgänger, mit Rückschleifen und Quellenstatus): https://claude.ai/code/artifact/aceb575b-e2b3-4556-8ca1-9444a4d9e085
 - Architektur & Feintuning v1 (Entscheidungsgrundlage): https://claude.ai/code/artifact/aa180f36-b7f0-473c-9946-088917b173ef
 - `docs/01-quellen-und-architektur.md` – erster Quellenkatalog (teilweise überholt durch Projektbild v2)
 - `scripts/check_sources.sh` – Praxistest aller Quellen
