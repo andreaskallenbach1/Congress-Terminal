@@ -104,7 +104,8 @@ Jede Story wird auf diesen Dimensionen bewertet; Medien-Lautstärke ist nur ein 
 | Also Notable | Schlagzeilen, je ein Satz + Link | ~2 min |
 
 Dazu dauerhaft: **Watchlist** (Gesetze mit Fortschritt), **Kalender „What's next“** (7 Tage), **Archiv**,
-**Glossar**. Sonntags zusätzlich: Wochenrückblick + ein Deep-Dive.
+**Sources** (pro Ausgabe: jede Aussage mit Quelle, Link, Beleg-Zitat, Abrufzeit und Prüfstatus; dazu die Quellenbibliothek),
+**Suche** (über Storys, Quellen, Gesetze und Abgeordnete aller Ausgaben), **Glossar**. Sonntags zusätzlich: Wochenrückblick + ein Deep-Dive.
 
 ### 5.4 Story-Format (FT 4)
 
