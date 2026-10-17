@@ -4,14 +4,17 @@ import { formatDay } from '../lib/editions';
 interface Stage { key: string; label: string; date?: string; done: boolean; setback: boolean }
 interface Props { bill: { number: string; title: string; congressGovUrl: string; stages: Stage[] } }
 const { bill } = Astro.props;
+// Dates from an earlier year than the latest step carry the year, so the order never looks wrong.
+const latestYear = bill.stages.map((s) => s.date?.slice(0, 4)).filter(Boolean).sort().at(-1);
+const day = (d: string) => formatDay(d, d.slice(0, 4) === latestYear ? { month: 'short', day: 'numeric' } : { month: 'short', day: 'numeric', year: 'numeric' });
 ---
 <figure class="progress" aria-label={`Progress of ${bill.number}`}>
   <figcaption><a href={bill.congressGovUrl}>{bill.number}</a>, {bill.title}</figcaption>
-  <ol>
+  <ol class:list={[{ many: bill.stages.length > 5 }]}>
     {bill.stages.map((s) => (
       <li class:list={[{ done: s.done, setback: s.setback }]}>
         <span class="dot" aria-hidden="true"></span>
-        <span class="label">{s.label}{s.date && <>, {formatDay(s.date)}</>}</span>
+        <span class="label">{s.label}{s.date && <>, {day(s.date)}</>}</span>
         <span class="visually-hidden">{s.done ? 'completed' : 'not yet'}</span>
       </li>
     ))}
@@ -32,6 +35,12 @@ const { bill } = Astro.props;
   .done .label { color: var(--ink); }
   .setback .label { color: #B23A2E; font-weight: 700; }
   .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  /* Many stages, or a narrow screen: one stage per line, so labels never collide. */
+  ol.many { grid-auto-flow: row; gap: 8px; }
+  ol.many li { padding: 0 0 0 26px; }
+  ol.many li::before { left: 6px; top: 16px; bottom: -10px; right: auto; border-top: 0; border-left: 2px solid var(--accent); }
+  ol.many li.setback::before, ol.many li:not(.done)::before { border-left-style: dashed; border-left-color: var(--rule); }
+  ol.many .dot { top: 2px; }
   @media (max-width: 640px) {
     ol { grid-auto-flow: row; gap: 10px; }
     li { padding: 0 0 0 26px; }

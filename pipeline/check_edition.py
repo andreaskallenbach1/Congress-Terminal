@@ -114,7 +114,13 @@ def main() -> int:
                     problem(cid, "quote not found in source text", url=e["url"], quote=e["quote"][:160])
             # 4. status rules
             tiers = {sources[e["sourceId"]]["tier"] for e in c["evidence"] if e["sourceId"] in sources}
-            if c["status"] == "verified" and "primary" not in tiers and c["origin"] != "code":
+            # A forecaster's own page is the primary source for its own rating, if the claim names it ("Cook rates …").
+            own_rating = any(
+                sources[e["sourceId"]]["tier"] == "elections"
+                and sources[e["sourceId"]]["name"].split()[0].lower() in c["text"].lower()
+                for e in c["evidence"] if e["sourceId"] in sources
+            )
+            if c["status"] == "verified" and "primary" not in tiers and c["origin"] != "code" and not own_rating:
                 problem(cid, "'verified' requires a primary source")
             if c["status"] == "multiple" and len(outlets - {s["name"] for s in sources.values() if s["tier"].startswith("partisan")}) < 2:
                 problem(cid, "'multiple reports' requires two independent non-partisan outlets")
