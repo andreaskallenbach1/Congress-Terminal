@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Checks whether each candidate source is reachable from the current environment.
-# Usage: CONGRESS_API_KEY=... ./scripts/check_sources.sh   (falls back to DEMO_KEY)
+# Usage: ./scripts/check_sources.sh
+# The Congress.gov key is attached by the environment as a network secret (X-Api-Key header),
+# so no key appears in URLs here.
 set -u
 
-KEY="${CONGRESS_API_KEY:-DEMO_KEY}"
 UA="Mozilla/5.0 (CongressTerminal source check)"
 
 check() {
@@ -15,16 +16,17 @@ check() {
 }
 
 echo "== Primary sources"
-check congress_api_bills      "https://api.congress.gov/v3/bill?api_key=$KEY&format=json&limit=1"
-check congress_api_meetings   "https://api.congress.gov/v3/committee-meeting?api_key=$KEY&format=json&limit=1"
+check congress_api_bills      "https://api.congress.gov/v3/bill?format=json&limit=1&sort=updateDate+desc"
+check congress_api_meetings   "https://api.congress.gov/v3/committee-meeting?format=json&limit=1"
 check govinfo_crec_rss        "https://www.govinfo.gov/rss/crec.xml"
 check senate_votes_xml        "https://www.senate.gov/legislative/LIS/roll_call_lists/vote_menu_119_2.xml"
+check house_votes_api         "https://api.congress.gov/v3/house-vote/119/2?format=json&limit=1"
 check house_clerk_floor       "https://clerk.house.gov/FloorSummary"
 check house_committee_week    "https://docs.house.gov/Committee/Calendar/ByWeek.aspx"
 check sfrc_hearings           "https://www.foreign.senate.gov/hearings"
-check hfac_hearings           "https://foreignaffairs.house.gov/hearings/"
+check hfac_hearings           "https://foreignaffairs.house.gov/committee-activity/hearings"
 check sasc_hearings           "https://www.armed-services.senate.gov/hearings"
-check dsca_arms_sales         "https://www.dsca.mil/press-media/major-arms-sales"
+check arms_sales_fedreg       "https://www.federalregister.gov/api/v1/documents.json?per_page=1&conditions%5Bterm%5D=%22arms+sales+notification%22&order=newest"
 check federal_register        "https://www.federalregister.gov/api/v1/documents.json?per_page=1"
 check fec_api                 "https://api.open.fec.gov/v1/candidates/?api_key=DEMO_KEY&per_page=1"
 check legislators_json        "https://unitedstates.github.io/congress-legislators/legislators-current.json"
