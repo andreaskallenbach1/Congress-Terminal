@@ -21,7 +21,7 @@
 
 ## Offen / Grenzen
 
-- GitHub Pages muss Andreas einmal einschalten (Settings → Pages → Source: GitHub Actions)
-- Branch `main` anlegen erst nach Andreas' ausdrücklicher Freigabe
+- GitHub Pages eingeschaltet (17.10.2026, Source: GitHub Actions); Seite live unter https://andreaskallenbach1.github.io/Congress-Terminal/ – live geprüft: installierbar, Service Worker aktiv, keine Fehler
+- Branch `main` angelegt (Freigabe Andreas 17.10.2026). Veröffentlichen von `main` wird noch von der Umgebungsregel `github-pages` abgelehnt („Branch main is not allowed to deploy“) → Andreas stellt `main` als Standard-Branch ein und erlaubt `main` in Settings → Environments → github-pages
 - Update-Knöpfe kommen in Etappe 5; bis dahin werden sie nicht angezeigt (keine Attrappen)
 - Installation unter Windows in Edge erst nach der Veröffentlichung praktisch prüfbar
