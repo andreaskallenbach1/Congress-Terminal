@@ -26,6 +26,8 @@ Subagent briefs live next to this file: `writer-brief.md`, `checker-brief.md` (r
    facts, copy, never edit** —, bills with a real action, nominations, committee meetings, arms-sales notices with
    purchaser/value/system from GovInfo, feed items), `inputs-compact.json`, `headlines.txt`. Read the `log` for sources
    that failed; mention a missing primary source in the edition's `today` list.
+   Also code: `python3 pipeline/reference.py` (member profiles and committees → `data/`), `python3 pipeline/watchlist.py`
+   and `python3 pipeline/feedback.py <run-id>` (see below).
 2. **Gatekeeper** (haiku): reads only `headlines.txt` ("n | outlets | headline"), keeps what has a link to Congress or
    federal power or the midterms (CLAUDE.md 5.1; White House, agencies, courts only with a congressional link or very
    significant), drops ceremony, local events, personal quarrels, campaign noise. Writes `gate.json` = {"keep":[n,...]}.
@@ -85,7 +87,7 @@ python3 pipeline/check_edition.py briefings/<run-id>.json run/<run-id>/inputs.js
 cd app && npm ci && npm run build
 ```
 Both must pass; one correction (R5), else delete the edition file and stop. Commit only `briefings/<run-id>.json`
-(and code-maintained data files in `briefings/`) to `main` with the message `Edition <run-id>`, push.
+and the code-maintained files in `data/` to `main` with the message `Edition <run-id>`, push.
 
 ## Collectors
 

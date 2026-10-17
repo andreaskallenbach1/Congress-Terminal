@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { membersInBriefings, portraitUrl, storyUrl, formatEditionDate } from '../lib/editions';
+import { memberProfiles } from '../lib/reference';
+import Ideology from '../components/Ideology.astro';
 const members = await membersInBriefings();
 const base = import.meta.env.BASE_URL;
 const party = { R: 'Republican', D: 'Democrat', I: 'Independent' };
@@ -12,14 +14,20 @@ const party = { R: 'Republican', D: 'Democrat', I: 'Independent' };
     <EmptyState title="Members"><p>Members of Congress who appear in the briefings, with their portrait and the stories they appear in. Profiles with committees, votes and ideology scores follow with the member-profile agent.</p></EmptyState>
   ) : (
     <>
-      <PageHead title="Members" intro="Members of Congress who appear in the briefings. Official portraits from the Government Publishing Office (public domain)." />
+      <PageHead title="Members" intro="Members of Congress who appear in the briefings: committees from @unitedstates/congress-legislators, voting-record scores (DW-NOMINATE, −1 liberal to +1 conservative) from Voteview, official portraits from the Government Publishing Office (public domain)." />
       <ul class="grid" data-pagefind-body>
         {members.map(({ member, refs }) => (
           <li id={member.bioguideId}>
             <img src={portraitUrl(member.bioguideId)} alt={`Official portrait of ${member.name}`} width="90" height="110" loading="lazy" />
             <div>
               <h2>{member.name}</h2>
-              <p class="who">{party[member.party]}, {member.state} · <a href={`https://bioguide.congress.gov/search/bio/${member.bioguideId}`}>Biographical Directory</a></p>
+              <p class="who">{party[member.party]}, {member.state}{memberProfiles.get(member.bioguideId)?.district ? `-${memberProfiles.get(member.bioguideId)!.district}` : ''}{memberProfiles.get(member.bioguideId) && <> · {memberProfiles.get(member.bioguideId)!.chamber === 'senate' ? 'Senator' : 'Representative'} since {memberProfiles.get(member.bioguideId)!.since}</>} · <a href={`https://bioguide.congress.gov/search/bio/${member.bioguideId}`}>Biographical Directory</a></p>
+              {memberProfiles.get(member.bioguideId) && (
+                <>
+                  <ul class="cmte">{memberProfiles.get(member.bioguideId)!.committees.map((c) => <li><a href={`${base}committees/#${c.id}`}>{c.committee.replace(/^(House|Senate|Joint) (Select |Permanent Select |Special )?Committee on (the )?/, '')}</a>{c.title && <strong> · {c.title}</strong>}</li>)}</ul>
+                  <Ideology value={memberProfiles.get(member.bioguideId)!.nominate} />
+                </>
+              )}
               <ul class="refs">{refs.slice(0, 5).map(({ story, edition }) => <li><a href={storyUrl(base, story)}>{story.headline}</a> <span>{formatEditionDate(edition.compiledAt)}</span></li>)}</ul>
             </div>
           </li>
@@ -34,6 +42,7 @@ const party = { R: 'Republican', D: 'Democrat', I: 'Independent' };
   img { width: 90px; height: 110px; object-fit: cover; background: var(--track); }
   h2 { margin: 0; font-size: 21px; font-weight: 800; font-stretch: 88%; }
   .who { margin: 2px 0 8px; font-size: 14px; color: var(--ink-soft); }
+  .cmte { list-style: none; margin: 0 0 8px; padding: 0; font-size: 14px; display: grid; gap: 2px; }
   .refs { list-style: none; margin: 0; padding: 0; font-size: 15px; display: grid; gap: 4px; }
   .refs span { color: var(--ink-soft); font-size: 13px; }
 </style>

@@ -1,0 +1,756 @@
+[
+ {
+  "id": "HSAG",
+  "name": "House Committee on Agriculture",
+  "chamber": "house",
+  "url": "https://agriculture.house.gov/",
+  "jurisdiction": "The House Committee on Agriculture has legislative jurisdiction over agriculture, food, rural development, and forestry.",
+  "chair": {
+   "bioguide": "T000467",
+   "name": "Glenn Thompson"
+  },
+  "ranking": {
+   "bioguide": "C001119",
+   "name": "Angie Craig"
+  },
+  "members": 53
+ },
+ {
+  "id": "HSAP",
+  "name": "House Committee on Appropriations",
+  "chamber": "house",
+  "url": "https://appropriations.house.gov/",
+  "jurisdiction": "The House Committee on Appropriations is responsible for legislation allocating federal funds prior to expenditure from the treasury. Appropriations are generally limited to the levels set by the Budget Resolution drafted by the House Committee on the Budget. The Committee is also responsible for supplemental spending bills, which are sometimes needed in the middle of a fiscal year to compensate for emergency expenses.",
+  "chair": {
+   "bioguide": "C001053",
+   "name": "Tom Cole"
+  },
+  "ranking": {
+   "bioguide": "D000216",
+   "name": "Rosa L. DeLauro"
+  },
+  "members": 63
+ },
+ {
+  "id": "HSAS",
+  "name": "House Committee on Armed Services",
+  "chamber": "house",
+  "url": "https://armedservices.house.gov/",
+  "jurisdiction": "The House Committee on Armed Services has legislative jurisdiction over military and defense.",
+  "chair": {
+   "bioguide": "R000575",
+   "name": "Mike Rogers"
+  },
+  "ranking": {
+   "bioguide": "S000510",
+   "name": "Adam Smith"
+  },
+  "members": 57
+ },
+ {
+  "id": "HSED",
+  "name": "House Committee on Education and Workforce",
+  "chamber": "house",
+  "url": "https://edlabor.house.gov/",
+  "jurisdiction": "The committee has legislative jurisdiction over matters related to higher and lower education, workforce development and protections, and health, employment, labor, and pensions.",
+  "chair": {
+   "bioguide": "W000798",
+   "name": "Tim Walberg"
+  },
+  "ranking": {
+   "bioguide": "S000185",
+   "name": "Robert C. \"Bobby\" Scott"
+  },
+  "members": 37
+ },
+ {
+  "id": "HSIF",
+  "name": "House Committee on Energy and Commerce",
+  "chamber": "house",
+  "url": "https://energycommerce.house.gov/",
+  "jurisdiction": "The House Committee on Energy and Commerce has legislative jurisdiction on matters related to telecommunications, consumer protection, food and drug safety, public health research, environmental quality, energy policy, and interstate and foreign commerce. It oversees multiple cabinet-level Departments and independent agencies, including the Departments of Energy, Health and Human Services, Commerce, and Transportation, as well as the Environmental Protection Agency, the Federal Trade Commission, the Food and Drug Administration, and the Federal Communications Commission.",
+  "chair": {
+   "bioguide": "G000558",
+   "name": "Brett Guthrie"
+  },
+  "ranking": {
+   "bioguide": "P000034",
+   "name": "Frank Pallone, Jr."
+  },
+  "members": 54
+ },
+ {
+  "id": "HSSO",
+  "name": "House Committee on Ethics",
+  "chamber": "house",
+  "url": "https://ethics.house.gov/",
+  "jurisdiction": "The House Committee on Ethics has the jurisdiction to administer travel, gift, financial disclosure, outside income, and other regulations; advise members and staff; issue advisory opinions and investigate potential ethics violations. The Committee is the only standing committee of the House whose membership is evenly divided between each political party. The Committee includes five members of each party. Also, unlike other committees, the day-to-day work of the Committee on Ethics is conducted by a staff that is nonpartisan by rule.",
+  "chair": {
+   "bioguide": "G000591",
+   "name": "Michael Guest"
+  },
+  "ranking": {
+   "bioguide": "D000623",
+   "name": "Mark DeSaulnier"
+  },
+  "members": 10
+ },
+ {
+  "id": "HSBA",
+  "name": "House Committee on Financial Services",
+  "chamber": "house",
+  "url": "https://financialservices.house.gov/",
+  "jurisdiction": "The House Financial Services Committee has jurisdiction over issues pertaining to the economy, the banking system, housing, insurance, and securities and exchanges. Additionally, the Committee also has jurisdiction over monetary policy, international finance, international monetary organizations, and efforts to combat terrorist financing. The Committee oversees the Nation’s economy through its oversight of the Federal Reserve Board and individual reserve banks, the Treasury, the production and distribution of currency, and the Nation’s capital markets.",
+  "chair": {
+   "bioguide": "H001072",
+   "name": "J. French Hill"
+  },
+  "ranking": {
+   "bioguide": "W000187",
+   "name": "Maxine Waters"
+  },
+  "members": 53
+ },
+ {
+  "id": "HSFA",
+  "name": "House Committee on Foreign Affairs",
+  "chamber": "house",
+  "url": "https://foreignaffairs.house.gov/",
+  "jurisdiction": "The House Committee on Foreign Affairs considers legislation that impacts the diplomatic community, which includes the Department of State, the Agency for International Development, the Peace Corps, the United Nations, and the enforcement of the Arms Export Control Act.",
+  "chair": {
+   "bioguide": "M001199",
+   "name": "Brian J. Mast"
+  },
+  "ranking": {
+   "bioguide": "M001137",
+   "name": "Gregory W. Meeks"
+  },
+  "members": 53
+ },
+ {
+  "id": "HSHM",
+  "name": "House Committee on Homeland Security",
+  "chamber": "house",
+  "url": "https://homeland.house.gov/",
+  "jurisdiction": "The House Committee on Homeland Security has jurisdiction over matters related to national defense. It has six subcommittees on border and maritime security; counterterrorism and intelligence; cybersecurity and infrastructure protection; emergency preparedness, response, and communications; oversight and management efficiency; and transportation and protective security. The Committee was created in 2002 in the aftermath of the September 11th, 2001 attacks.",
+  "chair": {
+   "bioguide": "G000597",
+   "name": "Andrew R. Garbarino"
+  },
+  "ranking": {
+   "bioguide": "T000193",
+   "name": "Bennie G. Thompson"
+  },
+  "members": 33
+ },
+ {
+  "id": "HSHA",
+  "name": "House Committee on House Administration",
+  "chamber": "house",
+  "url": "https://cha.house.gov/",
+  "jurisdiction": "The Committee on House Administration has legislative jurisdiction over the federal elections and the day-to-day operations of the House. The Committee's jurisdiction over federal elections requires it to consider proposals to amend federal election law and to monitor congressional elections across the United States. The Committee also sets budget authorizations for expenses of other House committees and members of Congress. It also oversees several federal organizations such as the Library of Congress and Smithsonian Institution.",
+  "chair": {
+   "bioguide": "S001213",
+   "name": "Bryan Steil"
+  },
+  "ranking": {
+   "bioguide": "M001206",
+   "name": "Joseph D. Morelle"
+  },
+  "members": 12
+ },
+ {
+  "id": "HSII",
+  "name": "House Committee on Natural Resources",
+  "chamber": "house",
+  "url": "https://naturalresources.house.gov/",
+  "jurisdiction": "The House Committee on Natural Resources considers legislation about American energy production, mineral lands and mining, fisheries and wildlife, public lands, oceans, Native Americans, irrigation and reclamation.",
+  "chair": {
+   "bioguide": "W000821",
+   "name": "Bruce Westerman"
+  },
+  "ranking": {
+   "bioguide": "H001068",
+   "name": "Jared Huffman"
+  },
+  "members": 45
+ },
+ {
+  "id": "HSGO",
+  "name": "House Committee on Oversight and Government Reform",
+  "chamber": "house",
+  "url": "https://oversight.house.gov/",
+  "jurisdiction": "The committee oversees the federal government and all of its agencies to ensure efficiency, effectiveness, and accountability. The Committee oversees government operations, health care, information technology, interior, energy and environment, national security, and intergovernmental affairs.",
+  "chair": {
+   "bioguide": "C001108",
+   "name": "James Comer"
+  },
+  "ranking": {
+   "bioguide": "G000598",
+   "name": "Robert Garcia"
+  },
+  "members": 47
+ },
+ {
+  "id": "HSRU",
+  "name": "House Committee on Rules",
+  "chamber": "house",
+  "url": "https://rules.house.gov/",
+  "jurisdiction": "The House Committee on Rules is commonly known as “The Speaker’s Committee” because it is the mechanism that the Speaker uses to maintain control of the House Floor. Because of the vast power wielded by the Rules Committee, its ratio has traditionally been weighted in favor of the majority party. The Committee provides the terms and conditions of debate on any measure or matter through Special Rules. The Committee also considers original jurisdiction measures, which commonly represent changes to the standing rules of the House, or measures that contain special rules, such as the expedited procedures in trade legislation.",
+  "chair": {
+   "bioguide": "F000450",
+   "name": "Virginia Foxx"
+  },
+  "ranking": {
+   "bioguide": "M000312",
+   "name": "James P. McGovern"
+  },
+  "members": 13
+ },
+ {
+  "id": "HSSY",
+  "name": "House Committee on Science, Space, and Technology",
+  "chamber": "house",
+  "url": "https://science.house.gov/",
+  "jurisdiction": "The Committee on Science, Space, and Technology has a jurisdiction over a range of matters related to energy research and development, federally owned or operated non-military energy laboratories, astronautical research and development, civil aviation, environmental research and development; marine research, and more. The Committee oversees the National Institute of Standards and Technology, National Aeronautics and Space Administration, National Science Foundation, and National Weather Service. It also reviews laws, programs, and Government activities relating to non-military research and development to report back to the House.",
+  "chair": {
+   "bioguide": "B001291",
+   "name": "Brian Babin"
+  },
+  "ranking": {
+   "bioguide": "L000397",
+   "name": "Zoe Lofgren"
+  },
+  "members": 40
+ },
+ {
+  "id": "HSSM",
+  "name": "House Committee on Small Business",
+  "chamber": "house",
+  "url": "https://smallbusiness.house.gov/",
+  "jurisdiction": "The House Small Business Committee was established to protect and assist small businesses.  As such, the Committee has jurisdiction over matters related to small business financial aid, regulatory flexibility, and paperwork reduction. Additionally, the House Small Business Committee has  oversight and legislative authority over the Small Business Administration (SBA) and its programs.",
+  "chair": {
+   "bioguide": "W000816",
+   "name": "Roger Williams"
+  },
+  "ranking": {
+   "bioguide": "V000081",
+   "name": "Nydia M. Velázquez"
+  },
+  "members": 26
+ },
+ {
+  "id": "HSPW",
+  "name": "House Committee on Transportation and Infrastructure",
+  "chamber": "house",
+  "url": "https://transportation.house.gov/",
+  "jurisdiction": "The Transportation and Infrastructure Committee has jurisdiction over all modes of transportation: aviation, maritime and waterborne transportation, highways, bridges, mass transit, and railroads. The Committee also has jurisdiction over other aspects of our national infrastructure, such as clean water and waste water management, the transport of resources by pipeline, flood damage reduction, the management of federally owned real estate and public buildings, the development of economically depressed rural and urban areas, disaster preparedness and response, and hazardous materials transportation.",
+  "chair": {
+   "bioguide": "G000546",
+   "name": "Sam Graves"
+  },
+  "ranking": {
+   "bioguide": "L000560",
+   "name": "Rick Larsen"
+  },
+  "members": 67
+ },
+ {
+  "id": "HSVR",
+  "name": "House Committee on Veterans' Affairs",
+  "chamber": "house",
+  "url": "https://veterans.house.gov/",
+  "jurisdiction": "The House Committee on Veterans' Affairs is the authorizing committee for the Department of Veterans Affairs (VA). The committee is responsible for recommending legislation expanding, curtailing, or fine-tuning existing laws relating to veterans' benefits. The Committee also has oversight responsibility, which means monitoring and evaluating the operations of the VA. If the Committee finds that VA is not administering laws as Congress intended, then it is addressed through the hearing process and legislation.",
+  "chair": {
+   "bioguide": "B001295",
+   "name": "Mike Bost"
+  },
+  "ranking": {
+   "bioguide": "T000472",
+   "name": "Mark Takano"
+  },
+  "members": 25
+ },
+ {
+  "id": "HSWM",
+  "name": "House Committee on Ways and Means",
+  "chamber": "house",
+  "url": "https://waysandmeans.house.gov/",
+  "jurisdiction": "The Committee on Ways and Means is the chief tax-writing committee in the House of Representatives. The Committee derives a large share of its jurisdiction from Article I, Section VII of the U.S. Constitution, which declares, “All Bills for raising Revenue shall originate in the House of Representatives.” The committee has jurisdiction over revenue and related issues such as tariffs, reciprocal trade agreements, and the bonded debt of the United States. It also oversees revenue-related aspects of the Social Security system, Medicare, and social services programs.",
+  "chair": {
+   "bioguide": "S001195",
+   "name": "Jason Smith"
+  },
+  "ranking": {
+   "bioguide": "N000015",
+   "name": "Richard E. Neal"
+  },
+  "members": 45
+ },
+ {
+  "id": "HSBU",
+  "name": "House Committee on the Budget",
+  "chamber": "house",
+  "url": "https://budget.house.gov/",
+  "jurisdiction": "The House Committee on the Budget is responsible for drafting a concurrent resolution on the budget for congressional action on spending, revenue, and debt-limit legislation. The Budget Resolution must be jointly agreed to by both the House and the Senate, but does not need to be signed by the President. The Committee is also responsible for enforcing the Budget Resolution by informing representatives of violations to the budget, and by working with other committees, such as the Committee on Appropriations, to prevent potential violations.",
+  "chair": {
+   "bioguide": "A000375",
+   "name": "Jodey C. Arrington"
+  },
+  "ranking": {
+   "bioguide": "B001296",
+   "name": "Brendan F. Boyle"
+  },
+  "members": 37
+ },
+ {
+  "id": "HSJU",
+  "name": "House Committee on the Judiciary",
+  "chamber": "house",
+  "url": "https://judiciary.house.gov/",
+  "jurisdiction": "The Committee on the Judiciary has jurisdiction over matters relating to the administration of justice in federal courts, administrative bodies, and law enforcement agencies. Its role in impeachment proceedings has also brought it much attention.  The committee’s jurisdiction also includes a range of issues such as bankruptcy, espionage, terrorism, the protection of civil liberties, constitutional amendments, and more. The Committee oversees the Departments of Justice and Homeland Security.",
+  "chair": {
+   "bioguide": "J000289",
+   "name": "Jim Jordan"
+  },
+  "ranking": {
+   "bioguide": "R000606",
+   "name": "Jamie Raskin"
+  },
+  "members": 44
+ },
+ {
+  "id": "HLIG",
+  "name": "House Permanent Select Committee on Intelligence",
+  "chamber": "house",
+  "url": "https://intelligence.house.gov/",
+  "jurisdiction": "The United States House Permanent Select Committee on Intelligence (HPSCI) is a committee of the United States House of Representatives. Created in 1977, HPSCI is charged with oversight of the United States Intelligence Community—which includes the intelligence and intelligence-related activities of the following seventeen elements of the U.S. Government—and the Military Intelligence Program.",
+  "chair": {
+   "bioguide": "C001087",
+   "name": "Eric A. \"Rick\" Crawford"
+  },
+  "ranking": {
+   "bioguide": "H001047",
+   "name": "James A. Himes"
+  },
+  "members": 27
+ },
+ {
+  "id": "HSZS",
+  "name": "House Select Committee on the Strategic Competition Between the United States and the Chinese Communist Party",
+  "chamber": "house",
+  "url": null,
+  "jurisdiction": null,
+  "chair": {
+   "bioguide": "M001194",
+   "name": "John R. Moolenaar"
+  },
+  "ranking": {
+   "bioguide": "K000389",
+   "name": "Ro Khanna"
+  },
+  "members": 24
+ },
+ {
+  "id": "HSQJ",
+  "name": "House Select Subcommittee to Investigate the Remaining Questions Surrounding January 6, 2021",
+  "chamber": "house",
+  "url": null,
+  "jurisdiction": null,
+  "chair": {
+   "bioguide": "L000583",
+   "name": "Barry Loudermilk"
+  },
+  "ranking": null,
+  "members": 7
+ },
+ {
+  "id": "JCSE",
+  "name": "Commission on Security and Cooperation in Europe",
+  "chamber": "joint",
+  "url": "http://www.csce.gov/",
+  "jurisdiction": null,
+  "chair": null,
+  "ranking": null,
+  "members": 9
+ },
+ {
+  "id": "JSLC",
+  "name": "Joint Committee of Congress on the Library",
+  "chamber": "joint",
+  "url": "https://cha.house.gov/jointcommittees/joint-committee-library",
+  "jurisdiction": null,
+  "chair": {
+   "bioguide": "S001213",
+   "name": "Bryan Steil"
+  },
+  "ranking": null,
+  "members": 10
+ },
+ {
+  "id": "JSPR",
+  "name": "Joint Committee on Printing",
+  "chamber": "joint",
+  "url": "https://cha.house.gov/jointcommittees/joint-committee-on-printing",
+  "jurisdiction": null,
+  "chair": {
+   "bioguide": "M000355",
+   "name": "Mitch McConnell"
+  },
+  "ranking": null,
+  "members": 10
+ },
+ {
+  "id": "JSTX",
+  "name": "Joint Committee on Taxation",
+  "chamber": "joint",
+  "url": "https://www.jct.gov",
+  "jurisdiction": null,
+  "chair": {
+   "bioguide": "C000880",
+   "name": "Mike Crapo"
+  },
+  "ranking": null,
+  "members": 10
+ },
+ {
+  "id": "JSEC",
+  "name": "Joint Economic Committee",
+  "chamber": "joint",
+  "url": "http://www.jec.senate.gov/",
+  "jurisdiction": null,
+  "chair": {
+   "bioguide": "S001183",
+   "name": "David Schweikert"
+  },
+  "ranking": {
+   "bioguide": "H001076",
+   "name": "Margaret Wood Hassan"
+  },
+  "members": 20
+ },
+ {
+  "id": "SSAF",
+  "name": "Senate Committee on Agriculture, Nutrition, and Forestry",
+  "chamber": "senate",
+  "url": "http://www.agriculture.senate.gov/",
+  "jurisdiction": "The Senate Committee on Agriculture has legislative jurisdiction over agriculture, food, and nutrition.",
+  "chair": {
+   "bioguide": "B001236",
+   "name": "John Boozman"
+  },
+  "ranking": {
+   "bioguide": "K000367",
+   "name": "Amy Klobuchar"
+  },
+  "members": 23
+ },
+ {
+  "id": "SSAP",
+  "name": "Senate Committee on Appropriations",
+  "chamber": "senate",
+  "url": "http://www.appropriations.senate.gov/",
+  "jurisdiction": "The Senate Committee on Appropriations is responsible for legislation allocating federal funds prior to expenditure from the treasury. Appropriations are generally limited to the levels set by the Budget Resolution drafted by the Senate Committee on the Budget. The Committee is also responsible for supplemental spending bills, which are sometimes needed in the middle of a fiscal year to compensate for emergency expenses.",
+  "chair": {
+   "bioguide": "C001035",
+   "name": "Susan M. Collins"
+  },
+  "ranking": {
+   "bioguide": "M001111",
+   "name": "Patty Murray"
+  },
+  "members": 28
+ },
+ {
+  "id": "SSAS",
+  "name": "Senate Committee on Armed Services",
+  "chamber": "senate",
+  "url": "http://www.armed-services.senate.gov/",
+  "jurisdiction": "The Senate Committee on Armed Services has legislative jurisdiction over military and defense.",
+  "chair": {
+   "bioguide": "W000437",
+   "name": "Roger F. Wicker"
+  },
+  "ranking": {
+   "bioguide": "R000122",
+   "name": "Jack Reed"
+  },
+  "members": 27
+ },
+ {
+  "id": "SSBK",
+  "name": "Senate Committee on Banking, Housing, and Urban Affairs",
+  "chamber": "senate",
+  "url": "http://banking.senate.gov/",
+  "jurisdiction": "The Senate Committee on Banking, Housing, and Urban Affairs not only has legislative jurisdiction on the topics listed in its name, but also on a range of other topics such as economic stability, federal monetary policy, and government contracts.",
+  "chair": {
+   "bioguide": "S001184",
+   "name": "Tim Scott"
+  },
+  "ranking": {
+   "bioguide": "W000817",
+   "name": "Elizabeth Warren"
+  },
+  "members": 24
+ },
+ {
+  "id": "SSCM",
+  "name": "Senate Committee on Commerce, Science, and Transportation",
+  "chamber": "senate",
+  "url": "http://www.commerce.senate.gov/",
+  "jurisdiction": "The Senate Committee on Commerce, Science, and Transportation has legislative jurisdiction on matters related to science and technology, oceans policy, transportation, communications, and consumer affairs.",
+  "chair": {
+   "bioguide": "C001098",
+   "name": "Ted Cruz"
+  },
+  "ranking": {
+   "bioguide": "C000127",
+   "name": "Maria Cantwell"
+  },
+  "members": 28
+ },
+ {
+  "id": "SSEG",
+  "name": "Senate Committee on Energy and Natural Resources",
+  "chamber": "senate",
+  "url": "http://www.energy.senate.gov/",
+  "jurisdiction": "The Senate Committee on Energy and Natural Resources has legislative jurisdiction on matters related to energy resources and development, nuclear energy, Indian affairs, public lands and their renewable resources, surface mining, territories and insular possessions, and water resources.",
+  "chair": {
+   "bioguide": "L000577",
+   "name": "Mike Lee"
+  },
+  "ranking": {
+   "bioguide": "H001046",
+   "name": "Martin Heinrich"
+  },
+  "members": 20
+ },
+ {
+  "id": "SSEV",
+  "name": "Senate Committee on Environment and Public Works",
+  "chamber": "senate",
+  "url": "http://www.epw.senate.gov/",
+  "jurisdiction": "The Senate Committee on Environment and Public Works has legislative jurisdiction on matters related to environmental protection, resource utilization and conservation, and public infrastructure.",
+  "chair": {
+   "bioguide": "C001047",
+   "name": "Shelley Moore Capito"
+  },
+  "ranking": {
+   "bioguide": "W000802",
+   "name": "Sheldon Whitehouse"
+  },
+  "members": 18
+ },
+ {
+  "id": "SSFI",
+  "name": "Senate Committee on Finance",
+  "chamber": "senate",
+  "url": "http://www.finance.senate.gov/",
+  "jurisdiction": "The Senate Committee on Finance has legislative jurisdiction on matters relating to taxation, debt, customs, foreign trade, and health programs under the Social Security Act such as Medicare, Medicaid, the Children's Health Insurance Program (CHIP), Temporary Assistance to Needy Families (TANF) and other health and human services programs financed by a specific tax or trust fund.",
+  "chair": {
+   "bioguide": "C000880",
+   "name": "Mike Crapo"
+  },
+  "ranking": {
+   "bioguide": "W000779",
+   "name": "Ron Wyden"
+  },
+  "members": 27
+ },
+ {
+  "id": "SSFR",
+  "name": "Senate Committee on Foreign Relations",
+  "chamber": "senate",
+  "url": "http://www.foreign.senate.gov/",
+  "jurisdiction": "The Senate Committee on Foreign Relations was established in 1816 as one of the original ten standing committees of the Senate. Throughout its history, the committee has been instrumental in developing and influencing United States foreign policy, at different times supporting and opposing the policies of presidents and secretaries of state. The committee has considered, debated, and reported important treaties and legislation, ranging from the purchase of Alaska in 1867 to the establishment of the United Nations in 1945. It also holds jurisdiction over all diplomatic nominations. Through these powers, the committee has helped shape foreign policy of broad significance, in matters of war and peace and international relations. Members of the committee have assisted in the negotiation of treaties, and at times have helped to defeat treaties they felt were not in the national interest.",
+  "chair": {
+   "bioguide": "R000584",
+   "name": "James E. Risch"
+  },
+  "ranking": {
+   "bioguide": "S001181",
+   "name": "Jeanne Shaheen"
+  },
+  "members": 22
+ },
+ {
+  "id": "SSHR",
+  "name": "Senate Committee on Health, Education, Labor, and Pensions",
+  "chamber": "senate",
+  "url": "http://www.help.senate.gov/",
+  "jurisdiction": "The Senate Committee on Health, Education, Labor, and Pensions has jurisdiction over most of the agencies, institutes, and programs of the Department of Health and Human Services, including the Food and Drug Administration, the Centers for Disease Control and Prevention, the National Institutes of Health, the Administration on Aging, the Substance Abuse and Mental Health Services Administration, and the Agency for Healthcare Research and Quality.",
+  "chair": {
+   "bioguide": "C001075",
+   "name": "Bill Cassidy"
+  },
+  "ranking": {
+   "bioguide": "S000033",
+   "name": "Bernard Sanders"
+  },
+  "members": 23
+ },
+ {
+  "id": "SSGA",
+  "name": "Senate Committee on Homeland Security and Governmental Affairs",
+  "chamber": "senate",
+  "url": "http://www.hsgac.senate.gov/",
+  "jurisdiction": "The Senate Committee on Homeland Security and Governmental Affairs is the Senate’s primary oversight committee with broad jurisdiction over government operations generally and the Department of Homeland Security in particular. Its primary responsibilities are to study the efficiency, economy, and effectiveness of all agencies and departments of the federal government; evaluate the effects of laws enacted to reorganize the legislative and executive branches of government; and study the intergovernmental relationships between the U.S. and states and municipalities, and between the U.S. and international organizations of which the U.S. is a member.",
+  "chair": {
+   "bioguide": "P000603",
+   "name": "Rand Paul"
+  },
+  "ranking": {
+   "bioguide": "P000595",
+   "name": "Gary C. Peters"
+  },
+  "members": 15
+ },
+ {
+  "id": "SLIA",
+  "name": "Senate Committee on Indian Affairs",
+  "chamber": "senate",
+  "url": "http://www.indian.senate.gov/",
+  "jurisdiction": "The Senate Committee on Indian Affairs has jurisdiction to study the unique problems of American Indian, Native Hawaiian, and Alaska Native peoples and to propose legislation to alleviate these difficulties. These issues include, but are not limited to, Indian education, economic development, land management, trust responsibilities, health care, and claims against the United States. Additionally, all legislation proposed by Members of the Senate that specifically pertains to American Indians, Native Hawaiians, or Alaska Natives is under the jurisdiction of the Committee.",
+  "chair": {
+   "bioguide": "M001153",
+   "name": "Lisa Murkowski"
+  },
+  "ranking": null,
+  "members": 11
+ },
+ {
+  "id": "SSRA",
+  "name": "Senate Committee on Rules and Administration",
+  "chamber": "senate",
+  "url": "http://www.rules.senate.gov/",
+  "jurisdiction": "The Senate Committee on Rules and Administration has legislative jurisdiction over the organization and operation of Congress. This includes matters such as congressional rules and procedures, corruption, the relationship of Congress with the other branches of government, and general administration of the Senate. The Committee is also responsible for recommending improvements in organization and operation with a view toward strengthening Congress, simplifying its operations, improving its relationships with other branches of the United States Government, and enabling it better to meet its responsibilities under the Constitution of the United States.",
+  "chair": {
+   "bioguide": "M000355",
+   "name": "Mitch McConnell"
+  },
+  "ranking": {
+   "bioguide": "P000145",
+   "name": "Alex Padilla"
+  },
+  "members": 17
+ },
+ {
+  "id": "SSSB",
+  "name": "Senate Committee on Small Business and Entrepreneurship",
+  "chamber": "senate",
+  "url": "http://www.sbc.senate.gov/",
+  "jurisdiction": "The Senate Committee on Small Business and Entrepreneurship has legislative jurisdiction over the Small Business Administration (SBA). The SBA is an independent federal agency meant to assist and protect the interests of small businesses. The Committee is also responsible for studying and problems of American small business enterprises, and reporting back to the Senate.",
+  "chair": {
+   "bioguide": "E000295",
+   "name": "Joni Ernst"
+  },
+  "ranking": {
+   "bioguide": "M000133",
+   "name": "Edward J. Markey"
+  },
+  "members": 19
+ },
+ {
+  "id": "SSVA",
+  "name": "Senate Committee on Veterans' Affairs",
+  "chamber": "senate",
+  "url": "http://www.veterans.senate.gov/",
+  "jurisdiction": "The Senate Committee on Veterans' Affairs has legislative jurisdiction over matters relating to veterans compensation and veterans generally, as well as matters relating to the vocational rehabilitation, education, medical care, civil relief, and civilian readjustment of veterans.",
+  "chair": {
+   "bioguide": "M000934",
+   "name": "Jerry Moran"
+  },
+  "ranking": {
+   "bioguide": "B001277",
+   "name": "Richard Blumenthal"
+  },
+  "members": 19
+ },
+ {
+  "id": "SSBU",
+  "name": "Senate Committee on the Budget",
+  "chamber": "senate",
+  "url": "http://www.budget.senate.gov/",
+  "jurisdiction": "The Senate Committee on the Budget is responsible for drafting a concurrent resolution on the budget for congressional action on spending, revenue, and debt-limit legislation. The Budget Resolution must be jointly agreed to by both the House and the Senate, but does not need to be signed by the President. The Committee is also responsible for enforcing the Budget Resolution by informing senators of violations to the budget, and by working with other committees, such as the Committee on Appropriations, to prevent potential violations.",
+  "chair": {
+   "bioguide": "J000293",
+   "name": "Ron Johnson"
+  },
+  "ranking": {
+   "bioguide": "M001176",
+   "name": "Jeff Merkley"
+  },
+  "members": 20
+ },
+ {
+  "id": "SSJU",
+  "name": "Senate Committee on the Judiciary",
+  "chamber": "senate",
+  "url": "http://www.judiciary.senate.gov/",
+  "jurisdiction": "The Senate Committee on the Judiciary provides oversight of the Department of Justice and the agencies under the Department's jurisdiction, including the Federal Bureau of Investigation, and the Department of Homeland Security. It also plays an important role in the consideration of nominations and pending legislation. Any legislation related to civil liberty, constitutional amendments, immigration and naturalization, and a variety of other topics is referred to the Committee.",
+  "chair": {
+   "bioguide": "G000386",
+   "name": "Chuck Grassley"
+  },
+  "ranking": {
+   "bioguide": "D000563",
+   "name": "Richard J. Durbin"
+  },
+  "members": 21
+ },
+ {
+  "id": "SLET",
+  "name": "Senate Select Committee on Ethics",
+  "chamber": "senate",
+  "url": "http://www.ethics.senate.gov/",
+  "jurisdiction": "The Senate Select Committee on Ethics is authorized to receive and investigate allegations of improper conduct which may reflect upon the Senate, violations of law, violations of the Senate Code of Official Conduct and violations of rules and regulations of the Senate; recommend disciplinary action; recommend additional Senate rules or regulations to insure proper standards of conduct; and report violations of law to the proper federal and state authorities.",
+  "chair": {
+   "bioguide": "L000575",
+   "name": "James Lankford"
+  },
+  "ranking": null,
+  "members": 6
+ },
+ {
+  "id": "SLIN",
+  "name": "Senate Select Committee on Intelligence",
+  "chamber": "senate",
+  "url": "http://www.intelligence.senate.gov/",
+  "jurisdiction": "The Senate Committee on Intelligence was created to study the intelligence activities and programs of the United States Government and report to the Senate concerning such intelligence activities and programs. The Committee is also responsible for proposing legislation and providing legislative oversight to ensure that intelligence activities of the United States are in conformity with the Constitution and the law.",
+  "chair": {
+   "bioguide": "C001095",
+   "name": "Tom Cotton"
+  },
+  "ranking": null,
+  "members": 21
+ },
+ {
+  "id": "SPAG",
+  "name": "Senate Special Committee on Aging",
+  "chamber": "senate",
+  "url": "http://www.aging.senate.gov/",
+  "jurisdiction": "The Senate Special Committee on Aging conducts a continuing study of issues related to older Americans such as health, income, lifestyle, and more. The committee reports its findings back to the Senate at least once a year. No bills are referred to this committee and the committee has no legislative jurisdiction.",
+  "chair": {
+   "bioguide": "S001217",
+   "name": "Rick Scott"
+  },
+  "ranking": {
+   "bioguide": "G000555",
+   "name": "Kirsten E. Gillibrand"
+  },
+  "members": 13
+ },
+ {
+  "id": "SCNC",
+  "name": "United States Senate Caucus on International Narcotics Control",
+  "chamber": "senate",
+  "url": "http://www.drugcaucus.senate.gov/",
+  "jurisdiction": "The Senate Caucus on International Narcotics Control was created to “monitor and encourage United States Government and private programs seeking to expand international cooperation against drug abuse and narcotics trafficking” and to “monitor and promote international compliance with narcotics control treaties.” As a formal organization of the U.S. Senate, the Caucus has the status of a standing committee. The Caucus exercises oversight on a wide range of issues, including international counternarcotics assistance and domestic drug prevention and treatment programs. The Caucus has held numerous hearings over the years and has issued a number of reports on U.S. narcotics control policy.",
+  "chair": {
+   "bioguide": "C001056",
+   "name": "John Cornyn"
+  },
+  "ranking": null,
+  "members": 7
+ }
+]

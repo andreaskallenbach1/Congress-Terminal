@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { committees } from '../lib/reference';
+const chambers = [['senate', 'Senate'], ['house', 'House'], ['joint', 'Joint']] as const;
+---
+<Base title="Committees" current="committees">
+  <PageHead title="Committees" intro="Standing, select and joint committees of the 119th Congress with chair and ranking member. Source: @unitedstates/congress-legislators (public domain), refreshed with every edition." />
+  <div class="cols" data-pagefind-body>
+    {chambers.map(([key, label]) => (
+      <section>
+        <h2>{label}</h2>
+        <ul>
+          {committees.filter((c) => c.chamber === key).map((c) => (
+            <li id={c.id}>
+              <h3>{c.url ? <a href={c.url}>{c.name}</a> : c.name}</h3>
+              <p class="lead">{c.chair && <>Chair: {c.chair.name}</>}{c.chair && c.ranking && ' · '}{c.ranking && <>Ranking member: {c.ranking.name}</>} · {c.members} members</p>
+              {c.jurisdiction && <p class="jur">{c.jurisdiction.length > 260 ? `${c.jurisdiction.slice(0, 260).replace(/\s\S*$/, '')} …` : c.jurisdiction}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>
+<style>
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 0 48px; }
+  h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; font-stretch: 88%; border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+  ul { list-style: none; margin: 0 0 28px; padding: 0; }
+  li { padding: 12px 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 16px; }
+  li:target { background: var(--accent-wash); outline: 8px solid var(--accent-wash); }
+  h3 { margin: 0; font-size: 17px; font-weight: 700; }
+  h3 a { color: var(--ink); }
+  .lead { margin: 4px 0 0; font-size: 14px; color: var(--ink-soft); }
+  .jur { margin: 6px 0 0; font-family: var(--font-read); font-size: 15px; line-height: 1.5; }
+</style>

@@ -1,0 +1,21 @@
+---
+// DW-NOMINATE first dimension (Voteview): −1 most liberal … +1 most conservative, from all roll-call votes cast.
+interface Props { value: number | null }
+const { value } = Astro.props;
+const pct = value === null ? 50 : ((value + 1) / 2) * 100;
+---
+{value !== null && (
+  <div class="ideo" title="DW-NOMINATE, first dimension (Voteview)">
+    <span class="lbl">Voting record</span>
+    <span class="scale" aria-hidden="true"><span class="dot" style={`left:${pct.toFixed(1)}%`}></span></span>
+    <span class="val">{value > 0 ? '+' : ''}{value.toFixed(2)}</span>
+    <span class="visually-hidden">DW-NOMINATE score {value.toFixed(2)} on a scale from −1, most liberal, to +1, most conservative</span>
+  </div>
+)}
+<style>
+  .ideo { display: grid; grid-template-columns: auto 120px auto; gap: 8px; align-items: center; font-size: 13px; color: var(--ink-soft); }
+  .scale { position: relative; height: 6px; background: linear-gradient(90deg, #2E5C9E, var(--track) 50%, #B23A2E); }
+  .dot { position: absolute; top: -4px; width: 4px; height: 14px; margin-left: -2px; background: var(--ink); }
+  .val { font-variant-numeric: tabular-nums; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
