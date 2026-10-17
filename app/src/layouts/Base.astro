@@ -1,0 +1,139 @@
+---
+import '../styles/global.css';
+import Seal from '../components/Seal.astro';
+import { latestEdition, formatEditionDate, formatBerlinTime } from '../lib/editions';
+
+interface Props { title?: string; current?: string }
+const { title, current = 'today' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const edition = latestEdition();
+
+const sections = [
+  { key: 'today', label: 'Today', href: base },
+];
+const tools = [
+  { key: 'watchlist', label: 'Watchlist', href: `${base}watchlist/` },
+  { key: 'calendar', label: 'Calendar', href: `${base}calendar/` },
+  { key: 'archive', label: 'Archive', href: `${base}archive/` },
+  { key: 'sources', label: 'Sources', href: `${base}sources/` },
+  { key: 'search', label: 'Search', href: `${base}search/` },
+];
+const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Terminal';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{pageTitle}</title>
+  <meta name="description" content="The daily briefing on the United States Congress, at home and abroad.">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121514" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href={`${base}manifest.webmanifest`}>
+  <link rel="icon" href={`${base}icons/favicon.svg`} type="image/svg+xml">
+  <link rel="apple-touch-icon" href={`${base}icons/icon-192.png`}>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the briefing</a>
+
+  <header class="masthead">
+    <div class="masthead-row">
+      <div class="masthead-seal"><Seal size={116} /></div>
+      <div class="nameplate">
+        <a href={base} class="nameplate-title">The Congress Terminal</a>
+        <p class="dateline">
+          {edition
+            ? <>{formatEditionDate(edition.compiledAt)}. {edition.kind === 'weekly' ? 'Weekly edition' : 'Daily edition'}, compiled at {formatBerlinTime(edition.compiledAt)}</>
+            : <>No edition published yet</>}
+        </p>
+      </div>
+      <p class="motto">The daily briefing on the United States Congress, at home and abroad</p>
+    </div>
+    <div class="rule-heavy"></div>
+    <div class="rule-light"></div>
+  </header>
+
+  <nav class="sections" aria-label="Sections">
+    <div class="sections-inner">
+      {sections.map((s) => <a href={s.href} aria-current={current === s.key ? 'page' : undefined}>{s.label}</a>)}
+      <span class="spacer"></span>
+      {tools.map((s) => <a href={s.href} aria-current={current === s.key ? 'page' : undefined}>{s.label}</a>)}
+    </div>
+  </nav>
+
+  {edition && (
+    <div class="stale" role="status" hidden data-edition-date={edition.compiledAt}>
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M8 4.5V8.4L10.4 9.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+      <span class="stale-text"></span>
+    </div>
+  )}
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="colophon">
+    <p>Every statement links to its source and shows how well it is verified. Facts come from primary sources; partisan outlets only show how each side frames a story.</p>
+    <p>Independent project. Not affiliated with the United States Congress. Emblem is an original design, not an official seal.</p>
+  </footer>
+
+  <script is:inline define:vars={{ base }}>
+    // Tell the reader how old the edition is, in Berlin calendar days.
+    const box = document.querySelector('.stale');
+    if (box) {
+      const day = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(d);
+      const ed = new Date(box.dataset.editionDate);
+      const days = Math.round((Date.parse(day(new Date())) - Date.parse(day(ed))) / 86400000);
+      if (days >= 1) {
+        const weekday = new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Berlin', weekday: 'long' }).format(ed);
+        box.querySelector('.stale-text').textContent = days === 1
+          ? `You are reading ${weekday}'s edition. One day of news is not in it yet.`
+          : `You are reading ${weekday}'s edition. ${days} days of news are not in it yet.`;
+        box.hidden = false;
+      }
+    }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(`${base}sw.js`, { scope: base }).catch(() => {});
+    }
+  </script>
+</body>
+</html>
+
+<style>
+  .masthead { padding: 18px var(--gutter) 0; }
+  .masthead-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+  .masthead-seal { justify-self: start; }
+  .nameplate { text-align: center; }
+  .nameplate-title {
+    font-family: var(--font-display); font-size: clamp(34px, 5.6vw, 72px); line-height: 1;
+    letter-spacing: -0.01em; color: var(--ink); text-decoration: none;
+  }
+  .dateline { font-size: 15px; color: var(--ink-soft); margin: 10px 0 0; font-variant-numeric: tabular-nums; }
+  .motto { justify-self: end; max-width: 230px; margin: 0; font-size: 15px; line-height: 1.4; text-align: right; color: var(--ink-soft); }
+  .rule-heavy { margin-top: 14px; border-top: 3px solid var(--rule-strong); }
+  .rule-light { margin-top: 2px; border-top: 1px solid var(--rule-strong); }
+
+  .sections { border-bottom: 1px solid var(--rule); overflow-x: auto; }
+  .sections-inner { min-height: 50px; padding: 0 var(--gutter); display: flex; align-items: stretch; gap: 28px; font-size: 16px; white-space: nowrap; }
+  .sections a { display: flex; align-items: center; color: var(--ink); text-decoration: none; border-bottom: 3px solid transparent; }
+  .sections a:hover { border-bottom-color: var(--rule); }
+  .sections a[aria-current='page'] { font-weight: 700; border-bottom-color: var(--accent); }
+  .spacer { flex: 1; }
+
+  .stale { margin: 0 var(--gutter); padding: 10px 0; display: flex; gap: 14px; align-items: center; font-size: 15px; color: var(--stale); border-bottom: 1px solid var(--rule); }
+  .stale[hidden] { display: none; }
+  .stale-text { color: var(--ink); }
+
+  main { padding: 0 var(--gutter); }
+
+  .colophon { margin-top: 64px; padding: 20px var(--gutter) 32px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-soft); display: grid; gap: 6px; }
+  .colophon p { margin: 0; max-width: 80ch; }
+
+  @media (max-width: 760px) {
+    .masthead-row { grid-template-columns: auto 1fr; }
+    .masthead-seal :global(svg) { width: 64px; height: 64px; }
+    .nameplate { text-align: left; }
+    .motto { display: none; }
+    .sections-inner { gap: 20px; }
+  }
+</style>

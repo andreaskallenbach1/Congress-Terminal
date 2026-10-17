@@ -1,0 +1,15 @@
+---
+// Honest placeholder for a page whose content arrives with the first edition or a later build step.
+interface Props { title: string }
+const { title } = Astro.props;
+---
+<section class="empty">
+  <h1>{title}</h1>
+  <div class="body"><slot /></div>
+</section>
+<style>
+  .empty { padding: 48px 0 24px; max-width: 68ch; display: grid; gap: 14px; }
+  h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 4vw, 44px); line-height: 1.1; margin: 0; }
+  .body { font-family: var(--font-read); font-size: 19px; line-height: 1.6; color: var(--ink-soft); display: grid; gap: 12px; }
+  .body :global(p) { margin: 0; }
+</style>

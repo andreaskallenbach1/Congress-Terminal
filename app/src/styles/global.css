@@ -1,0 +1,72 @@
+@import '@fontsource/libre-caslon-display/400.css';
+@import '@fontsource/libre-caslon-text/400.css';
+@import '@fontsource-variable/archivo/standard.css';
+@import '@fontsource-variable/source-serif-4/standard.css';
+
+/* Federal Program: newspaper masthead, patina green as the single accent (design round 6) */
+:root {
+  --paper: #FFFFFF;
+  --ink: #1A1A1A;
+  --ink-soft: #555555;
+  --ink-faint: #808080;      /* was #9A9A9A in the mockups; raised to pass AA for large text */
+  --rule: #D4D4D4;
+  --rule-strong: #1A1A1A;
+  --wash: #F2F2F0;
+  --track: #ECECEA;
+  --accent: #2F6B5E;
+  --accent-deep: #1F4A41;
+  --accent-wash: #CFE3DD;
+  --stale: #8A5A00;
+
+  --font-display: 'Libre Caslon Display', 'Georgia', serif;
+  --font-seal: 'Libre Caslon Text', 'Georgia', serif;
+  --font-ui: 'Archivo Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-read: 'Source Serif 4 Variable', 'Georgia', serif;
+
+  --gutter: clamp(16px, 3.4vw, 48px);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121514;
+    --ink: #E8EBEA;
+    --ink-soft: #A9B0AD;
+    --ink-faint: #8C9490;
+    --rule: #2E3532;
+    --rule-strong: #E8EBEA;
+    --wash: #1A1F1D;
+    --track: #252B29;
+    --accent: #6FB3A2;
+    --accent-deep: #9CCFC1;
+    --accent-wash: #22403A;
+    --stale: #E0B060;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-deep); }
+::selection { background: var(--accent-wash); color: var(--ink); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; }
+
+.skip-link {
+  position: absolute; left: var(--gutter); top: -100px;
+  background: var(--ink); color: var(--paper); padding: 8px 14px; z-index: 10;
+}
+.skip-link:focus { top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

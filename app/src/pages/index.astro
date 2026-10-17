@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { latestEdition } from '../lib/editions';
+const edition = latestEdition();
+---
+<Base current="today">
+  {edition ? (
+    <section class="placeholder">
+      <p>The edition {edition.id} is published. Story layout arrives in build step 2.</p>
+    </section>
+  ) : (
+    <EmptyState title="The first edition has not been compiled yet">
+      <p>Each edition is written and fact-checked by the briefing pipeline, then published here. Until the first run, there is nothing to read, and this page will not show sample stories in its place.</p>
+      <p>Once an edition exists, it stays on this page until a newer one replaces it; older editions move to the archive.</p>
+    </EmptyState>
+  )}
+</Base>

@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import EmptyState from '../components/EmptyState.astro';
+const base = import.meta.env.BASE_URL;
+---
+<Base title="Page not found" current="">
+  <EmptyState title="This page does not exist">
+    <p>The address may be mistyped, or the page belongs to an edition that was never published. <a href={base}>Go to today's briefing</a>.</p>
+  </EmptyState>
+</Base>
