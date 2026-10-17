@@ -12,15 +12,13 @@ The full structure is checked again by the site build (app/src/content.config.ts
 Usage: python3 pipeline/check_edition.py briefings/<id>.json run/<run-id>/inputs.json
 Exit code 0 = publishable; 1 = problems (listed in run/<run-id>/check.json).
 """
-import html
 import json
 import re
 import sys
-import unicodedata
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from collect import get  # noqa: E402  (same throttling and user agent)
+import pages  # noqa: E402  (page store: one fetch per source and day)
 
 # Outlets that block direct fetches (CLAUDE.md): their quotes cannot be machine-checked, so their claims
 # can at most be "multiple reports" backed by other outlets, never the only evidence.
@@ -28,25 +26,13 @@ UNFETCHABLE = ("apnews.com", "reuters.com", "c-span.org", "axios.com", "news.goo
 
 
 def normalize(s: str) -> str:
-    s = unicodedata.normalize("NFKC", html.unescape(s))
-    s = s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
-    s = s.replace("–", "-").replace("—", "-").replace(" ", " ")
-    return re.sub(r"\s+", " ", s).strip().lower()
-
-
-_pages: dict[str, str | None] = {}
+    return pages.normalize(s)
 
 
 def page_text(url: str) -> str | None:
-    if url not in _pages:
-        raw = get(url, timeout=30)
-        if raw is None:
-            _pages[url] = None
-        else:
-            text = raw.decode("utf-8", errors="ignore")
-            text = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", text)
-            _pages[url] = normalize(re.sub(r"<[^>]+>", " ", text))
-    return _pages[url]
+    """Normalized page text from the page store (fetched once per day, shared by all stages)."""
+    t = pages.text(url)
+    return t.lower() if t is not None else None
 
 
 def words(paragraphs: list[str]) -> int:

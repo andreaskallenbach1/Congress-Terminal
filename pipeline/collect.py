@@ -290,6 +290,9 @@ def collect_arms_sales(since: dt.datetime) -> list[dict]:
         v = (re.search(r"estimated total (?:cost|value) is (\$[\d.,]+ (?:billion|million))", text, re.I)
              or re.search(r"TOTAL\W{0,60}(\$ ?[\d.,]+ (?:billion|million))", text)
              or re.search(r"Total(?: Estimated)? Value[^$]{0,40}(\$[\d.,]+ (?:billion|million))", text, re.I))
+        d = re.search(r"under Consideration for Purchase:\s*(?:Major Defense Equipment \(MDE\):\s*)?(.{10,400})", text)
+        first = re.split(r"(?<=[a-z\)])\s+(?=[A-Z][a-z]+(?:-[a-z]+)? \(\d+\))|\s\(iv\)|\sNon-MDE", d.group(1))[0] if d else None
+        a["system"] = first.strip()[:140] if first else None
         a["purchaser"] = m.group(1).strip() if m else None
         a["value"] = v.group(1) if v else None
     note(f"arms sales notices: {len(out)} ({sum(1 for a in out if a.get('purchaser'))} with purchaser from GovInfo)")
@@ -412,6 +415,32 @@ def collect_feeds(since: dt.datetime) -> list[dict]:
     return out
 
 
+# ---------------------------------------------------------------- compact view for the agents
+
+def compact(inputs: dict) -> dict:
+    """Saving measure 5: what the gatekeeper and the story builder read. The same story from several feeds becomes
+    one entry with all outlets; summaries are cut to 160 characters; hard facts (votes) stay complete."""
+    def key(title: str) -> str:
+        t = re.sub(r"\s[-|–]\s[^-|–]{2,40}$", "", title or "")          # "Headline - Outlet" from Google News
+        return re.sub(r"[^a-z0-9 ]", "", t.lower())[:70]
+    groups: dict[str, dict] = {}
+    for it in inputs["feedItems"]:
+        g = groups.setdefault(key(it["title"]), {"title": it["title"], "summary": it["summary"][:160], "published": it["published"], "links": []})
+        g["links"].append({"outlet": it["outlet"], "tier": it["tier"], "url": it["url"]})
+    items = sorted(groups.values(), key=lambda g: g["published"] or "", reverse=True)
+    for i, g in enumerate(items):
+        g["n"] = i
+    return {
+        "runId": inputs["runId"], "since": inputs["since"], "previousEdition": inputs["previousEdition"],
+        "senateVotes": inputs["senateVotes"], "houseVotes": inputs["houseVotes"],
+        "bills": [{"number": b["number"], "title": b["title"][:140], "action": f"{b['latestAction']['date']}: {(b['latestAction']['text'] or '')[:120]}"} for b in inputs["bills"]],
+        "nominations": inputs["nominations"],
+        "committeeMeetings": [{"date": m["date"], "chamber": m["chamber"], "title": (m["title"] or "")[:120], "committees": m["committees"]} for m in inputs["committeeMeetings"]],
+        "armsSales": [{k: a.get(k) for k in ("date", "documentNumber", "purchaser", "value", "textUrl")} for a in inputs["armsSales"]],
+        "items": items,
+    }
+
+
 # ---------------------------------------------------------------- main
 
 def previous_edition() -> dict | None:
@@ -453,6 +482,11 @@ def main() -> None:
         "log": log,
     }
     (run_dir / "inputs.json").write_text(json.dumps(inputs, indent=1, ensure_ascii=False))
+    view = compact(inputs)
+    (run_dir / "inputs-compact.json").write_text(json.dumps(view, ensure_ascii=False, separators=(",", ":")))
+    # Headlines only, one per line, for the gatekeeper (stage 0, small model): "n | outlets | title"
+    (run_dir / "headlines.txt").write_text("\n".join(
+        f"{g['n']} | {', '.join(sorted({l['outlet'] for l in g['links']}))[:60]} | {g['title']}" for g in view["items"]))
     counts = {k: len(v) for k, v in inputs.items() if isinstance(v, list) and k != "log"}
     print(json.dumps({"runDir": str(run_dir.relative_to(ROOT)), "counts": counts}, indent=1))
 

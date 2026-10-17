@@ -8,43 +8,18 @@
 
 Usage: python3 pipeline/merge_drafts.py <run-id>
 """
-import html
 import json
-import re
 import sys
-import unicodedata
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from collect import get  # noqa: E402
-from check_edition import normalize  # noqa: E402
+import pages  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-_raw: dict[str, str | None] = {}
-
-
-def readable(url: str) -> str | None:
-    """Page text with the same cleaning as normalize(), but keeping case."""
-    if url not in _raw:
-        data = get(url, timeout=30)
-        if data is None:
-            _raw[url] = None
-        else:
-            t = data.decode("utf-8", errors="ignore")
-            t = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", t)
-            t = unicodedata.normalize("NFKC", html.unescape(re.sub(r"<[^>]+>", " ", t)))
-            t = t.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
-            t = t.replace("–", "-").replace("—", "-").replace(" ", " ")
-            _raw[url] = re.sub(r"\s+", " ", t).strip()
-    return _raw[url]
 
 
 def restore_case(quote: str, url: str) -> str:
-    text = readable(url)
-    if not text:
-        return quote
-    i = text.lower().find(normalize(quote))
-    return text[i:i + len(normalize(quote))] if i >= 0 else quote
+    return pages.cased_quote(quote=quote, url=url)
 
 
 def main() -> None:

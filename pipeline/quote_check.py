@@ -3,19 +3,16 @@
 
 Usage: python3 pipeline/quote_check.py URL "quote"      → prints FOUND, NOT FOUND or UNREACHABLE
        python3 pipeline/quote_check.py URL --text      → prints the normalized page text (first 20,000 chars)
-Uses the same normalization as the machine check (stage 7), so a FOUND here will pass there.
+Reads from the page store (pipeline/pages.py), the same text the machine check (stage 7) uses.
 """
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from check_edition import normalize, page_text  # noqa: E402
+import pages  # noqa: E402
 
 url, arg = sys.argv[1], sys.argv[2]
-text = page_text(url)
-if text is None:
-    print("UNREACHABLE")
-elif arg == "--text":
-    print(text[:20000])
+if arg == "--text":
+    print((pages.text(url) or "UNREACHABLE")[:20000])
 else:
-    print("FOUND" if normalize(arg) in text else "NOT FOUND")
+    print(pages.find(url, arg))
