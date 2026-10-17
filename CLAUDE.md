@@ -214,7 +214,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
   für Rubrik, Faktenprüfung, Story-Format), `dataviz` (Diagramme), `deep-research` (Vorbild für Sammler).
   Keine Skills aus ungeprüften Sammelportalen.
 - **Verbrauch und Token-Sparen (Pro-Abo):** 25 Rollen. Hebel: Code statt KI für Fleißarbeit · Modell je Aufgabe (klein: Türsteher, Faktenkarten, Sammler, Verfahren · mittel: Story-Builder, Relevanz, Gegenagent, Historiker, Prüfer B, Neutralität · groß: Schiedsrichter, Redakteure, Prüfer A, Chefredaktion) · Türsteher · Faktenkarten · nur das Neue · Regeln als Skills. **Keine** gebündelte Prüfung: jede Kernaussage wird einzeln geprüft (Andreas' Entscheidung).
-- **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe über die Browser-Sprachausgabe (kostenlos); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
+- **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe (Stimme offen: Browser-Stimmen und Kokoro am 17.10.2026 getestet und von Andreas als zu künstlich abgelehnt; Kandidaten OpenAI gpt-4o-mini-tts, Google Chirp 3 HD, ElevenLabs – Audio per API-Schlüssel in der GitHub Action, keine Claude-Tokens); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
 - **Konnektoren (Entscheidung 17.10.2026, getestet 17.10.2026):** Andreas verbindet sie unter claude.ai/customize/connectors; wirksam erst in einer neu gestarteten Sitzung bzw. im Lauf, wenn sie in der Routine ausgewählt sind. Praxistest:
   | Konnektor | Test | Rolle im Lauf |
   |---|---|---|
@@ -224,7 +224,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
   | USAFacts | ✅ 24 Behördenquellen, u. a. Congress.gov, FEC, Treasury, USAspending | Zahlen für Haushalt/Midterms, nur mit `_citation` |
   | Firecrawl | ✅ erreichbar; Seiten-Zusammenfassung war unbrauchbar und aus dem Cache → nur Markdown-Abruf mit `maxAge: 0` nutzen | Volltexte langer Primärquellen (Faktenkarten) |
   | Gov Relations | ✅ Lobbying-Meldungen je Gesetz (LDA-Daten) – von Andreas zusätzlich verbunden | Hintergrund „wer lobbyiert“ |
-  | Unsplash | ❌ in der Sitzung nicht verfügbar – Verbindung prüfen | Ersatzbilder |
+  | Unsplash | ✅ Fotosuche funktioniert (nachverbunden 17.10.2026) | Ersatzbilder |
   Konnektoren liefern Orientierung und Rohmaterial; Fakten weiterhin nur aus Primärquellen (Abschnitt 6). Keine Konnektoren mit persönlichen Daten (Gmail, Kalender, Drive, Gamma …) im Lauf.
 
 ## 10. Projektdokumente
