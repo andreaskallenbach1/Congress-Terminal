@@ -21,14 +21,20 @@ const tools = [
 const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Terminal';
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{pageTitle}</title>
   <meta name="description" content="The daily briefing on the United States Congress, at home and abroad.">
-  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121514" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FFFFFF">
+  <script is:inline>
+    // Apply the saved theme before the first paint; default is light.
+    try {
+      const t = localStorage.getItem('ct-theme');
+      if (t === 'dark' || t === 'auto') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
   <link rel="manifest" href={`${base}manifest.webmanifest`}>
   <link rel="icon" href={`${base}icons/favicon.svg`} type="image/svg+xml">
   <link rel="apple-touch-icon" href={`${base}icons/icon-192.png`}>
@@ -58,6 +64,10 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
       {sections.map((s) => <a href={s.href} aria-current={current === s.key ? 'page' : undefined}>{s.label}</a>)}
       <span class="spacer"></span>
       {tools.map((s) => <a href={s.href} aria-current={current === s.key ? 'page' : undefined}>{s.label}</a>)}
+      <button type="button" class="theme" id="theme-toggle" aria-label="Colour theme: light. Change theme">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"></path></svg>
+        <span class="theme-label">Light</span>
+      </button>
     </div>
   </nav>
 
@@ -92,6 +102,27 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
         box.hidden = false;
       }
     }
+    // Theme switch: Light → Dark → Auto (follows Windows) → Light.
+    const themeBtn = document.getElementById('theme-toggle');
+    const names = { light: 'Light', dark: 'Dark', auto: 'Auto' };
+    const order = ['light', 'dark', 'auto'];
+    const paint = () => {
+      const t = document.documentElement.dataset.theme || 'light';
+      themeBtn.querySelector('.theme-label').textContent = names[t];
+      themeBtn.setAttribute('aria-label', `Colour theme: ${names[t]}. Change theme`);
+      const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.querySelector('meta[name=theme-color]').content = dark ? '#121514' : '#FFFFFF';
+    };
+    themeBtn.addEventListener('click', () => {
+      const t = document.documentElement.dataset.theme || 'light';
+      const next = order[(order.indexOf(t) + 1) % order.length];
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('ct-theme', next); } catch (e) {}
+      paint();
+    });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint);
+    paint();
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register(`${base}sw.js`, { scope: base }).catch(() => {});
     }
@@ -119,6 +150,12 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
   .sections a:hover { border-bottom-color: var(--rule); }
   .sections a[aria-current='page'] { font-weight: 700; border-bottom-color: var(--accent); }
   .spacer { flex: 1; }
+  .theme {
+    align-self: center; display: flex; align-items: center; gap: 6px; padding: 5px 10px;
+    font: inherit; font-size: 14px; color: var(--ink-soft); background: none;
+    border: 1px solid var(--rule); border-radius: 0; cursor: pointer;
+  }
+  .theme:hover { color: var(--ink); border-color: var(--ink-soft); }
 
   .stale { margin: 0 var(--gutter); padding: 10px 0; display: flex; gap: 14px; align-items: center; font-size: 15px; color: var(--stale); border-bottom: 1px solid var(--rule); }
   .stale[hidden] { display: none; }

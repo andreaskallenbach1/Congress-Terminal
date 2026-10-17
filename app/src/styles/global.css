@@ -27,8 +27,8 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+/* Light is the default (the newspaper design is light-first). The reader can choose Dark, or Auto to follow Windows. */
+:root[data-theme="dark"] {
     --paper: #121514;
     --ink: #E8EBEA;
     --ink-soft: #A9B0AD;
@@ -42,6 +42,22 @@
     --accent-wash: #22403A;
     --stale: #E0B060;
     color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+      --paper: #121514;
+      --ink: #E8EBEA;
+      --ink-soft: #A9B0AD;
+      --ink-faint: #8C9490;
+      --rule: #2E3532;
+      --rule-strong: #E8EBEA;
+      --wash: #1A1F1D;
+      --track: #252B29;
+      --accent: #6FB3A2;
+      --accent-deep: #9CCFC1;
+      --accent-wash: #22403A;
+      --stale: #E0B060;
+      color-scheme: dark;
   }
 }
 
