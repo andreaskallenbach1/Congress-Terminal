@@ -31,7 +31,7 @@ CONGRESS, SESSION, YEAR = 119, 2, 2026
 
 # Minimum seconds between requests to the same host. The Federal Register blocked this IP once
 # after rapid full-text fetches (17.10.2026), so it gets the slowest pace.
-PACE = {"www.federalregister.gov": 4.0, "api.congress.gov": 0.6, "news.google.com": 1.5}
+PACE = {"www.federalregister.gov": 4.0, "www.govinfo.gov": 2.0, "api.congress.gov": 0.6, "news.google.com": 1.5}
 _last_hit: dict[str, float] = {}
 log: list[str] = []
 
@@ -276,7 +276,23 @@ def collect_arms_sales(since: dt.datetime) -> list[dict]:
         "documentNumber": d.get("document_number"),
         "abstract": d.get("abstract"),
     } for d in (data or {}).get("results", [])]
-    note(f"arms sales notices: {len(out)} (full texts are fetched later, one at a time)")
+    today = dt.date.today().isoformat()
+    for a in out:
+        # Full text from GovInfo (Government Publishing Office, the official edition of the Federal Register),
+        # not from federalregister.gov, which blocks repeated full-text requests. Available from publication day.
+        a["textUrl"] = f"https://www.govinfo.gov/content/pkg/FR-{a['date']}/html/{a['documentNumber']}.htm"
+        if a["date"] > today:
+            note(f"arms sale {a['documentNumber']}: published {a['date']}, full text not yet on GovInfo")
+            continue
+        raw = get(a["textUrl"])
+        text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw.decode("utf-8", "ignore"))) if raw else ""
+        m = re.search(r"Prospective Purchaser:\s*(.+?)\s+(?:\(?ii\)?|Total)", text)
+        v = (re.search(r"estimated total (?:cost|value) is (\$[\d.,]+ (?:billion|million))", text, re.I)
+             or re.search(r"TOTAL\W{0,60}(\$ ?[\d.,]+ (?:billion|million))", text)
+             or re.search(r"Total(?: Estimated)? Value[^$]{0,40}(\$[\d.,]+ (?:billion|million))", text, re.I))
+        a["purchaser"] = m.group(1).strip() if m else None
+        a["value"] = v.group(1) if v else None
+    note(f"arms sales notices: {len(out)} ({sum(1 for a in out if a.get('purchaser'))} with purchaser from GovInfo)")
     return out
 
 

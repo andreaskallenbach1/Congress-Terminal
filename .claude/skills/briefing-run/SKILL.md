@@ -53,7 +53,7 @@ Prompt it with:
 
 ## Stage 4 · Write and check
 
-### Writers (model: opus, one subagent per pillar)
+### Writers (one subagent per pillar; model: **sonnet**, only the lead story with **opus** — Andreas' decision 18.10.2026)
 Each writer gets its candidates, the primary data and the source URLs, and writes stories in the schema of
 `app/src/content.config.ts` (read it). Rules:
 - Format: headline, dek, What's new (1–2 sentences), Why it matters, What's next, optional Background.
@@ -122,7 +122,9 @@ with the message `Edition <run-id>` and push. The GitHub Action publishes the si
 - After R3 the fixed rule applies strictly: a core claim not confirmed by both → story dropped (may appear as an
   attributed one-line "notable" item). Never re-weight a claim to save a story.
 - Forecasters (Cook, Sabato, Inside Elections) are primary only for their own ratings, and the claim must name them.
-- Federal Register full texts are blocked from the session IP: use API metadata only, never retry. FEC needs its own key.
+- Federal Register full texts: never from federalregister.gov (blocks the IP); `collect.py` takes them from GovInfo
+  (official GPO edition, available from the publication day) and fills purchaser and value. Amendment notices can
+  carry several values: the editor checks each table row against `textUrl`. FEC needs its own key.
 
 ## Budget
 
