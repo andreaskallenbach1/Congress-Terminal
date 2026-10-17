@@ -204,7 +204,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
 - **Web-App:** statische PWA, gehostet über GitHub Pages aus diesem Repository; installierbar über Edge/Chrome.
 - **Daten:** Briefings als Dateien im Repository (ein Briefing pro Tag + Archiv).
 - **Läufe** schreiben Briefings fest auf `main`; eine GitHub Action baut und veröffentlicht die Seite. Der Routine-Endpunkt erlaubt keine Browser-Aufrufe (CORS-Vorabfrage → 405), daher der Weg über GitHub.
-- **Phase-3-Maßnahmen (17.10.2026):** 40 Minuten sind Obergrenze; nur GitHub-Konnektor im Lauf; Statusdatei je Lauf; Kernaussagen (8–12 je Story) doppelt prüfen; Abrufe drosseln und zwischenspeichern; stufenweise bauen und testen, Betrieb mit voller Pipeline.
+- **Phase-3-Maßnahmen (17.10.2026):** 40 Minuten sind Obergrenze; im Lauf nur GitHub plus die sechs Recherche-Konnektoren; Statusdatei je Lauf; Kernaussagen (8–12 je Story) doppelt prüfen; Abrufe drosseln und zwischenspeichern; stufenweise bauen und testen, Betrieb mit voller Pipeline.
 - **Git:** Entwicklung auf dem zugewiesenen `claude/…`-Branch; keine Pull Requests ohne Andreas' Auftrag.
 - **Quellentest:** `./scripts/check_sources.sh` vor Änderungen an der Pipeline und bei Verdacht auf Ausfälle.
 - **Design-Skills im Repository** (`.claude/skills/`, geprüft, Lizenzen beigelegt): `impeccable` (Apache-2.0, Design-Prozess und Detektor gegen KI-Standardoptik), `frontend-design` (Anthropic), `ui-ux-pro-max` (MIT, Paletten- und Schriftdatenbank). Produktwahrheit für das Design: `PRODUCT.md`.
@@ -215,7 +215,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
   Keine Skills aus ungeprüften Sammelportalen.
 - **Verbrauch und Token-Sparen (Pro-Abo):** 25 Rollen. Hebel: Code statt KI für Fleißarbeit · Modell je Aufgabe (klein: Türsteher, Faktenkarten, Sammler, Verfahren · mittel: Story-Builder, Relevanz, Gegenagent, Historiker, Prüfer B, Neutralität · groß: Schiedsrichter, Redakteure, Prüfer A, Chefredaktion) · Türsteher · Faktenkarten · nur das Neue · Regeln als Skills. **Keine** gebündelte Prüfung: jede Kernaussage wird einzeln geprüft (Andreas' Entscheidung).
 - **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe über die Browser-Sprachausgabe (kostenlos); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
-- **Konnektoren:** Vorschlag Parallel Search, CourtListener, USAFacts, Tavily (optional Firecrawl, Unsplash); keine Konnektoren mit persönlichen Daten im Lauf. Entscheidung von Andreas offen.
+- **Konnektoren (Entscheidung 17.10.2026):** Parallel Search, CourtListener, USAFacts, Tavily, Firecrawl, Unsplash – alle sechs. Andreas verbindet sie unter claude.ai/customize/connectors; wirksam erst in einer neu gestarteten Sitzung bzw. im Lauf, wenn sie in der Routine ausgewählt sind. Keine Konnektoren mit persönlichen Daten (Gmail, Kalender, Drive, Gamma …) im Lauf.
 
 ## 10. Projektdokumente
 
