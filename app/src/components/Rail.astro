@@ -1,0 +1,51 @@
+---
+// Right rail: overnight, today, the next seven days and the countdown to Election Day.
+import { formatDay, type Edition } from '../lib/editions';
+interface Props { edition: Edition }
+const { edition } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const next = edition.agenda.slice(0, 5);
+---
+<aside class="rail" aria-label="What happens when">
+  {edition.overnight.length > 0 && <section><h2>Overnight</h2>{edition.overnight.map((t) => <p>{t}</p>)}</section>}
+  {edition.today.length > 0 && <section><h2>Today</h2>{edition.today.map((t) => <p>{t}</p>)}</section>}
+  <section>
+    <h2>Next 7 days</h2>
+    {next.length === 0 ? <p class="quiet">Nothing scheduled in the sources checked.</p> : (
+      <dl class="agenda">
+        {next.map((a) => <><dt>{formatDay(a.date, { weekday: 'short', month: 'short', day: 'numeric' })}</dt><dd>{a.url ? <a href={a.url}>{a.title}</a> : a.title}</dd></>)}
+      </dl>
+    )}
+    {edition.agenda.length > next.length && <p class="more"><a href={`${base}calendar/`}>Full calendar</a></p>}
+  </section>
+  <section class="countdown" data-election="2026-11-03" hidden>
+    <span class="days"></span><span class="what"></span>
+  </section>
+</aside>
+<style>
+  .rail { display: grid; gap: 22px; align-content: start; padding-top: 28px; }
+  h2 { margin: 0 0 6px; font-size: 21px; font-weight: 800; font-stretch: 88%; }
+  p { margin: 0 0 6px; font-size: 15px; line-height: 1.5; }
+  .quiet { color: var(--ink-soft); }
+  .agenda { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; margin: 0; font-size: 15px; }
+  .agenda dt { color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .agenda dd { margin: 0; }
+  .more { margin-top: 6px; font-size: 14px; }
+  .countdown { border-top: 1px solid var(--ink); padding-top: 14px; display: flex; gap: 12px; align-items: center; }
+  .countdown[hidden] { display: none; }
+  .days { font-family: var(--font-display); font-size: 52px; line-height: 1; }
+  .what { font-size: 15px; line-height: 1.4; }
+</style>
+<script>
+  // Days to Election Day, counted in Berlin calendar days on the reader's device.
+  const box = document.querySelector<HTMLElement>('.countdown');
+  if (box) {
+    const day = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(d);
+    const n = Math.round((Date.parse(box.dataset.election!) - Date.parse(day(new Date()))) / 86400000);
+    if (n >= 0) {
+      box.querySelector('.days')!.textContent = String(n);
+      box.querySelector('.what')!.innerHTML = n === 0 ? 'Election Day is today,<br>Tuesday, November 3' : `day${n === 1 ? '' : 's'} to Election Day,<br>Tuesday, November 3`;
+      box.hidden = false;
+    }
+  }
+</script>

@@ -1,0 +1,20 @@
+---
+import StatusMark from './StatusMark.astro';
+import type { Story, Edition } from '../lib/editions';
+interface Props { story: Story; edition: Edition }
+const { story, edition } = Astro.props;
+const names = [...new Set(story.claims.flatMap((c) => c.evidence.map((e) => e.sourceId)))]
+  .map((id) => edition.sources.find((s) => s.id === id)?.name)
+  .filter(Boolean)
+  .slice(0, 3);
+---
+<div class="meta">
+  <StatusMark status={story.status} label />
+  {names.length > 0 && <span>{names.join(', ')}</span>}
+  <span>{Math.round(story.readingMinutes)} min read</span>
+  {story.continuing && <span class="follow">Follow-up</span>}
+</div>
+<style>
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font-size: 14px; color: var(--ink-soft); }
+  .follow { border: 1px solid var(--rule); padding: 0 6px; }
+</style>

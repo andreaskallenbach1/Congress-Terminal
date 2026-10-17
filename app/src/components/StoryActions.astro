@@ -1,0 +1,39 @@
+---
+// Continue reading, set aside (kept in this browser), and feedback that opens a prefilled GitHub issue (FT 8).
+import { feedbackUrl, storyUrl, type Story, type Edition } from '../lib/editions';
+interface Props { story: Story; edition: Edition; showContinue?: boolean }
+const { story, edition, showContinue = true } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+<div class="actions">
+  {showContinue && <a class="btn btn-primary" href={storyUrl(base, story)}>Continue reading</a>}
+  <button type="button" class="btn set-aside" data-story={story.id} aria-pressed="false">Set aside</button>
+  <a class="btn" href={feedbackUrl('error', edition, story)} target="_blank" rel="noopener">Flag an error</a>
+  <a class="btn" href={feedbackUrl('not-important', edition, story)} target="_blank" rel="noopener">Less of this</a>
+</div>
+<style>
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+  .btn { font: inherit; font-size: 15px; padding: 9px 16px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); text-decoration: none; cursor: pointer; }
+  .btn:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .btn-primary { border-color: var(--ink); }
+  .set-aside[aria-pressed='true'] { background: var(--accent-wash); border-color: var(--accent); }
+</style>
+<script>
+  const KEY = 'ct-set-aside';
+  const read = (): string[] => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } };
+  const write = (v: string[]) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch {} };
+  document.querySelectorAll<HTMLButtonElement>('.set-aside').forEach((btn) => {
+    const id = btn.dataset.story!;
+    const paint = () => {
+      const on = read().includes(id);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.textContent = on ? 'Set aside ✓' : 'Set aside';
+    };
+    btn.addEventListener('click', () => {
+      const list = read();
+      write(list.includes(id) ? list.filter((x) => x !== id) : [...list, id]);
+      paint();
+    });
+    paint();
+  });
+</script>

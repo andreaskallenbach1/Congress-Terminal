@@ -1,0 +1,25 @@
+---
+// Renders paragraphs; a "[[c3]]" marker becomes a status mark that links to the claim's evidence.
+import StatusMark from './StatusMark.astro';
+import type { Claim } from '../lib/editions';
+interface Props { paragraphs: string[]; claims: Claim[]; storyUrl: string; dropcap?: boolean }
+const { paragraphs, claims, storyUrl, dropcap = false } = Astro.props;
+const byId = new Map(claims.map((c) => [c.id, c]));
+const split = (p: string) => p.split(/(\[\[[a-z0-9-]+\]\])/i).filter(Boolean);
+---
+{paragraphs.map((p, i) => (
+  <p class:list={['para', { dropcap: dropcap && i === 0 }]}>
+    {split(p).map((part) => {
+      const m = part.match(/^\[\[([a-z0-9-]+)\]\]$/i);
+      if (!m) return part;
+      const c = byId.get(m[1]);
+      if (!c) return null;
+      return <a class="claim" href={`${storyUrl}#claim-${c.id}`} aria-label={`Source for this statement`}><StatusMark status={c.status} size={12} title={`${c.status === 'verified' ? 'Verified' : c.status === 'multiple' ? 'Multiple reports' : 'Unconfirmed'}: see source`} /></a>;
+    })}
+  </p>
+))}
+<style>
+  .para { margin: 0; }
+  .claim { text-decoration: none; margin-left: 3px; }
+  .dropcap::first-letter { float: left; font-family: var(--font-display); font-size: 4.1em; line-height: 0.82; padding: 6px 10px 0 0; }
+</style>

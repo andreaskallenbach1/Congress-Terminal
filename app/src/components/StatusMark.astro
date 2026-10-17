@@ -1,0 +1,21 @@
+---
+// Verification status mark: verified (primary source), multiple reports (two or more independent outlets), unconfirmed.
+import { STATUS_LABEL } from '../lib/editions';
+interface Props { status: 'verified' | 'multiple' | 'unconfirmed'; label?: boolean; size?: number; title?: string }
+const { status, label = false, size = 14, title } = Astro.props;
+const text = STATUS_LABEL[status];
+---
+<span class={`mark mark-${status}`} title={title ?? text}>
+  <svg width={size} height={size} viewBox="0 0 14 14" aria-hidden="true">
+    {status === 'verified' && <><circle cx="7" cy="7" r="6.5" fill="currentColor"></circle><path d="M4 7.2 L6.2 9.4 L10.2 5" fill="none" stroke="var(--paper)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></>}
+    {status === 'multiple' && <><circle cx="5" cy="7" r="4" fill="currentColor"></circle><circle cx="9" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.6"></circle></>}
+    {status === 'unconfirmed' && <circle cx="7" cy="7" r="5.6" fill="none" stroke="currentColor" stroke-width="1.6"></circle>}
+  </svg>
+  {label ? <span class="mark-label">{text}</span> : <span class="visually-hidden">{text}</span>}
+</span>
+<style>
+  .mark { display: inline-flex; align-items: center; gap: 5px; vertical-align: -1px; font-family: var(--font-ui); font-size: 14px; font-weight: 700; }
+  .mark-verified, .mark-multiple { color: var(--accent); }
+  .mark-unconfirmed { color: var(--stale); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>

@@ -1,0 +1,31 @@
+---
+// Watch: a clip that opens at the timestamp that matters.
+import { formatDay } from '../lib/editions';
+interface Props { clip: { title: string; channel: string; date: string; url: string; startSeconds: number; why: string; thumbnail?: string } }
+const { clip } = Astro.props;
+const mm = `${Math.floor(clip.startSeconds / 60)}:${String(clip.startSeconds % 60).padStart(2, '0')}`;
+const href = (() => { const u = new URL(clip.url); if (clip.startSeconds) u.searchParams.set('t', `${clip.startSeconds}s`); return u.toString(); })();
+---
+<article class="clip">
+  <a class="frame" href={href} target="_blank" rel="noopener" aria-label={`Play clip: ${clip.title}, from ${mm}`}>
+    {clip.thumbnail && <img src={clip.thumbnail} alt="" loading="lazy" />}
+    <svg width="54" height="54" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="27" fill="#FFFFFF"></circle><path d="M22 17 L37 27 L22 37 Z" fill="#111111"></path></svg>
+    <span class="start">Starts at {mm}</span>
+  </a>
+  <div>
+    <div class="src">{clip.channel}, {formatDay(clip.date, { month: 'long', day: 'numeric' })}</div>
+    <h3>{clip.title}</h3>
+    <p>{clip.why}</p>
+  </div>
+</article>
+<style>
+  .clip { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 20px; }
+  .frame { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: #1E1E1E; display: grid; place-items: center; overflow: hidden; }
+  .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.75; }
+  .frame svg { position: relative; }
+  .start { position: absolute; left: 10px; bottom: 10px; background: #2F6B5E; color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 2px 8px; }
+  .src { font-size: 14px; color: var(--ink-soft); }
+  h3 { margin: 2px 0 6px; font-size: 21px; font-weight: 700; font-stretch: 92%; line-height: 1.2; }
+  p { margin: 0; font-family: var(--font-read); font-size: 17px; line-height: 1.5; }
+  @media (max-width: 640px) { .clip { grid-template-columns: 1fr; } }
+</style>

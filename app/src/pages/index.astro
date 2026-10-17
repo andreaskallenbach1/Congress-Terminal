@@ -1,18 +1,209 @@
 ---
 import Base from '../layouts/Base.astro';
 import EmptyState from '../components/EmptyState.astro';
-import { latestEdition } from '../lib/editions';
-const edition = latestEdition();
+import SectionBar from '../components/SectionBar.astro';
+import StoryFull from '../components/StoryFull.astro';
+import StoryCard from '../components/StoryCard.astro';
+import SeatChart from '../components/SeatChart.astro';
+import Rail from '../components/Rail.astro';
+import Toc from '../components/Toc.astro';
+import Clip from '../components/Clip.astro';
+import StatusMark from '../components/StatusMark.astro';
+import { latestEdition, formatDay } from '../lib/editions';
+
+const base = import.meta.env.BASE_URL;
+const edition = await latestEdition();
+
+const byPillar = (p: string) => (edition?.stories ?? []).filter((s) => s.pillar === p).sort((a, b) => a.relevance.rank - b.relevance.rank);
+const top = byPillar('top');
+const foreign = byPillar('foreign');
+const midterms = byPillar('midterms');
+const floorStories = byPillar('floor');
+const [lead, ...moreTop] = top;
+const minutes = (list: { readingMinutes: number }[]) => list.reduce((a, s) => a + s.readingMinutes, 0);
+
+const toc = edition ? [
+  { href: '#top', label: 'Top stories', minutes: minutes(top) },
+  { href: '#foreign', label: 'Foreign Policy Desk', minutes: minutes(foreign) },
+  { href: '#midterms', label: 'Midterms 2026', minutes: minutes(midterms) },
+  { href: '#floor', label: 'Floor and committees', minutes: minutes(floorStories) + edition.floor.votes.length },
+  { href: '#watch', label: 'Watch', minutes: edition.watch.length * 2 },
+  { href: '#notable', label: 'Also notable', minutes: Math.max(1, edition.notable.length * 0.25) },
+].filter((i) => i.minutes > 0) : [];
+
+const sections = edition ? [
+  { key: 'foreign', label: 'Foreign Policy Desk', href: `${base}#foreign` },
+  { key: 'midterms', label: 'Midterms 2026', href: `${base}#midterms` },
+  { key: 'floor', label: 'Floor and committees', href: `${base}#floor` },
+  { key: 'watch', label: 'Watch', href: `${base}#watch` },
+] : [];
+
+const usd = (n: number) => n >= 1e9 ? `$${(n / 1e9).toFixed(n % 1e9 ? 2 : 0)} billion` : `$${Math.round(n / 1e6)} million`;
+const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.kind === 'markup') ?? [];
 ---
-<Base current="today">
-  {edition ? (
-    <section class="placeholder">
-      <p>The edition {edition.id} is published. Story layout arrives in build step 2.</p>
-    </section>
-  ) : (
+<Base current="today" sections={sections}>
+  {!edition ? (
     <EmptyState title="The first edition has not been compiled yet">
       <p>Each edition is written and fact-checked by the briefing pipeline, then published here. Until the first run, there is nothing to read, and this page will not show sample stories in its place.</p>
       <p>Once an edition exists, it stays on this page until a newer one replaces it; older editions move to the archive.</p>
     </EmptyState>
+  ) : (
+    <>
+      {edition.hero && (
+        <figure class="hero">
+          <img src={edition.hero.src} alt={edition.hero.alt} />
+          <figcaption>{edition.hero.credit}</figcaption>
+        </figure>
+      )}
+
+      <div class="front">
+        <Toc items={toc} total={edition.readingMinutes} />
+        <div class="lead" id="top">
+          <SectionBar id="top-bar" title="Top stories" meta={`${top.length} ${top.length === 1 ? 'story' : 'stories'}`} />
+          {lead && <StoryFull story={lead} edition={edition} />}
+          {moreTop.length > 0 && <div class="more">{moreTop.map((s) => <StoryCard story={s} edition={edition} />)}</div>}
+        </div>
+        <Rail edition={edition} />
+      </div>
+
+      <div class="pair">
+        <section aria-labelledby="floor-h">
+          <SectionBar title="Floor and committees" id="floor" />
+          <div class="sec">
+            {edition.floor.votes.length === 0 ? <p class="quiet">No roll-call votes since the last edition.</p> : edition.floor.votes.map((v) => (
+              <div class="vote">
+                <h3>{v.description}</h3>
+                <p class="vote-line">{v.question}: {v.result}. <StatusMark status="verified" label /> <span class="quiet">official roll call</span></p>
+                <SeatChart vote={v} />
+              </div>
+            ))}
+            {floorStories.map((s) => <StoryCard story={s} edition={edition} />)}
+            {committeeAhead.length > 0 && (
+              <>
+                <h3 class="sub">Committee meetings ahead</h3>
+                <dl class="table">
+                  {committeeAhead.map((a) => <><dt>{formatDay(a.date, { weekday: 'short', month: 'short', day: 'numeric' })}</dt><dd>{a.committee && <strong>{a.committee}: </strong>}{a.url ? <a href={a.url}>{a.title}</a> : a.title}</dd></>)}
+                </dl>
+              </>
+            )}
+          </div>
+        </section>
+
+        <section aria-labelledby="midterms-h">
+          <SectionBar title="Midterms 2026" id="midterms" />
+          <div class="sec">
+            {midterms.length === 0 ? <p class="quiet">No race with significant news since the last edition.</p> : midterms.map((s, i) => <StoryCard story={s} edition={edition} index={i + 1} />)}
+          </div>
+        </section>
+      </div>
+
+      <section aria-labelledby="foreign-h">
+        <SectionBar title="Foreign Policy Desk" id="foreign" />
+        <div class="sec foreign">
+          <div>
+            {foreign.length === 0 ? <p class="quiet">No foreign-policy action by Congress since the last edition.</p> : foreign.map((s) => <StoryCard story={s} edition={edition} />)}
+          </div>
+          {edition.armsSales.length > 0 && (
+            <div>
+              <h3 class="sub">Arms sales notified to Congress</h3>
+              <div class="scroll">
+                <table>
+                  <thead><tr><th scope="col">Purchaser</th><th scope="col">System</th><th scope="col" class="num">Value</th></tr></thead>
+                  <tbody>{edition.armsSales.map((a) => <tr><td>{a.purchaser}</td><td><a href={a.url}>{a.system}</a></td><td class="num">{usd(a.valueUSD)}</td></tr>)}</tbody>
+                </table>
+              </div>
+              <p class="quiet small">Federal Register notifications. Congress can block a sale by joint resolution of disapproval.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {edition.watch.length > 0 && (
+        <section aria-labelledby="watch-h">
+          <SectionBar title="Watch" id="watch" />
+          <div class="sec clips">{edition.watch.map((c) => <Clip clip={c} />)}</div>
+        </section>
+      )}
+
+      {edition.notable.length > 0 && (
+        <section aria-labelledby="notable-h">
+          <SectionBar title="Also notable" id="notable" />
+          <ul class="sec notable">
+            {edition.notable.map((n) => <li><a href={n.url}>{n.headline}</a> <span>{n.sentence}</span> <span class="quiet">{n.outlet}</span></li>)}
+          </ul>
+        </section>
+      )}
+
+      <footer class="made" aria-labelledby="made-h">
+        <div>
+          <h2 id="made-h">How this edition was made</h2>
+          <p>Every statement links to its source. <a href={`${base}sources/`}>See all sources for this edition</a>.</p>
+        </div>
+        <div class="stat"><span class="n">{edition.process.sourcesChecked}</span><span>sources checked</span></div>
+        <div class="stat"><span class="n">{edition.process.claimsChecked}</span><span>core statements checked by two fact-checkers</span></div>
+        <div class="stat"><span class="n">{edition.process.objections}</span><span>objections by the counter-agent, {edition.process.objectionsAccepted} accepted</span></div>
+        <div class="legend">
+          <StatusMark status="verified" label /><span class="quiet">primary source</span>
+          <StatusMark status="multiple" label /><span class="quiet">two or more independent outlets</span>
+          <StatusMark status="unconfirmed" label /><span class="quiet">reported, not yet confirmed</span>
+        </div>
+      </footer>
+    </>
   )}
 </Base>
+
+<style>
+  .hero { margin: 0 calc(-1 * var(--gutter)); position: relative; }
+  .hero img { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .hero figcaption { position: absolute; right: var(--gutter); bottom: 10px; font-size: 12px; color: #FFFFFF; background: rgba(0, 0, 0, 0.6); padding: 3px 8px; }
+
+  .front { display: grid; grid-template-columns: 260px minmax(0, 1fr) 340px; column-gap: 48px; }
+  .lead { padding-top: 28px; display: grid; gap: 22px; align-content: start; min-width: 0; }
+  .more { display: grid; }
+
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; margin-top: 48px; }
+  section { margin-top: 48px; }
+  .pair section { margin-top: 0; }
+  .sec { padding-top: 20px; display: grid; gap: 18px; align-content: start; }
+  .vote h3 { margin: 0; font-size: 24px; line-height: 1.2; font-weight: 800; font-stretch: 88%; }
+  .vote-line { margin: 6px 0 14px; font-family: var(--font-read); font-size: 17px; }
+  .sub { margin: 10px 0 0; font-size: 18px; font-weight: 800; font-stretch: 92%; }
+  .table { display: grid; grid-template-columns: auto 1fr; margin: 0; border-top: 1px solid var(--ink); font-size: 15px; }
+  .table dt, .table dd { padding: 7px 0; border-bottom: 1px solid var(--rule); margin: 0; }
+  .table dt { color: var(--ink-soft); padding-right: 24px; white-space: nowrap; }
+
+  .foreign { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; border-top: 1px solid var(--ink); }
+  th { text-align: left; font-weight: 400; color: var(--ink-soft); padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule); }
+  td { padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; padding-right: 0; }
+
+  .clips { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 48px; }
+  .notable { list-style: none; margin: 0; padding: 20px 0 0; display: grid; gap: 10px; font-size: 16px; }
+  .notable li { padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .notable a { font-weight: 700; }
+
+  .made { margin-top: 56px; border-top: 3px solid var(--ink); padding-top: 18px; display: grid; grid-template-columns: 1.3fr repeat(3, 1fr) 1.3fr; gap: 24px; }
+  .made h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; font-stretch: 88%; }
+  .made p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+  .stat { display: grid; align-content: start; font-size: 14px; color: var(--ink-soft); }
+  .stat .n { font-family: var(--font-display); font-size: 44px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .legend { display: grid; grid-template-columns: auto 1fr; gap: 4px 8px; align-content: start; font-size: 14px; }
+
+  .quiet { color: var(--ink-soft); }
+  .small { font-size: 14px; margin: 8px 0 0; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (max-width: 1180px) {
+    .front { grid-template-columns: minmax(0, 1fr) 300px; }
+    .front :global(.toc) { grid-column: 1 / -1; }
+    .made { grid-template-columns: repeat(3, 1fr); }
+    .made > div:first-child, .legend { grid-column: 1 / -1; }
+  }
+  @media (max-width: 860px) {
+    .front, .pair, .foreign, .clips { grid-template-columns: 1fr; }
+    .lead { order: -1; }
+    .made { grid-template-columns: 1fr; }
+  }
+</style>

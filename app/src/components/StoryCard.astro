@@ -1,0 +1,25 @@
+---
+// Compact story entry: headline, dek, status and reading time, link to the full story.
+import StoryMeta from './StoryMeta.astro';
+import { storyUrl, type Story, type Edition } from '../lib/editions';
+interface Props { story: Story; edition: Edition; index?: number }
+const { story, edition, index } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+<article class="card">
+  {story.race && <div class="kicker">{index !== undefined && <span class="num">{index}</span>}{story.race.state}, {story.race.district ?? (story.race.chamber === 'senate' ? 'Senate' : story.race.chamber === 'governor' ? 'Governor' : 'House')}</div>}
+  <h3><a href={storyUrl(base, story)}>{story.headline}</a></h3>
+  <p class="dek">{story.dek}</p>
+  {story.race?.rating && <p class="rating">Rating: {story.race.rating}{story.race.ratingSource && <> ({story.race.ratingSource})</>}</p>}
+  <StoryMeta story={story} edition={edition} />
+</article>
+<style>
+  .card { display: grid; gap: 8px; padding: 18px 0; border-top: 1px solid var(--rule); }
+  .kicker { font-size: 14px; color: var(--ink-soft); display: flex; gap: 8px; align-items: center; }
+  .num { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); color: var(--paper); font-size: 11px; font-weight: 700; }
+  h3 { margin: 0; font-size: 22px; line-height: 1.2; font-weight: 700; font-stretch: 92%; }
+  h3 a { color: var(--ink); text-decoration: none; }
+  h3 a:hover { text-decoration: underline; }
+  .dek { margin: 0; font-family: var(--font-read); font-size: 17px; line-height: 1.5; color: var(--ink-soft); }
+  .rating { margin: 0; font-size: 14px; }
+</style>

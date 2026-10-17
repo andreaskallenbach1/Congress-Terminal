@@ -1,0 +1,67 @@
+---
+// Roll-call result as a chamber seen from above. Numbers come from the official roll call (code, not AI).
+import { formatDay, type Vote } from '../lib/editions';
+interface Props { vote: Vote }
+const { vote } = Astro.props;
+const p = vote.byParty;
+const total = vote.chamber === 'senate' ? 100 : 435;
+type Seat = { party: 'R' | 'D' | 'I'; cast: 'yea' | 'nay' | 'present' | 'nv' };
+const seats: Seat[] = [];
+const push = (party: Seat['party'], cast: Seat['cast'], n: number) => { for (let i = 0; i < n; i++) seats.push({ party, cast }); };
+// Order around the arc: yea (R, I, D), present, not voting, nay (D, I, R) – so the two blocs sit apart.
+push('R', 'yea', p.R.yea); push('I', 'yea', p.I.yea); push('D', 'yea', p.D.yea);
+(['R', 'I', 'D'] as const).forEach((k) => push(k, 'present', p[k].present));
+(['R', 'I', 'D'] as const).forEach((k) => push(k, 'nv', p[k].notVoting));
+push('D', 'nay', p.D.nay); push('I', 'nay', p.I.nay); push('R', 'nay', p.R.nay);
+const rows = vote.chamber === 'senate' ? 5 : 11;
+const r0 = vote.chamber === 'senate' ? 50 : 46, r1 = 100;
+const radii = Array.from({ length: rows }, (_, i) => r0 + ((r1 - r0) * i) / (rows - 1));
+const sumR = radii.reduce((a, b) => a + b, 0);
+const perRow = radii.map((r) => Math.round((seats.length * r) / sumR));
+perRow[rows - 1] += seats.length - perRow.reduce((a, b) => a + b, 0);
+const pts: { x: number; y: number; a: number }[] = [];
+radii.forEach((r, i) => {
+  const n = perRow[i];
+  for (let j = 0; j < n; j++) {
+    const a = Math.PI - (Math.PI * (j + 0.5)) / n;
+    pts.push({ x: 110 + r * Math.cos(a), y: 104 - r * Math.sin(a), a });
+  }
+});
+pts.sort((u, v) => v.a - u.a);
+const dotR = vote.chamber === 'senate' ? 4 : 2.1;
+const fill = { R: '#B23A2E', D: '#2E5C9E', I: '#6E5A8C' };
+const yea = p.R.yea + p.D.yea + p.I.yea, nay = p.R.nay + p.D.nay + p.I.nay;
+const nv = p.R.notVoting + p.D.notVoting + p.I.notVoting;
+const present = p.R.present + p.D.present + p.I.present;
+const chamberName = vote.chamber === 'senate' ? 'Senate' : 'House';
+const label = `${chamberName} roll call ${vote.rollCall}: ${yea} yea, ${nay} nay${present ? `, ${present} present` : ''}, ${nv} not voting`;
+const line = (k: 'yea' | 'nay') => (['R', 'D', 'I'] as const).filter((x) => p[x][k] > 0).map((x) => `${p[x][k]} ${x === 'R' ? 'Republican' : x === 'D' ? 'Democrat' : 'independent'}${p[x][k] === 1 ? '' : 's'}`).join(', ');
+---
+<figure class="seats">
+  <svg viewBox="0 0 220 112" role="img" aria-label={label}>
+    {seats.slice(0, pts.length).map((s, i) => (
+      s.cast === 'nv'
+        ? <circle cx={pts[i].x.toFixed(2)} cy={pts[i].y.toFixed(2)} r={dotR - 0.6} fill="none" stroke="var(--ink-faint)" stroke-width="1.1"></circle>
+        : s.cast === 'present'
+          ? <circle cx={pts[i].x.toFixed(2)} cy={pts[i].y.toFixed(2)} r={dotR} fill="var(--ink-faint)"></circle>
+          : <circle cx={pts[i].x.toFixed(2)} cy={pts[i].y.toFixed(2)} r={dotR} fill={fill[s.party]}></circle>
+    ))}
+    <text x="110" y="102" text-anchor="middle" class="score">{yea}–{nay}</text>
+  </svg>
+  <figcaption>
+    <span><strong>Yea {yea}</strong>{line('yea') && <>: {line('yea')}</>}</span>
+    <span><strong>Nay {nay}</strong>{line('nay') && <>: {line('nay')}</>}</span>
+    {present > 0 && <span><strong>Present {present}</strong></span>}
+    <span><strong>Not voting {nv}</strong> <span class="hollow" aria-hidden="true"></span></span>
+    <span class="src"><a href={vote.sourceUrl}>{chamberName} roll call {vote.rollCall}, {formatDay(vote.date, { month: 'long', day: 'numeric' })}</a></span>
+  </figcaption>
+</figure>
+<style>
+  .seats { margin: 0; display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 24px; align-items: center; }
+  svg { width: 100%; height: auto; display: block; }
+  .score { font-family: var(--font-display); font-size: 22px; fill: var(--ink); }
+  figcaption { display: grid; gap: 6px; font-size: 15px; }
+  .hollow { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1.3px solid var(--ink-faint); vertical-align: -1px; }
+  .src { font-size: 14px; color: var(--ink-soft); }
+  @media (max-width: 640px) { .seats { grid-template-columns: 1fr; } }
+</style>

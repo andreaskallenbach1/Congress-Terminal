@@ -1,0 +1,14 @@
+---
+// Black section bar with patina underline, as in the design ("Top stories   1 of 5").
+interface Props { title: string; meta?: string; id?: string }
+const { title, meta, id } = Astro.props;
+---
+<div class="bar" id={id}>
+  <h2 id={id ? `${id}-h` : undefined}>{title}</h2>
+  {meta && <span>{meta}</span>}
+</div>
+<style>
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #000; color: #fff; padding: 9px 16px; border-bottom: 3px solid var(--accent); scroll-margin-top: 12px; }
+  h2 { margin: 0; font-size: 17px; font-weight: 700; font-stretch: 92%; }
+  span { font-size: 16px; color: #D8D8D8; font-variant-numeric: tabular-nums; }
+</style>

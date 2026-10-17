@@ -1,0 +1,60 @@
+---
+// A story in the fixed format: headline, dek, What's new, Why it matters, What's next, Background, Sources.
+import ClaimText from './ClaimText.astro';
+import StoryMeta from './StoryMeta.astro';
+import StoryActions from './StoryActions.astro';
+import BillProgress from './BillProgress.astro';
+import { storyUrl, type Story, type Edition } from '../lib/editions';
+interface Props { story: Story; edition: Edition; onStoryPage?: boolean }
+const { story, edition, onStoryPage = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const url = storyUrl(base, story);
+---
+<article class="story">
+  <h1 class="headline">{story.headline}</h1>
+  <p class="dek">{story.dek}</p>
+  <StoryMeta story={story} edition={edition} />
+  {story.image && (
+    <figure class="pic">
+      <img src={story.image.src} alt={story.image.alt} loading="lazy" />
+      <figcaption>{story.image.credit}. {story.image.license}.</figcaption>
+    </figure>
+  )}
+  <div class="body">
+    <ClaimText paragraphs={story.whatsNew} claims={story.claims} storyUrl={url} dropcap />
+    <h2>Why it matters</h2>
+    <ClaimText paragraphs={story.whyItMatters} claims={story.claims} storyUrl={url} />
+    {story.bill && <BillProgress bill={story.bill} />}
+    <h2>What's next</h2>
+    <ClaimText paragraphs={story.whatsNext} claims={story.claims} storyUrl={url} />
+    {story.background && (
+      <details class="background">
+        <summary>Background</summary>
+        <ClaimText paragraphs={story.background} claims={story.claims} storyUrl={url} />
+      </details>
+    )}
+    {story.relevance.dissent && (
+      <details class="dissent">
+        <summary>Why this story was chosen, and the objection</summary>
+        <p>{story.relevance.reason}</p>
+        <p><strong>Counter-agent:</strong> {story.relevance.dissent}</p>
+      </details>
+    )}
+  </div>
+  {onStoryPage ? <StoryActions story={story} edition={edition} showContinue={false} /> : <StoryActions story={story} edition={edition} />}
+</article>
+<style>
+  .story { display: grid; gap: 16px; }
+  .headline { margin: 0; font-size: clamp(30px, 3.4vw, 40px); line-height: 1.1; font-weight: 800; font-stretch: 88%; letter-spacing: -0.01em; }
+  .dek { margin: 0; font-family: var(--font-read); font-size: 21px; line-height: 1.45; color: var(--ink-soft); }
+  .pic { margin: 0; }
+  .pic img { width: 100%; height: auto; display: block; }
+  .pic figcaption { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+  .body { font-family: var(--font-read); font-size: 19px; line-height: 1.62; display: grid; gap: 14px; max-width: 64ch; }
+  .body h2 { margin: 12px 0 -4px; font-family: var(--font-ui); font-size: 17px; font-weight: 700; }
+  details { border-top: 1px solid var(--rule); padding-top: 10px; }
+  details summary { font-family: var(--font-ui); font-size: 16px; font-weight: 700; cursor: pointer; }
+  details[open] summary { margin-bottom: 10px; }
+  details :global(p) { margin: 0 0 10px; }
+  .dissent { font-size: 17px; }
+</style>

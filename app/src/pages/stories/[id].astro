@@ -1,0 +1,68 @@
+---
+// One page per story (the archive stores stories individually, grouped by edition).
+import Base from '../../layouts/Base.astro';
+import StoryFull from '../../components/StoryFull.astro';
+import StatusMark from '../../components/StatusMark.astro';
+import { listEditions, formatEditionDate, formatBerlinTime, PILLARS, type Edition, type Story } from '../../lib/editions';
+
+export async function getStaticPaths() {
+  const seen = new Map<string, { story: Story; edition: Edition }>();
+  for (const edition of await listEditions()) {          // newest first; keep the newest version of a story
+    for (const story of edition.stories) if (!seen.has(story.id)) seen.set(story.id, { story, edition });
+  }
+  return [...seen.entries()].map(([id, props]) => ({ params: { id }, props }));
+}
+
+const { story, edition } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const src = new Map(edition.sources.map((s) => [s.id, s]));
+const claims = [...story.claims].sort((a, b) => (a.weight === b.weight ? 0 : a.weight === 'core' ? -1 : 1));
+---
+<Base title={story.headline} current="">
+  <div class="page">
+    <p class="crumb"><a href={base}>{formatEditionDate(edition.compiledAt)}</a> · {PILLARS[story.pillar]}</p>
+    <StoryFull story={story} edition={edition} onStoryPage />
+
+    <section class="sources" aria-labelledby="sources-h">
+      <h2 id="sources-h">Sources for this story</h2>
+      <p class="quiet">Each statement with its evidence. Core statements decide whether the story runs: if one fails the fact-check, the story is dropped.</p>
+      <ol>
+        {claims.map((c) => (
+          <li id={`claim-${c.id}`}>
+            <div class="head">
+              <StatusMark status={c.status} label />
+              <span class="weight">{c.weight === 'core' ? 'Core statement' : 'Supporting statement'}</span>
+              {c.origin === 'code' && <span class="weight">taken directly from primary data</span>}
+            </div>
+            <p class="claim-text">{c.text}</p>
+            {c.evidence.map((e) => {
+              const s = src.get(e.sourceId);
+              return (
+                <blockquote>
+                  <p>“{e.quote}”</p>
+                  <footer><a href={e.url}>{s?.name ?? e.sourceId}</a>{s && <> · retrieved {formatBerlinTime(s.retrievedAt)}</>}</footer>
+                </blockquote>
+              );
+            })}
+          </li>
+        ))}
+      </ol>
+    </section>
+  </div>
+</Base>
+<style>
+  .page { max-width: 820px; padding-top: 28px; display: grid; gap: 28px; }
+  .crumb { margin: 0; font-size: 14px; color: var(--ink-soft); }
+  .sources { border-top: 3px solid var(--ink); padding-top: 16px; }
+  .sources h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; font-stretch: 88%; }
+  .quiet { color: var(--ink-soft); font-size: 15px; margin: 0 0 12px; }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; }
+  li { padding: 14px 0; border-top: 1px solid var(--rule); scroll-margin-top: 16px; }
+  li:target { background: var(--accent-wash); outline: 8px solid var(--accent-wash); }
+  .head { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 14px; }
+  .weight { color: var(--ink-soft); }
+  .claim-text { margin: 6px 0; font-family: var(--font-read); font-size: 18px; }
+  blockquote { margin: 6px 0 0; padding-left: 14px; border-left: 3px solid var(--rule); font-size: 15px; }
+  blockquote p { margin: 0; font-family: var(--font-read); font-style: italic; }
+  blockquote footer { margin-top: 4px; color: var(--ink-soft); font-size: 14px; }
+</style>

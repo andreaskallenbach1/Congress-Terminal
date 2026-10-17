@@ -1,0 +1,535 @@
+{
+ "schemaVersion": 1,
+ "sample": true,
+ "id": "sample-2026-10-17-daily",
+ "kind": "daily",
+ "date": "2026-10-17",
+ "compiledAt": "2026-10-17T07:40:00+02:00",
+ "readingMinutes": 38,
+ "hero": {
+  "src": "https://images.unsplash.com/photo-1611010638643-051de75362ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600",
+  "alt": "The United States Capitol dome with a flag in front",
+  "credit": "Andy Feliciotti, Unsplash",
+  "license": "Unsplash License",
+  "sourceUrl": "https://unsplash.com/photos/MCWONeEXhC4"
+ },
+ "stories": [
+  {
+   "id": "fy27-cr-deadline",
+   "pillar": "top",
+   "continuing": true,
+   "headline": "Funding runs out December 11, and the budget fight now lands in the lame duck",
+   "dek": "The stopgap law signed in September keeps agencies open for ten weeks; the real decisions on next year's spending wait until after the midterms.",
+   "whatsNew": [
+    "The Continuing Appropriations Act, 2027 funds federal agencies covered by all 12 regular appropriations bills from October 1 through December 11, 2026. [[c1]] The House cleared the final version 370 to 48 on September 1, and the President signed it the next day. [[c2]]"
+   ],
+   "whyItMatters": [
+    "A continuing resolution freezes spending at the previous year's levels. It postpones every choice Congress has not made on the 12 annual spending bills, including defense, until a session in which some members will already have lost their seats. [[c3]]"
+   ],
+   "whatsNext": [
+    "Unless Congress passes full-year bills or another stopgap by December 11, a lapse in appropriations begins. [Sample: next procedural step would come from verified schedules.]"
+   ],
+   "background": [
+    "Continuing resolutions are named after the joint resolutions in which they were historically enacted. This one was passed as a bill, H.R. 6500. [[c4]]"
+   ],
+   "words": 1180,
+   "readingMinutes": 6,
+   "status": "verified",
+   "claims": [
+    {
+     "id": "c1",
+     "text": "The CR funds agencies under all 12 bills through December 11, 2026.",
+     "weight": "core",
+     "status": "verified",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "crs-r49353",
+       "quote": "provides continuing appropriations for agencies, programs, projects, and activities funded through all 12 regular appropriations bills from October 1, 2026, through December 11, 2026",
+       "url": "https://www.congress.gov/crs-product/R49353"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    },
+    {
+     "id": "c2",
+     "text": "The House agreed 370-48 on September 1; signed September 2.",
+     "weight": "core",
+     "status": "verified",
+     "origin": "code",
+     "evidence": [
+      {
+       "sourceId": "crs-r49353",
+       "quote": "On September 1, 2026, the House agreed by a vote of 370-48 on a motion to suspend the rules and concur in the Senate amendments to H.R. 6500",
+       "url": "https://www.congress.gov/crs-product/R49353"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    },
+    {
+     "id": "c3",
+     "text": "[Sample] Spending is frozen at prior-year levels.",
+     "weight": "minor",
+     "status": "multiple",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "sample-media-1",
+       "quote": "[sample quote]",
+       "url": "https://example.org/a"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    },
+    {
+     "id": "c4",
+     "text": "CRs are named after joint resolutions.",
+     "weight": "minor",
+     "status": "verified",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "crs-r49353",
+       "quote": "commonly referred to as \"continuing resolutions,\" or \"CRs,\" because they have historically been enacted in the form of a joint resolution",
+       "url": "https://www.congress.gov/crs-product/R49353"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    }
+   ],
+   "bill": {
+    "number": "H.R. 6500",
+    "title": "Continuing Appropriations and Extensions Act, 2027",
+    "congressGovUrl": "https://www.congress.gov/bill/119th-congress/house-bill/6500",
+    "stages": [
+     {
+      "key": "introduced",
+      "label": "Introduced",
+      "done": true
+     },
+     {
+      "key": "passed-house",
+      "label": "Passed House",
+      "done": true
+     },
+     {
+      "key": "passed-senate",
+      "label": "Passed Senate",
+      "date": "2026-08-08",
+      "done": true
+     },
+     {
+      "key": "resolved",
+      "label": "House agreed",
+      "date": "2026-09-01",
+      "done": true
+     },
+     {
+      "key": "signed",
+      "label": "Signed into law",
+      "date": "2026-09-02",
+      "done": true
+     }
+    ]
+   },
+   "relevance": {
+    "rank": 1,
+    "reason": "Shutdown deadline with consequences for every agency.",
+    "dissent": "[Sample] The counter-agent argued the deadline is eight weeks away and nothing moved today."
+   }
+  },
+  {
+   "id": "sample-top-2",
+   "pillar": "top",
+   "headline": "[Sample] A second top story for layout testing",
+   "dek": "Sample story to check the layout. Not a real report.",
+   "whatsNew": [
+    "Sample paragraph. [[s1]]"
+   ],
+   "whyItMatters": [
+    "Sample paragraph."
+   ],
+   "whatsNext": [
+    "Sample paragraph."
+   ],
+   "words": 800,
+   "readingMinutes": 4,
+   "status": "unconfirmed",
+   "claims": [
+    {
+     "id": "s1",
+     "text": "[Sample] statement",
+     "weight": "core",
+     "status": "unconfirmed",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "sample-media-2",
+       "quote": "[sample quote]",
+       "url": "https://example.org/b"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    }
+   ],
+   "relevance": {
+    "rank": 2,
+    "reason": "Sample"
+   }
+  },
+  {
+   "id": "sample-top-3",
+   "pillar": "top",
+   "headline": "[Sample] A third top story for layout testing",
+   "dek": "Sample story to check the layout. Not a real report.",
+   "whatsNew": [
+    "Sample paragraph. [[s1]]"
+   ],
+   "whyItMatters": [
+    "Sample paragraph."
+   ],
+   "whatsNext": [
+    "Sample paragraph."
+   ],
+   "words": 600,
+   "readingMinutes": 3,
+   "status": "multiple",
+   "claims": [
+    {
+     "id": "s1",
+     "text": "[Sample] statement",
+     "weight": "core",
+     "status": "multiple",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "sample-media-2",
+       "quote": "[sample quote]",
+       "url": "https://example.org/b"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    }
+   ],
+   "relevance": {
+    "rank": 3,
+    "reason": "Sample"
+   }
+  },
+  {
+   "id": "sample-fp-1",
+   "pillar": "foreign",
+   "headline": "[Sample] A foreign policy story for layout testing",
+   "dek": "Sample story to check the layout. Not a real report.",
+   "whatsNew": [
+    "Sample paragraph. [[s1]]"
+   ],
+   "whyItMatters": [
+    "Sample paragraph."
+   ],
+   "whatsNext": [
+    "Sample paragraph."
+   ],
+   "words": 800,
+   "readingMinutes": 4,
+   "status": "multiple",
+   "claims": [
+    {
+     "id": "s1",
+     "text": "[Sample] statement",
+     "weight": "core",
+     "status": "multiple",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "sample-media-2",
+       "quote": "[sample quote]",
+       "url": "https://example.org/b"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    }
+   ],
+   "relevance": {
+    "rank": 1,
+    "reason": "Sample"
+   }
+  },
+  {
+   "id": "sample-fp-2",
+   "pillar": "foreign",
+   "headline": "[Sample] A second foreign policy story",
+   "dek": "Sample story to check the layout. Not a real report.",
+   "whatsNew": [
+    "Sample paragraph. [[s1]]"
+   ],
+   "whyItMatters": [
+    "Sample paragraph."
+   ],
+   "whatsNext": [
+    "Sample paragraph."
+   ],
+   "words": 600,
+   "readingMinutes": 3,
+   "status": "unconfirmed",
+   "claims": [
+    {
+     "id": "s1",
+     "text": "[Sample] statement",
+     "weight": "core",
+     "status": "unconfirmed",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "sample-media-2",
+       "quote": "[sample quote]",
+       "url": "https://example.org/b"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    }
+   ],
+   "relevance": {
+    "rank": 2,
+    "reason": "Sample"
+   }
+  },
+  {
+   "id": "sample-mt-1",
+   "pillar": "midterms",
+   "headline": "[Sample] A Senate race for layout testing",
+   "dek": "Sample story to check the layout. Not a real report.",
+   "whatsNew": [
+    "Sample paragraph. [[s1]]"
+   ],
+   "whyItMatters": [
+    "Sample paragraph."
+   ],
+   "whatsNext": [
+    "Sample paragraph."
+   ],
+   "words": 600,
+   "readingMinutes": 3,
+   "status": "unconfirmed",
+   "claims": [
+    {
+     "id": "s1",
+     "text": "[Sample] statement",
+     "weight": "core",
+     "status": "unconfirmed",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "sample-media-2",
+       "quote": "[sample quote]",
+       "url": "https://example.org/b"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    }
+   ],
+   "relevance": {
+    "rank": 1,
+    "reason": "Sample"
+   },
+   "race": {
+    "state": "[State]",
+    "chamber": "senate",
+    "rating": "[Rating]",
+    "ratingSource": "[Source]"
+   }
+  },
+  {
+   "id": "sample-mt-2",
+   "pillar": "midterms",
+   "headline": "[Sample] A House race for layout testing",
+   "dek": "Sample story to check the layout. Not a real report.",
+   "whatsNew": [
+    "Sample paragraph. [[s1]]"
+   ],
+   "whyItMatters": [
+    "Sample paragraph."
+   ],
+   "whatsNext": [
+    "Sample paragraph."
+   ],
+   "words": 600,
+   "readingMinutes": 3,
+   "status": "unconfirmed",
+   "claims": [
+    {
+     "id": "s1",
+     "text": "[Sample] statement",
+     "weight": "core",
+     "status": "unconfirmed",
+     "origin": "agent",
+     "evidence": [
+      {
+       "sourceId": "sample-media-2",
+       "quote": "[sample quote]",
+       "url": "https://example.org/b"
+      }
+     ],
+     "checkA": "confirmed",
+     "checkB": "confirmed"
+    }
+   ],
+   "relevance": {
+    "rank": 2,
+    "reason": "Sample"
+   },
+   "race": {
+    "state": "[State]",
+    "chamber": "house",
+    "district": "[District]"
+   }
+  }
+ ],
+ "floor": {
+  "votes": [
+   {
+    "chamber": "senate",
+    "rollCall": 999,
+    "date": "2026-10-16",
+    "question": "[Sample] On the Nomination",
+    "description": "[Sample] A Senate confirmation vote for layout testing",
+    "result": "Confirmed",
+    "byParty": {
+     "R": {
+      "yea": 47,
+      "nay": 0,
+      "present": 0,
+      "notVoting": 6
+     },
+     "D": {
+      "yea": 0,
+      "nay": 39,
+      "present": 0,
+      "notVoting": 6
+     },
+     "I": {
+      "yea": 0,
+      "nay": 2,
+      "present": 0,
+      "notVoting": 0
+     }
+    },
+    "sourceUrl": "https://www.senate.gov/legislative/LIS/roll_call_lists/vote_menu_119_2.htm"
+   }
+  ]
+ },
+ "agenda": [
+  {
+   "date": "2026-10-20",
+   "chamber": "senate",
+   "kind": "hearing",
+   "committee": "[Sample committee]",
+   "title": "[Sample hearing]"
+  },
+  {
+   "date": "2026-10-21",
+   "chamber": "house",
+   "kind": "floor",
+   "title": "[Sample floor item]"
+  },
+  {
+   "date": "2026-12-11",
+   "chamber": "joint",
+   "kind": "deadline",
+   "title": "Government funding expires (P.L. 119-103)",
+   "url": "https://www.congress.gov/crs-product/R49353"
+  }
+ ],
+ "overnight": [
+  "[Sample] Two arms sales notifications appear in the Federal Register."
+ ],
+ "today": [
+  "[Sample] The Senate is in pro forma session."
+ ],
+ "armsSales": [
+  {
+   "purchaser": "[Sample country]",
+   "system": "[Sample system]",
+   "valueUSD": 1200000000.0,
+   "date": "2026-10-16",
+   "url": "https://www.federalregister.gov/"
+  },
+  {
+   "purchaser": "[Sample country]",
+   "system": "[Sample system]",
+   "valueUSD": 350000000.0,
+   "date": "2026-10-16",
+   "url": "https://www.federalregister.gov/"
+  }
+ ],
+ "watch": [
+  {
+   "title": "[Sample clip]",
+   "channel": "C-SPAN (YouTube)",
+   "date": "2026-10-16",
+   "url": "https://www.youtube.com/@cspan",
+   "startSeconds": 760,
+   "why": "[Sample] Why this clip matters, in one sentence."
+  }
+ ],
+ "notable": [
+  {
+   "headline": "[Sample headline]",
+   "sentence": "One sentence of context.",
+   "outlet": "[Sample outlet]",
+   "url": "https://example.org/n"
+  }
+ ],
+ "sources": [
+  {
+   "id": "crs-r49353",
+   "name": "CRS Report R49353",
+   "tier": "primary",
+   "url": "https://www.congress.gov/crs-product/R49353",
+   "retrievedAt": "2026-10-17T07:40:00+02:00"
+  },
+  {
+   "id": "cg-approps",
+   "name": "Congress.gov, Appropriations Status Table",
+   "tier": "primary",
+   "url": "https://www.congress.gov/crs-appropriations-status-table",
+   "retrievedAt": "2026-10-17T07:40:00+02:00"
+  },
+  {
+   "id": "sample-media-1",
+   "name": "[Sample outlet A]",
+   "tier": "media",
+   "url": "https://example.org/a",
+   "retrievedAt": "2026-10-17T07:40:00+02:00"
+  },
+  {
+   "id": "sample-media-2",
+   "name": "[Sample outlet B]",
+   "tier": "media",
+   "url": "https://example.org/b",
+   "retrievedAt": "2026-10-17T07:40:00+02:00"
+  },
+  {
+   "id": "senate-rc",
+   "name": "Senate roll call (sample)",
+   "tier": "primary",
+   "url": "https://www.senate.gov/legislative/LIS/roll_call_lists/vote_menu_119_2.htm",
+   "retrievedAt": "2026-10-17T07:40:00+02:00"
+  }
+ ],
+ "process": {
+  "sourcesChecked": 66,
+  "claimsChecked": 48,
+  "objections": 3,
+  "objectionsAccepted": 1
+ }
+}

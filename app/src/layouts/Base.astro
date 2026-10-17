@@ -3,13 +3,14 @@ import '../styles/global.css';
 import Seal from '../components/Seal.astro';
 import { latestEdition, formatEditionDate, formatBerlinTime } from '../lib/editions';
 
-interface Props { title?: string; current?: string }
-const { title, current = 'today' } = Astro.props;
+interface Props { title?: string; current?: string; sections?: { key: string; label: string; href: string }[] }
+const { title, current = 'today', sections: extra = [] } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const edition = latestEdition();
+const edition = await latestEdition();
 
 const sections = [
   { key: 'today', label: 'Today', href: base },
+  ...extra,
 ];
 const tools = [
   { key: 'watchlist', label: 'Watchlist', href: `${base}watchlist/` },
@@ -70,6 +71,10 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
       </button>
     </div>
   </nav>
+
+  {edition?.sample && (
+    <div class="sample-banner" role="note">Test data. This edition is a sample used to check the layout; it is not a real briefing and its statements are not verified.</div>
+  )}
 
   {edition && (
     <div class="stale" role="status" hidden data-edition-date={edition.compiledAt}>
@@ -162,6 +167,7 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
   .stale-text { color: var(--ink); }
 
   main { padding: 0 var(--gutter); }
+  .sample-banner { margin: 0 var(--gutter); padding: 10px 14px; background: var(--stale); color: var(--paper); font-weight: 700; font-size: 15px; }
 
   .colophon { margin-top: 64px; padding: 20px var(--gutter) 32px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-soft); display: grid; gap: 6px; }
   .colophon p { margin: 0; max-width: 80ch; }
