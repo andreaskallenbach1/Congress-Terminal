@@ -204,7 +204,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
 - **Web-App:** statische PWA, gehostet über GitHub Pages aus diesem Repository; installierbar über Edge/Chrome.
 - **Daten:** Briefings als Dateien im Repository (ein Briefing pro Tag + Archiv).
 - **Läufe** schreiben Briefings fest auf `main`; eine GitHub Action baut und veröffentlicht die Seite. Der Routine-Endpunkt erlaubt keine Browser-Aufrufe (CORS-Vorabfrage → 405), daher der Weg über GitHub.
-- **Phase-3-Maßnahmen (17.10.2026):** 40 Minuten sind Obergrenze; im Lauf nur GitHub plus die sechs Recherche-Konnektoren; Statusdatei je Lauf; Kernaussagen (8–12 je Story) doppelt prüfen; Abrufe drosseln und zwischenspeichern; stufenweise bauen und testen, Betrieb mit voller Pipeline.
+- **Phase-3-Maßnahmen (17.10.2026):** 40 Minuten sind Obergrenze; im Lauf nur GitHub plus die Recherche-Konnektoren (Tabelle unten); Statusdatei je Lauf; Kernaussagen (8–12 je Story) doppelt prüfen; Abrufe drosseln und zwischenspeichern; stufenweise bauen und testen, Betrieb mit voller Pipeline.
 - **Git:** Entwicklung auf dem zugewiesenen `claude/…`-Branch; keine Pull Requests ohne Andreas' Auftrag.
 - **Quellentest:** `./scripts/check_sources.sh` vor Änderungen an der Pipeline und bei Verdacht auf Ausfälle.
 - **Design-Skills im Repository** (`.claude/skills/`, geprüft, Lizenzen beigelegt): `impeccable` (Apache-2.0, Design-Prozess und Detektor gegen KI-Standardoptik), `frontend-design` (Anthropic), `ui-ux-pro-max` (MIT, Paletten- und Schriftdatenbank). Produktwahrheit für das Design: `PRODUCT.md`.
@@ -215,7 +215,17 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
   Keine Skills aus ungeprüften Sammelportalen.
 - **Verbrauch und Token-Sparen (Pro-Abo):** 25 Rollen. Hebel: Code statt KI für Fleißarbeit · Modell je Aufgabe (klein: Türsteher, Faktenkarten, Sammler, Verfahren · mittel: Story-Builder, Relevanz, Gegenagent, Historiker, Prüfer B, Neutralität · groß: Schiedsrichter, Redakteure, Prüfer A, Chefredaktion) · Türsteher · Faktenkarten · nur das Neue · Regeln als Skills. **Keine** gebündelte Prüfung: jede Kernaussage wird einzeln geprüft (Andreas' Entscheidung).
 - **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe über die Browser-Sprachausgabe (kostenlos); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
-- **Konnektoren (Entscheidung 17.10.2026):** Parallel Search, CourtListener, USAFacts, Tavily, Firecrawl, Unsplash – alle sechs. Andreas verbindet sie unter claude.ai/customize/connectors; wirksam erst in einer neu gestarteten Sitzung bzw. im Lauf, wenn sie in der Routine ausgewählt sind. Keine Konnektoren mit persönlichen Daten (Gmail, Kalender, Drive, Gamma …) im Lauf.
+- **Konnektoren (Entscheidung 17.10.2026, getestet 17.10.2026):** Andreas verbindet sie unter claude.ai/customize/connectors; wirksam erst in einer neu gestarteten Sitzung bzw. im Lauf, wenn sie in der Routine ausgewählt sind. Praxistest:
+  | Konnektor | Test | Rolle im Lauf |
+  |---|---|---|
+  | Parallel Search | ✅ liefert aktuelle Treffer inkl. CRS, Congress.gov, Abgeordneten-Pressemitteilungen | Sammler, Nachsuche (R2) |
+  | Tavily | ✅ Nachrichten der letzten Woche mit Datum | Gegenagent 3b (eigener Quellenpool) |
+  | CourtListener | ✅ Urteile bis 15.10.2026 | Executive & Courts |
+  | USAFacts | ✅ 24 Behördenquellen, u. a. Congress.gov, FEC, Treasury, USAspending | Zahlen für Haushalt/Midterms, nur mit `_citation` |
+  | Firecrawl | ✅ erreichbar; Seiten-Zusammenfassung war unbrauchbar und aus dem Cache → nur Markdown-Abruf mit `maxAge: 0` nutzen | Volltexte langer Primärquellen (Faktenkarten) |
+  | Gov Relations | ✅ Lobbying-Meldungen je Gesetz (LDA-Daten) – von Andreas zusätzlich verbunden | Hintergrund „wer lobbyiert“ |
+  | Unsplash | ❌ in der Sitzung nicht verfügbar – Verbindung prüfen | Ersatzbilder |
+  Konnektoren liefern Orientierung und Rohmaterial; Fakten weiterhin nur aus Primärquellen (Abschnitt 6). Keine Konnektoren mit persönlichen Daten (Gmail, Kalender, Drive, Gamma …) im Lauf.
 
 ## 10. Projektdokumente
 
