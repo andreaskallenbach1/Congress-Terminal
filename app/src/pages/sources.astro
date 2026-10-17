@@ -1,9 +1,81 @@
 ---
+// Sources (design round 6): every statement of the current edition with source, quote, retrieval time and status,
+// plus the library of sources the edition drew on, grouped by tier.
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import EmptyState from '../components/EmptyState.astro';
+import StatusMark from '../components/StatusMark.astro';
+import { latestEdition, formatEditionDate, formatBerlinTime, storyUrl, PILLARS } from '../lib/editions';
+const edition = await latestEdition();
+const base = import.meta.env.BASE_URL;
+const tiers = {
+  primary: 'Primary sources: may establish facts',
+  agency: 'Wire services and newspapers of record',
+  media: 'Wire services and newspapers of record',
+  international: 'International press: outside view',
+  specialist: 'Specialist outlets: analysis',
+  elections: 'Elections',
+  video: 'Video',
+  'partisan-right': 'Partisan, right: framing only, never facts',
+  'partisan-left': 'Partisan, left: framing only, never facts',
+} as const;
+const groups = new Map<string, NonNullable<typeof edition>['sources']>();
+for (const s of edition?.sources ?? []) { const k = tiers[s.tier]; groups.set(k, [...(groups.get(k) ?? []), s]); }
+const src = new Map((edition?.sources ?? []).map((s) => [s.id, s]));
+const total = edition?.stories.reduce((a, s) => a + s.claims.length, 0) ?? 0;
 ---
 <Base title="Sources" current="sources">
-  <EmptyState title="Sources">
-    <p>For every edition: each statement with its source, link, quoted evidence, retrieval time and verification status, plus the library of sources the pipeline draws on. This page fills with the first edition.</p>
-  </EmptyState>
+  {!edition ? (
+    <EmptyState title="Sources"><p>For every edition: each statement with its source, link, quoted evidence, retrieval time and verification status, plus the library of sources the pipeline draws on. This page fills with the first edition.</p></EmptyState>
+  ) : (
+    <>
+      <PageHead title="Sources" intro={`All ${total} statements in the edition of ${formatEditionDate(edition.compiledAt)}, each with its evidence. Facts come from primary sources; partisan outlets are cited only for how each side frames a story.`} />
+      <div class="layout">
+        <div>
+          {edition.stories.map((s) => (
+            <section class="story">
+              <h2><span>{PILLARS[s.pillar]}</span><a href={storyUrl(base, s)}>{s.headline}</a></h2>
+              <ol>
+                {s.claims.map((c) => (
+                  <li>
+                    <div class="head"><StatusMark status={c.status} label /><span>{c.weight === 'core' ? 'Core' : 'Supporting'}</span>{c.origin === 'code' && <span>from primary data</span>}</div>
+                    <p class="text">{c.text}</p>
+                    {c.evidence.map((e) => <p class="quote">“{e.quote}” <a href={e.url}>{src.get(e.sourceId)?.name ?? e.sourceId}</a></p>)}
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ))}
+        </div>
+        <aside>
+          <h2>Library for this edition</h2>
+          {[...groups.entries()].map(([g, list]) => (
+            <section>
+              <h3>{g}</h3>
+              <ul>{list.map((s) => <li><a href={s.url}>{s.name}</a> <span>{formatBerlinTime(s.retrievedAt)}</span></li>)}</ul>
+            </section>
+          ))}
+        </aside>
+      </div>
+    </>
+  )}
 </Base>
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; }
+  .story { margin-bottom: 26px; }
+  .story h2 { margin: 0 0 4px; font-size: 20px; font-weight: 800; font-stretch: 88%; border-bottom: 1px solid var(--ink); padding-bottom: 6px; display: grid; gap: 2px; }
+  .story h2 span { font-size: 13px; font-weight: 400; color: var(--ink-soft); font-stretch: 100%; }
+  .story h2 a { color: var(--ink); }
+  ol { list-style: none; margin: 0; padding: 0; }
+  li { padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .head { display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; color: var(--ink-soft); align-items: center; }
+  .text { margin: 4px 0; font-family: var(--font-read); font-size: 17px; }
+  .quote { margin: 2px 0 0; padding-left: 12px; border-left: 3px solid var(--rule); font-family: var(--font-read); font-style: italic; font-size: 15px; }
+  .quote a { font-family: var(--font-ui); font-style: normal; font-size: 13px; }
+  aside h2 { margin: 0 0 10px; font-size: 20px; font-weight: 800; font-stretch: 88%; }
+  aside h3 { margin: 14px 0 4px; font-size: 14px; font-weight: 700; }
+  aside ul { list-style: none; margin: 0; padding: 0; font-size: 15px; }
+  aside li { padding: 4px 0; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 10px; }
+  aside li span { color: var(--ink-soft); font-size: 13px; white-space: nowrap; }
+  @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+</style>

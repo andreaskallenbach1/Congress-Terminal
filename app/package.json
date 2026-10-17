@@ -4,15 +4,21 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
-    "build:sample": "BRIEFINGS_DIR=test/fixtures/briefings astro build --outDir dist-sample"
+    "build:sample": "BRIEFINGS_DIR=test/fixtures/briefings astro build --outDir dist-sample && pagefind --site dist-sample"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
     "@fontsource-variable/source-serif-4": "^5.3.1",
     "@fontsource/libre-caslon-display": "^5.3.0",
     "@fontsource/libre-caslon-text": "^5.3.0",
-    "astro": "^5.18.2"
+    "astro": "^5.18.2",
+    "d3-geo": "^3.1.1",
+    "pagefind": "^1.5.2",
+    "topojson-client": "^3.1.0",
+    "topojson-simplify": "^3.0.3",
+    "us-atlas": "^3.0.1",
+    "world-atlas": "^2.0.2"
   }
 }

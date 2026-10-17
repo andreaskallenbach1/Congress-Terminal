@@ -1,9 +1,31 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import EmptyState from '../components/EmptyState.astro';
+import BillProgress from '../components/BillProgress.astro';
+import { watchedBills, storyUrl, formatEditionDate } from '../lib/editions';
+const bills = await watchedBills();
+const base = import.meta.env.BASE_URL;
 ---
 <Base title="Watchlist" current="watchlist">
-  <EmptyState title="Watchlist">
-    <p>Bills the briefing follows, each with its progress from introduction through committee, floor, the other chamber and the President. The list fills once the first edition is published.</p>
-  </EmptyState>
+  {bills.length === 0 ? (
+    <EmptyState title="Watchlist"><p>Bills the briefing follows, each with its progress from introduction through committee, floor, the other chamber and the President. The list fills once an edition covers a bill.</p></EmptyState>
+  ) : (
+    <>
+      <PageHead title="Watchlist" intro="Every bill the briefing has covered, in its most recent known state." />
+      <ul class="bills" data-pagefind-body>
+        {bills.map(({ bill, story, edition }) => (
+          <li>
+            <BillProgress bill={bill} />
+            <p class="last">Last covered {formatEditionDate(edition.compiledAt)}: <a href={storyUrl(base, story)}>{story.headline}</a></p>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
 </Base>
+<style>
+  .bills { list-style: none; margin: 0; padding: 0; max-width: 900px; display: grid; }
+  .bills li { padding: 22px 0; border-top: 1px solid var(--rule); }
+  .last { margin: 12px 0 0; font-size: 15px; color: var(--ink-soft); }
+</style>

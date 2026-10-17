@@ -19,7 +19,7 @@ const src = new Map(edition.sources.map((s) => [s.id, s]));
 const claims = [...story.claims].sort((a, b) => (a.weight === b.weight ? 0 : a.weight === 'core' ? -1 : 1));
 ---
 <Base title={story.headline} current="">
-  <div class="page">
+  <div class="page" data-pagefind-body>
     <p class="crumb"><a href={base}>{formatEditionDate(edition.compiledAt)}</a> · {PILLARS[story.pillar]}</p>
     <StoryFull story={story} edition={edition} onStoryPage />
 

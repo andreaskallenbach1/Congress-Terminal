@@ -1,9 +1,28 @@
 ---
+// Client-side search with Pagefind: the index is built from the published pages after each build.
 import Base from '../layouts/Base.astro';
-import EmptyState from '../components/EmptyState.astro';
+import PageHead from '../components/PageHead.astro';
+import { listEditions } from '../lib/editions';
+const base = import.meta.env.BASE_URL;
+const hasContent = (await listEditions()).length > 0;
 ---
 <Base title="Search" current="search">
-  <EmptyState title="Search">
-    <p>Search across stories, sources, bills and members of all editions. The search index is built once there is something to index.</p>
-  </EmptyState>
+  <PageHead title="Search" intro="Search across stories, sources, bills and members of every edition." />
+  {hasContent ? (
+    <>
+      <link href={`${base}pagefind/pagefind-ui.css`} rel="stylesheet" />
+      <div id="search"></div>
+      <script is:inline src={`${base}pagefind/pagefind-ui.js`}></script>
+      <script is:inline>
+        new PagefindUI({ element: '#search', showSubResults: true, showImages: false, resetStyles: false, translations: { placeholder: 'Search the briefings' } });
+      </script>
+    </>
+  ) : (
+    <p class="empty">There is nothing to search yet. The search index is built once the first edition is published.</p>
+  )}
 </Base>
+<style is:global>
+  #search { max-width: 820px; --pagefind-ui-primary: var(--accent); --pagefind-ui-text: var(--ink); --pagefind-ui-background: var(--paper); --pagefind-ui-border: var(--ink-soft); --pagefind-ui-tag: var(--wash); --pagefind-ui-border-radius: 0; --pagefind-ui-font: var(--font-ui); }
+  #search mark { background: var(--accent-wash); color: var(--ink); }
+  .empty { font-family: var(--font-read); font-size: 18px; color: var(--ink-soft); }
+</style>

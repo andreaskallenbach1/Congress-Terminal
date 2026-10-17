@@ -9,6 +9,8 @@ import Rail from '../components/Rail.astro';
 import Toc from '../components/Toc.astro';
 import Clip from '../components/Clip.astro';
 import StatusMark from '../components/StatusMark.astro';
+import LocatorMap from '../components/LocatorMap.astro';
+import BillProgress from '../components/BillProgress.astro';
 import { latestEdition, formatDay } from '../lib/editions';
 
 const base = import.meta.env.BASE_URL;
@@ -39,6 +41,7 @@ const sections = edition ? [
 ] : [];
 
 const usd = (n: number) => n >= 1e9 ? `$${(n / 1e9).toFixed(n % 1e9 ? 2 : 0)} billion` : `$${Math.round(n / 1e6)} million`;
+const fpBill = foreign.find((s) => s.bill)?.bill;
 const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.kind === 'markup') ?? [];
 ---
 <Base current="today" sections={sections}>
@@ -92,7 +95,15 @@ const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.k
         <section aria-labelledby="midterms-h">
           <SectionBar title="Midterms 2026" id="midterms" />
           <div class="sec">
-            {midterms.length === 0 ? <p class="quiet">No race with significant news since the last edition.</p> : midterms.map((s, i) => <StoryCard story={s} edition={edition} index={i + 1} />)}
+            {midterms.length === 0 ? <p class="quiet">No race with significant news since the last edition.</p> : (
+              <>
+                <figure class="mapfig">
+                  <LocatorMap kind="us" places={midterms.map((m) => m.race?.state ?? '')} label={`Map of the United States marking the races in this edition: ${midterms.map((m, i) => `${i + 1} ${m.race?.state}`).join(', ')}`} />
+                  <figcaption>Only races with news in this edition are marked. Election Day is Tuesday, November 3.</figcaption>
+                </figure>
+                {midterms.map((s, i) => <StoryCard story={s} edition={edition} index={i + 1} />)}
+              </>
+            )}
           </div>
         </section>
       </div>
@@ -101,10 +112,19 @@ const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.k
         <SectionBar title="Foreign Policy Desk" id="foreign" />
         <div class="sec foreign">
           <div>
-            {foreign.length === 0 ? <p class="quiet">No foreign-policy action by Congress since the last edition.</p> : foreign.map((s) => <StoryCard story={s} edition={edition} />)}
+            {foreign.length === 0 ? <p class="quiet">No foreign-policy action by Congress since the last edition.</p> : (
+              <>
+                <figure class="mapfig">
+                  <LocatorMap kind="world" places={foreign.map((f) => f.countries[0] ?? '')} label={`World map marking where Congress acted abroad: ${foreign.map((f, i) => `${i + 1} ${f.countries[0] ?? 'no country'}`).join(', ')}`} />
+                </figure>
+                {foreign.map((s, i) => <StoryCard story={s} edition={edition} index={s.countries.length ? i + 1 : undefined} />)}
+              </>
+            )}
           </div>
-          {edition.armsSales.length > 0 && (
-            <div>
+          {(fpBill || edition.armsSales.length > 0) && (
+            <div class="fp-side">
+              {fpBill && <BillProgress bill={fpBill} />}
+              {edition.armsSales.length > 0 && <>
               <h3 class="sub">Arms sales notified to Congress</h3>
               <div class="scroll">
                 <table>
@@ -113,6 +133,7 @@ const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.k
                 </table>
               </div>
               <p class="quiet small">Federal Register notifications. Congress can block a sale by joint resolution of disapproval.</p>
+              </>}
             </div>
           )}
         </div>
@@ -174,6 +195,9 @@ const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.k
 
   .foreign { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
   .scroll { overflow-x: auto; }
+  .mapfig { margin: 0 0 4px; }
+  .mapfig figcaption { font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+  .fp-side { display: grid; gap: 22px; align-content: start; }
   table { width: 100%; border-collapse: collapse; font-size: 15px; border-top: 1px solid var(--ink); }
   th { text-align: left; font-weight: 400; color: var(--ink-soft); padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule); }
   td { padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule); }

@@ -5,16 +5,31 @@ import { storyUrl, type Story, type Edition } from '../lib/editions';
 interface Props { story: Story; edition: Edition; index?: number }
 const { story, edition, index } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const member = story.members[0];
 ---
-<article class="card">
+<article class:list={['card', { 'with-portrait': !!member }]}>
+  {member && (
+    <figure class="portrait">
+      <img src={`https://unitedstates.github.io/images/congress/225x275/${member.bioguideId}.jpg`} alt={`Official portrait of ${member.name}`} width="90" height="110" loading="lazy" />
+      <figcaption>{member.name} ({member.party}-{member.state})</figcaption>
+    </figure>
+  )}
+  <div class="text">
   {story.race && <div class="kicker">{index !== undefined && <span class="num">{index}</span>}{story.race.state}, {story.race.district ?? (story.race.chamber === 'senate' ? 'Senate' : story.race.chamber === 'governor' ? 'Governor' : 'House')}</div>}
+  {!story.race && story.countries.length > 0 && <div class="kicker">{index !== undefined && <span class="num">{index}</span>}{story.countries.map((c) => c === 'United States of America' ? 'United States' : c).join(', ')}</div>}
   <h3><a href={storyUrl(base, story)}>{story.headline}</a></h3>
   <p class="dek">{story.dek}</p>
   {story.race?.rating && <p class="rating">Rating: {story.race.rating}{story.race.ratingSource && <> ({story.race.ratingSource})</>}</p>}
   <StoryMeta story={story} edition={edition} />
+  </div>
 </article>
 <style>
-  .card { display: grid; gap: 8px; padding: 18px 0; border-top: 1px solid var(--rule); }
+  .card { display: grid; gap: 16px; padding: 18px 0; border-top: 1px solid var(--rule); }
+  .with-portrait { grid-template-columns: 90px minmax(0, 1fr); }
+  .text { display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .portrait { margin: 0; }
+  .portrait img { width: 90px; height: 110px; object-fit: cover; display: block; background: var(--track); }
+  .portrait figcaption { font-size: 12px; color: var(--ink-soft); margin-top: 4px; line-height: 1.3; }
   .kicker { font-size: 14px; color: var(--ink-soft); display: flex; gap: 8px; align-items: center; }
   .num { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); color: var(--paper); font-size: 11px; font-weight: 700; }
   h3 { margin: 0; font-size: 22px; line-height: 1.2; font-weight: 700; font-stretch: 92%; }

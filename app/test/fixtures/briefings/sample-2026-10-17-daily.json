@@ -262,6 +262,42 @@
    "relevance": {
     "rank": 1,
     "reason": "Sample"
+   },
+   "countries": [
+    "Ukraine"
+   ],
+   "bill": {
+    "number": "S. 0000",
+    "title": "[Sample] Sanctions act",
+    "congressGovUrl": "https://www.congress.gov/",
+    "stages": [
+     {
+      "key": "introduced",
+      "label": "Introduced",
+      "done": true
+     },
+     {
+      "key": "passed-senate",
+      "label": "Passed Senate",
+      "done": true
+     },
+     {
+      "key": "passed-house",
+      "label": "Passed House",
+      "done": true
+     },
+     {
+      "key": "signed",
+      "label": "Signed into law",
+      "done": true
+     },
+     {
+      "key": "waived",
+      "label": "Waived, Oct 16",
+      "done": true,
+      "setback": true
+     }
+    ]
    }
   },
   {
@@ -302,7 +338,10 @@
    "relevance": {
     "rank": 2,
     "reason": "Sample"
-   }
+   },
+   "countries": [
+    "Israel"
+   ]
   },
   {
    "id": "sample-mt-1",
@@ -344,11 +383,19 @@
     "reason": "Sample"
    },
    "race": {
-    "state": "[State]",
+    "state": "Maine",
     "chamber": "senate",
     "rating": "[Rating]",
     "ratingSource": "[Source]"
-   }
+   },
+   "members": [
+    {
+     "bioguideId": "C001035",
+     "name": "Susan Collins",
+     "party": "R",
+     "state": "ME"
+    }
+   ]
   },
   {
    "id": "sample-mt-2",
@@ -390,10 +437,18 @@
     "reason": "Sample"
    },
    "race": {
-    "state": "[State]",
+    "state": "Pennsylvania",
     "chamber": "house",
     "district": "[District]"
-   }
+   },
+   "members": [
+    {
+     "bioguideId": "P000605",
+     "name": "Scott Perry",
+     "party": "R",
+     "state": "PA"
+    }
+   ]
   }
  ],
  "floor": {

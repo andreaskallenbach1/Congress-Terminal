@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { membersInBriefings, portraitUrl, storyUrl, formatEditionDate } from '../lib/editions';
+const members = await membersInBriefings();
+const base = import.meta.env.BASE_URL;
+const party = { R: 'Republican', D: 'Democrat', I: 'Independent' };
+---
+<Base title="Members" current="members">
+  {members.length === 0 ? (
+    <EmptyState title="Members"><p>Members of Congress who appear in the briefings, with their portrait and the stories they appear in. Profiles with committees, votes and ideology scores follow with the member-profile agent.</p></EmptyState>
+  ) : (
+    <>
+      <PageHead title="Members" intro="Members of Congress who appear in the briefings. Official portraits from the Government Publishing Office (public domain)." />
+      <ul class="grid" data-pagefind-body>
+        {members.map(({ member, refs }) => (
+          <li id={member.bioguideId}>
+            <img src={portraitUrl(member.bioguideId)} alt={`Official portrait of ${member.name}`} width="90" height="110" loading="lazy" />
+            <div>
+              <h2>{member.name}</h2>
+              <p class="who">{party[member.party]}, {member.state} · <a href={`https://bioguide.congress.gov/search/bio/${member.bioguideId}`}>Biographical Directory</a></p>
+              <ul class="refs">{refs.slice(0, 5).map(({ story, edition }) => <li><a href={storyUrl(base, story)}>{story.headline}</a> <span>{formatEditionDate(edition.compiledAt)}</span></li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</Base>
+<style>
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 0 48px; }
+  .grid > li { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid var(--rule); scroll-margin-top: 16px; }
+  img { width: 90px; height: 110px; object-fit: cover; background: var(--track); }
+  h2 { margin: 0; font-size: 21px; font-weight: 800; font-stretch: 88%; }
+  .who { margin: 2px 0 8px; font-size: 14px; color: var(--ink-soft); }
+  .refs { list-style: none; margin: 0; padding: 0; font-size: 15px; display: grid; gap: 4px; }
+  .refs span { color: var(--ink-soft); font-size: 13px; }
+</style>

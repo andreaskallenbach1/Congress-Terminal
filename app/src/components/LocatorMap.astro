@@ -1,0 +1,28 @@
+---
+// Locator map with numbered markers that match the numbered stories next to it.
+import { worldMap, usMap, worldMarkers, usMarkers } from '../lib/maps';
+interface Props { kind: 'world' | 'us'; places: string[]; label: string }
+const { kind, places, label } = Astro.props;
+const map = kind === 'world' ? worldMap : usMap;
+const { markers } = kind === 'world' ? worldMarkers(places) : usMarkers(places);
+const marked = new Set(markers.map((m) => m.name));
+const r = kind === 'world' ? 15 : 15;
+---
+<svg class="map" viewBox={`0 0 ${map.width} ${map.height}`} role="img" aria-label={label}>
+  {map.shapes.map((s) => <path d={s.d} class:list={['land', { hit: marked.has(s.name) }]}></path>)}
+  <path d={map.borders} class="border"></path>
+  {markers.map((m) => (
+    <g>
+      <circle cx={m.x.toFixed(1)} cy={m.y.toFixed(1)} r={r} class="pin"></circle>
+      <text x={m.x.toFixed(1)} y={(m.y + r * 0.36).toFixed(1)} text-anchor="middle" class="pin-n" style={`font-size:${r * 1.05}px`}>{m.n}</text>
+    </g>
+  ))}
+</svg>
+<style>
+  .map { width: 100%; height: auto; display: block; }
+  .land { fill: var(--track); }
+  .land.hit { fill: var(--accent-wash); }
+  .border { fill: none; stroke: var(--paper); stroke-width: 0.8; }
+  .pin { fill: var(--ink); stroke: var(--paper); stroke-width: 2; }
+  .pin-n { fill: var(--paper); font-family: var(--font-ui); font-weight: 700; }
+</style>

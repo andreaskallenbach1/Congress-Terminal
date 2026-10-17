@@ -1,9 +1,43 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import EmptyState from '../components/EmptyState.astro';
+import { latestEdition, formatDay, formatEditionDate } from '../lib/editions';
+const edition = await latestEdition();
+const days = new Map<string, NonNullable<typeof edition>['agenda']>();
+for (const a of edition?.agenda ?? []) days.set(a.date, [...(days.get(a.date) ?? []), a]);
+const kinds = { floor: 'Floor', hearing: 'Hearing', markup: 'Markup', deadline: 'Deadline', other: 'Other' };
+const chambers = { senate: 'Senate', house: 'House', joint: 'Congress' };
 ---
 <Base title="What's next" current="calendar">
-  <EmptyState title="What's next">
-    <p>Floor schedules, hearings, markups and deadlines for the next seven days, taken from the House and Senate schedules and committee sites. The calendar fills once the first edition is published.</p>
-  </EmptyState>
+  {!edition || days.size === 0 ? (
+    <EmptyState title="What's next"><p>Floor schedules, hearings, markups and deadlines for the next seven days, taken from the House and Senate schedules and committee sites. The calendar fills once an edition lists them.</p></EmptyState>
+  ) : (
+    <>
+      <PageHead title="What's next" intro={`As of the edition of ${formatEditionDate(edition.compiledAt)}. Schedules change; each entry links to its source where one exists.`} />
+      <div class="days">
+        {[...days.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, items]) => (
+          <section>
+            <h2>{formatDay(date, { weekday: 'long', month: 'long', day: 'numeric' })}</h2>
+            <ul>
+              {items.map((a) => (
+                <li>
+                  <span class="tag">{chambers[a.chamber]} · {kinds[a.kind]}{a.time && <> · {a.time}</>}</span>
+                  <span>{a.committee && <strong>{a.committee}: </strong>}{a.url ? <a href={a.url}>{a.title}</a> : a.title}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </>
+  )}
 </Base>
+<style>
+  .days { max-width: 900px; display: grid; gap: 26px; }
+  h2 { margin: 0 0 8px; font-size: 20px; font-weight: 800; font-stretch: 88%; border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 16px; }
+  .tag { color: var(--ink-soft); font-size: 14px; }
+  @media (max-width: 640px) { li { grid-template-columns: 1fr; gap: 2px; } }
+</style>

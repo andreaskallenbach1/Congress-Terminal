@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { glossary, termId } from '../lib/glossary';
+---
+<Base title="Glossary" current="glossary">
+  <PageHead title="Glossary" intro="Procedural terms used in the briefings. Definitions are quoted from the official glossary of the U.S. Senate; in stories, the first use of a term shows its definition on hover." />
+  <dl class="gl" data-pagefind-body>
+    {glossary.map((e) => (
+      <div id={termId(e.term)}>
+        <dt>{e.term}</dt>
+        <dd>{e.definition} <a href={e.url}>{e.source}</a>, retrieved {e.retrieved}.</dd>
+      </div>
+    ))}
+  </dl>
+</Base>
+<style>
+  .gl { margin: 0; max-width: 820px; border-top: 1px solid var(--ink); }
+  .gl div { padding: 14px 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 16px; }
+  .gl div:target { background: var(--accent-wash); outline: 8px solid var(--accent-wash); }
+  dt { font-weight: 700; font-size: 18px; text-transform: capitalize; }
+  dd { margin: 4px 0 0; font-family: var(--font-read); font-size: 17px; line-height: 1.55; }
+  dd a { font-family: var(--font-ui); font-size: 14px; }
+</style>

@@ -1,9 +1,37 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import EmptyState from '../components/EmptyState.astro';
+import StatusMark from '../components/StatusMark.astro';
+import { listEditions, formatEditionDate, formatBerlinTime, storyUrl, PILLARS } from '../lib/editions';
+const editions = await listEditions();
+const base = import.meta.env.BASE_URL;
 ---
 <Base title="Archive" current="archive">
-  <EmptyState title="Archive">
-    <p>Every earlier edition, with each story stored on its own and grouped by edition. Nothing has been published yet.</p>
-  </EmptyState>
+  {editions.length === 0 ? (
+    <EmptyState title="Archive"><p>Every earlier edition, with each story stored on its own and grouped by edition. Nothing has been published yet.</p></EmptyState>
+  ) : (
+    <>
+      <PageHead title="Archive" intro="Every edition, newest first. Each story has its own page with its sources." />
+      {editions.map((e) => (
+        <section class="ed">
+          <h2>{formatEditionDate(e.compiledAt)} <span>{e.kind === 'weekly' ? 'Weekly edition' : 'Daily edition'}, {formatBerlinTime(e.compiledAt)}, about {Math.round(e.readingMinutes)} min</span></h2>
+          <ul>
+            {[...e.stories].sort((a, b) => Object.keys(PILLARS).indexOf(a.pillar) - Object.keys(PILLARS).indexOf(b.pillar) || a.relevance.rank - b.relevance.rank).map((s) => (
+              <li><span class="pillar">{PILLARS[s.pillar]}</span><a href={storyUrl(base, s)}>{s.headline}</a><StatusMark status={s.status} /></li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </>
+  )}
 </Base>
+<style>
+  .ed { max-width: 900px; margin-bottom: 30px; }
+  h2 { margin: 0 0 6px; font-size: 21px; font-weight: 800; font-stretch: 88%; border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+  h2 span { font-weight: 400; font-size: 15px; color: var(--ink-soft); font-stretch: 100%; margin-left: 8px; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 170px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+  .pillar { font-size: 14px; color: var(--ink-soft); }
+  @media (max-width: 640px) { li { grid-template-columns: minmax(0, 1fr) auto; } .pillar { grid-column: 1 / -1; } }
+</style>

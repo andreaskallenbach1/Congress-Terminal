@@ -9,6 +9,7 @@ interface Props { story: Story; edition: Edition; onStoryPage?: boolean }
 const { story, edition, onStoryPage = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const url = storyUrl(base, story);
+const used = new Set<string>();   // glossary terms already explained in this story
 ---
 <article class="story">
   <h1 class="headline">{story.headline}</h1>
@@ -21,16 +22,16 @@ const url = storyUrl(base, story);
     </figure>
   )}
   <div class="body">
-    <ClaimText paragraphs={story.whatsNew} claims={story.claims} storyUrl={url} dropcap />
+    <ClaimText paragraphs={story.whatsNew} claims={story.claims} storyUrl={url} used={used} dropcap />
     <h2>Why it matters</h2>
-    <ClaimText paragraphs={story.whyItMatters} claims={story.claims} storyUrl={url} />
+    <ClaimText paragraphs={story.whyItMatters} claims={story.claims} storyUrl={url} used={used} />
     {story.bill && <BillProgress bill={story.bill} />}
     <h2>What's next</h2>
-    <ClaimText paragraphs={story.whatsNext} claims={story.claims} storyUrl={url} />
+    <ClaimText paragraphs={story.whatsNext} claims={story.claims} storyUrl={url} used={used} />
     {story.background && (
       <details class="background">
         <summary>Background</summary>
-        <ClaimText paragraphs={story.background} claims={story.claims} storyUrl={url} />
+        <ClaimText paragraphs={story.background} claims={story.claims} storyUrl={url} used={used} />
       </details>
     )}
     {story.relevance.dissent && (

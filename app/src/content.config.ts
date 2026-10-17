@@ -83,6 +83,7 @@ const story = z.object({
   members: z.array(z.object({ bioguideId: z.string(), name: z.string(), party: z.enum(['R', 'D', 'I']), state: z.string() })).default([]),
   bill: bill.optional(),
   race: race.optional(),
+  countries: z.array(z.string()).default([]),   // Natural Earth names (world-atlas), for the Foreign Policy map
   relevance: z.object({
     rank: z.number().int().positive(),
     reason: z.string(),

@@ -68,3 +68,34 @@ export function feedbackUrl(kind: 'error' | 'not-important', edition: Edition, s
   const q = new URLSearchParams({ title, body, labels: label });
   return `https://github.com/andreaskallenbach1/Congress-Terminal/issues/new?${q}`;
 }
+
+export interface StoryRef { story: Story; edition: Edition }
+
+// Every story of every edition, newest edition first.
+export async function allStories(): Promise<StoryRef[]> {
+  return (await listEditions()).flatMap((edition) => edition.stories.map((story) => ({ story, edition })));
+}
+
+// Watchlist (FT 5): each bill once, in its most recent state.
+export async function watchedBills() {
+  const seen = new Map<string, StoryRef & { bill: NonNullable<Story['bill']> }>();
+  for (const ref of await allStories()) {
+    if (ref.story.bill && !seen.has(ref.story.bill.number)) seen.set(ref.story.bill.number, { ...ref, bill: ref.story.bill });
+  }
+  return [...seen.values()];
+}
+
+// Members who appear in the briefings, with the stories they appear in.
+export async function membersInBriefings() {
+  const map = new Map<string, { member: Story['members'][number]; refs: StoryRef[] }>();
+  for (const ref of await allStories()) {
+    for (const m of ref.story.members) {
+      const entry = map.get(m.bioguideId) ?? { member: m, refs: [] };
+      entry.refs.push(ref);
+      map.set(m.bioguideId, entry);
+    }
+  }
+  return [...map.values()].sort((a, b) => a.member.name.split(' ').at(-1)!.localeCompare(b.member.name.split(' ').at(-1)!));
+}
+
+export const portraitUrl = (bioguideId: string) => `https://unitedstates.github.io/images/congress/225x275/${bioguideId}.jpg`;

@@ -1,20 +1,31 @@
 ---
 // Renders paragraphs; a "[[c3]]" marker becomes a status mark that links to the claim's evidence.
+// Procedural terms from the glossary get a tooltip with the official definition (first use per story).
 import StatusMark from './StatusMark.astro';
 import type { Claim } from '../lib/editions';
-interface Props { paragraphs: string[]; claims: Claim[]; storyUrl: string; dropcap?: boolean }
-const { paragraphs, claims, storyUrl, dropcap = false } = Astro.props;
+import { markTerms, termId } from '../lib/glossary';
+interface Props { paragraphs: string[]; claims: Claim[]; storyUrl: string; dropcap?: boolean; used?: Set<string> }
+const { paragraphs, claims, storyUrl, dropcap = false, used = new Set<string>() } = Astro.props;
+const base = import.meta.env.BASE_URL;
 const byId = new Map(claims.map((c) => [c.id, c]));
 const split = (p: string) => p.split(/(\[\[[a-z0-9-]+\]\])/i).filter(Boolean);
+const label = { verified: 'Verified', multiple: 'Multiple reports', unconfirmed: 'Unconfirmed' };
 ---
 {paragraphs.map((p, i) => (
   <p class:list={['para', { dropcap: dropcap && i === 0 }]}>
     {split(p).map((part) => {
       const m = part.match(/^\[\[([a-z0-9-]+)\]\]$/i);
-      if (!m) return part;
-      const c = byId.get(m[1]);
-      if (!c) return null;
-      return <a class="claim" href={`${storyUrl}#claim-${c.id}`} aria-label={`Source for this statement`}><StatusMark status={c.status} size={12} title={`${c.status === 'verified' ? 'Verified' : c.status === 'multiple' ? 'Multiple reports' : 'Unconfirmed'}: see source`} /></a>;
+      if (m) {
+        const c = byId.get(m[1]);
+        if (!c) return null;
+        return <a class="claim" href={`${storyUrl}#claim-${c.id}`} aria-label={`${label[c.status]}: source for this statement`}><StatusMark status={c.status} size={12} title={`${label[c.status]}: see source`} /></a>;
+      }
+      return markTerms(part, used).map((seg) => 'entry' in seg ? (
+        <span class="gloss">
+          <a href={`${base}glossary/#${termId(seg.entry.term)}`} aria-describedby={`tip-${termId(seg.entry.term)}`}>{seg.text}</a>
+          <span class="tip" role="tooltip" id={`tip-${termId(seg.entry.term)}`}><strong>{seg.entry.term}</strong> {seg.entry.definition} <em>{seg.entry.source}</em></span>
+        </span>
+      ) : seg.text);
     })}
   </p>
 ))}
@@ -22,4 +33,14 @@ const split = (p: string) => p.split(/(\[\[[a-z0-9-]+\]\])/i).filter(Boolean);
   .para { margin: 0; }
   .claim { text-decoration: none; margin-left: 3px; }
   .dropcap::first-letter { float: left; font-family: var(--font-display); font-size: 4.1em; line-height: 0.82; padding: 6px 10px 0 0; }
+  .gloss { position: relative; }
+  .gloss a { color: inherit; text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .tip {
+    display: none; position: absolute; left: 0; top: calc(100% + 6px); z-index: 5; width: min(340px, 80vw);
+    padding: 10px 12px; background: var(--paper); color: var(--ink); border: 1px solid var(--ink);
+    font-family: var(--font-ui); font-size: 14px; line-height: 1.45; font-style: normal; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+  .tip strong { display: block; text-transform: capitalize; margin-bottom: 2px; }
+  .tip em { display: block; margin-top: 6px; color: var(--ink-soft); font-style: normal; font-size: 12px; }
+  .gloss:hover .tip, .gloss:focus-within .tip { display: block; }
 </style>
