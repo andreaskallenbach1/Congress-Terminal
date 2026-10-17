@@ -35,6 +35,9 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 | Thema | Entscheidung |
 |---|---|
 | Form | Installierbare Web-App (PWA), zuerst Windows (Edge/Chrome), Handy später |
+| Technik | Astro (statische Seiten), gehostet über GitHub Pages |
+| Textumfang | Jede Story ausführlich, ca. 500–800 Wörter (Andreas' Entscheidung vom 17.10.2026) |
+| Bilder | Gemeinfreie Porträts der Abgeordneten, gemeinfreie Kapitol-/Kongressfotos (Library of Congress, Architect of the Capitol, Wikimedia Commons), Unsplash über Konnektor; eigenes Logo, nie das offizielle Siegel; keine Agenturfotos |
 | Hosting | Öffentliches Repository `andreaskallenbach1/Congress-Terminal` + GitHub Pages (wird eingeschaltet, sobald die App existiert) |
 | Automatik | Geplante Claude-Aufgabe (Variante A, über Andreas' Claude-Abo), täglich morgens; zusätzlich ein Sonntagslauf |
 | Netzwerk | Cloud-Umgebung „Andreas Cloud“, Netzwerkzugang **Full** |
@@ -198,6 +201,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
 - **Geplante Läufe** pushen auf `claude/`-Branches; die Veröffentlichung muss genau damit funktionieren.
 - **Git:** Entwicklung auf dem zugewiesenen `claude/…`-Branch; keine Pull Requests ohne Andreas' Auftrag.
 - **Quellentest:** `./scripts/check_sources.sh` vor Änderungen an der Pipeline und bei Verdacht auf Ausfälle.
+- **Design-Skills im Repository** (`.claude/skills/`, geprüft, Lizenzen beigelegt): `impeccable` (Apache-2.0, Design-Prozess und Detektor gegen KI-Standardoptik), `frontend-design` (Anthropic), `ui-ux-pro-max` (MIT, Paletten- und Schriftdatenbank). Produktwahrheit für das Design: `PRODUCT.md`.
 - **Skills und Plugins** (nur geprüfte Herkunft, z. B. Anthropic-Verzeichnis):
   `frontend-design` (Oberfläche), `webapp-testing` (Playwright-Tests, Chromium ist vorinstalliert),
   Design-Plugin mit `design-critique` und `accessibility-review` (Phase 3), `skill-creator` (eigene Skills
