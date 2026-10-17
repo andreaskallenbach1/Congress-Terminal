@@ -11,7 +11,9 @@
   "alt": "The United States Capitol dome with a flag in front",
   "credit": "Andy Feliciotti, Unsplash",
   "license": "Unsplash License",
-  "sourceUrl": "https://unsplash.com/photos/MCWONeEXhC4"
+  "sourceUrl": "https://unsplash.com/photos/MCWONeEXhC4",
+  "relation": "symbolic",
+  "caption": "The Capitol dome"
  },
  "stories": [
   {

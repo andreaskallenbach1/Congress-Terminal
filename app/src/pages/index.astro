@@ -52,7 +52,7 @@ const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.k
       {edition.hero && (
         <figure class="hero">
           <img src={edition.hero.src} alt={edition.hero.alt} />
-          <figcaption>{edition.hero.credit}</figcaption>
+          <figcaption>{edition.hero.caption}{edition.hero.relation === 'symbolic' && ' (symbolic image)'}. {edition.hero.credit}</figcaption>
         </figure>
       )}
 

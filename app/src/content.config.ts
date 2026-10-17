@@ -133,6 +133,13 @@ const armsSale = z.object({
   url: z.string().url(),
 });
 
+// Title image of an edition: chosen for the lead story where a fitting licensed image exists,
+// otherwise a symbolic photo of the Capitol or Congress from a curated library.
+const hero = image.extend({
+  relation: z.enum(['story', 'symbolic']),
+  caption: z.string(),                    // what the image shows, in one line
+});
+
 const briefings = defineCollection({
   loader: glob({ pattern: '*.json', base: briefingsDir }),
   schema: z.object({
@@ -143,7 +150,7 @@ const briefings = defineCollection({
     date: z.string(),
     compiledAt: z.string(),
     readingMinutes: z.number().positive(),
-    hero: image.optional(),
+    hero: hero.optional(),
     stories: z.array(story),
     floor: z.object({ votes: z.array(vote), summary: z.string().optional() }),
     agenda: z.array(agendaItem),          // next seven days
