@@ -39,7 +39,7 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 | Textumfang | Jede Story ausführlich, ca. 500–800 Wörter (Andreas' Entscheidung vom 17.10.2026) |
 | Bilder | Gemeinfreie Porträts der Abgeordneten, gemeinfreie Kapitol-/Kongressfotos (Library of Congress, Architect of the Capitol, Wikimedia Commons), Unsplash über Konnektor; eigenes Logo, nie das offizielle Siegel; keine Agenturfotos |
 | Hosting | Öffentliches Repository `andreaskallenbach1/Congress-Terminal` + GitHub Pages (wird eingeschaltet, sobald die App existiert) |
-| Automatik | **Auf Knopfdruck** (Entscheidung 17.10.2026): Knopf „Update now“ in der Web-App → GitHub `workflow_dispatch` → GitHub Action ruft den API-Trigger der Claude-Routine auf (Start-Token als GitHub-Secret). Ersatzweg: „Run now“ auf claude.ai. Kein fester Morgenlauf. Sonntagsausgabe mit eigenem Knopf. Läuft über Andreas' Claude-Abo |
+| Automatik | **Auf Knopfdruck** (Entscheidung 17.10.2026): Knopf „Update now“ in der Web-App → GitHub `workflow_dispatch` → GitHub Action ruft den API-Trigger der Claude-Routine auf (Start-Token als GitHub-Secret). Ersatzweg: „Run now“ auf claude.ai. Kein fester Morgenlauf. Zweiter Knopf „Weekly edition“ (Rückblick über die letzten 7 Tage + Deep-Dive), an jedem Tag nutzbar. Beim Öffnen bleibt die letzte Ausgabe sichtbar, mit Hinweis, wie alt sie ist; während eines Laufs Fortschritt in 6 Stufen (Emblem füllt sich), danach Hinweis „neue Ausgabe bereit“. Knöpfe im rechten Teil des Kopfs. Läuft über Andreas' Claude-Abo |
 | Netzwerk | Cloud-Umgebung „Andreas Cloud“, Netzwerkzugang **Full** |
 | Congress.gov-Key | Als **Network secret** hinterlegt (Header `X-Api-Key` für `api.congress.gov`). Nie in Code, URLs, Logs oder Chat schreiben. Requests einfach ohne Key senden – die Umgebung hängt ihn an. |
 | Inhaltssprache | Englisch |
@@ -105,7 +105,7 @@ Jede Story wird auf diesen Dimensionen bewertet; Medien-Lautstärke ist nur ein 
 
 Dazu dauerhaft: **Watchlist** (Gesetze mit Fortschritt), **Kalender „What's next“** (7 Tage), **Archiv**,
 **Sources** (pro Ausgabe: jede Aussage mit Quelle, Link, Beleg-Zitat, Abrufzeit und Prüfstatus; dazu die Quellenbibliothek),
-**Suche** (über Storys, Quellen, Gesetze und Abgeordnete aller Ausgaben), **Glossar**. Sonntags zusätzlich: Wochenrückblick + ein Deep-Dive.
+**Suche** (über Storys, Quellen, Gesetze und Abgeordnete aller Ausgaben), **Glossar**. Auf Knopfdruck zusätzlich die Wochenausgabe: Rückblick über 7 Tage + ein Deep-Dive.
 
 ### 5.4 Story-Format (FT 4)
 
@@ -190,7 +190,7 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
 | FT 6 | Kalender „What's next“ (7 Tage) | 1, Dashboard |
 | FT 7 | Glossar-Tooltips, fest hinterlegt und geprüft | Dashboard |
 | FT 8 | Feedback-Knöpfe → vorausgefülltes GitHub-Issue → nächster Lauf | Dashboard → 0, 3 |
-| FT 10 | Sonntagsausgabe: Wochenrückblick + Deep-Dive | eigener Wochenlauf |
+| FT 10 | Wochenausgabe („Weekly edition“, eigener Knopf): Rückblick 7 Tage + Deep-Dive | eigener Lauf |
 | FT 9 | Abdeckungsanzeige links/Mitte/rechts | **später** |
 
 ---
