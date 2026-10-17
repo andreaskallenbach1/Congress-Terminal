@@ -14,3 +14,4 @@ briefing and reads, at small sizes, like a signal.
 
 Origin: concept explored with a Gamma image study (hemicycle of dotted and solid arcs), then
 constructed as precise vector geometry. Never use the official seals of Congress, the House or the Senate.
+| `seal.svg` | Round seal for the masthead (ring text needs Libre Caslon Text) |

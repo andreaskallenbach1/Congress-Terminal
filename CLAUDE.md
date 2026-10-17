@@ -231,4 +231,4 @@ Ein Arbeitsschritt ist erst fertig, wenn:
 - Genaue Uhrzeit des Morgenlaufs mit Andreas festlegen
 - Verbrauch eines Laufs im Abo messen
 - Federal Register sperrte am 17.10.2026 nach mehreren Volltext-Abrufen diese IP („Your IP address has been blocked“): Abrufe drosseln, Volltexte nur einzeln und zwischengespeichert holen
-- Designrichtung: „Federal Program“ gewählt (17.10.2026); Kopf/Emblem-Variante noch offen
+- Design (17.10.2026): „Federal Program“; Kopf = rundes Siegel mit Plenarsaal-Emblem neben zentriertem Caslon-Namen „The Congress Terminal“ (`design/brand/`); Reihenfolge unter dem Leitartikel: Floor & Committees, Midterms (mit Karte), Foreign Policy Desk (mit Karte). Endgültige Freigabe durch Andreas steht aus.
