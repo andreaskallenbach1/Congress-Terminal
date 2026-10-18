@@ -74,7 +74,9 @@ def main() -> None:
         "date": run_id[:10],
         "compiledAt": now.isoformat(timespec="seconds"),
         "readingMinutes": reading,
-        **({"hero": editor["hero"]} if editor.get("hero") else {}),
+        # the app labels symbolic images itself, so a label in the editor's caption would appear twice
+        **({"hero": {**editor["hero"], "caption": re.sub(r"\s*\(symbolic image\)\.?\s*$", "", editor["hero"]["caption"], flags=re.I)}}
+           if editor.get("hero") else {}),
         "stories": stories,
         "floor": {"votes": votes, **({"summary": editor["floorSummary"]} if editor.get("floorSummary") else {})},
         "agenda": [{k: v for k, v in a.items() if k in AGENDA_KEYS} for a in draft.get("agenda", [])],

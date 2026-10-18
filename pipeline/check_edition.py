@@ -90,10 +90,10 @@ def main() -> int:
                     problem(cid, f"unknown source id {e['sourceId']}")
                     continue
                 outlets.add(src["name"])
-                if any(u in e["url"] for u in UNFETCHABLE):
+                txt = page_text(e["url"])   # page store first: some pages of blocking hosts (CRS PDFs) do answer
+                if txt is None and any(u in e["url"] for u in UNFETCHABLE):
                     warnings.append(f"{cid}: quote not machine-checkable ({src['name']} blocks direct fetches)")
                     continue
-                txt = page_text(e["url"])
                 if txt is None:
                     problem(cid, "source could not be fetched to check the quote", url=e["url"])
                 elif normalize(e["quote"]) not in txt:
