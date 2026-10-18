@@ -8,7 +8,7 @@ Wird nach jedem Schritt aktualisiert. Eine Sitzung, die nach einem Limit neu sta
 - [x] 3b.3 Status-Vorprüfung per Code vor Prüfer A (Status deterministisch korrigieren)
 - [x] 3b.4 Ausgabe per Code zusammenbauen (`pipeline/assemble.py`); Chefredaktion liefert nur Urteile
 - [x] 3b.5 Eingaben verdichten (Dubletten, kurze Zusammenfassungen) für Bündeln/Türsteher
-- [ ] 3b.6 Zweiter Lauf zum Messen – zusammengelegt mit 4.7 (ein Lauf misst Einsparung je bestehender Stufe und Kosten der neuen Rollen; spart einen ganzen Lauf). Start nach dem Bau von Etappe 4, mit Nachrichtenfenster seit der letzten Ausgabe
+- [x] 3b.6 Zweiter Lauf zum Messen (18.10.2026, `docs/08-zweiter-lauf.md`) – zusammengelegt mit 4.7 (ein Lauf misst Einsparung je bestehender Stufe und Kosten der neuen Rollen; spart einen ganzen Lauf). Start nach dem Bau von Etappe 4, mit Nachrichtenfenster seit der letzten Ausgabe
 
 ## Etappe 4 – volle Pipeline (Rollen einzeln, jeweils gemessen)
 - [x] 4.1 Türsteher (klein) nur auf Titeln (vorgezogen, da größter Hebel beim Bündeln)
@@ -17,7 +17,7 @@ Wird nach jedem Schritt aktualisiert. Eine Sitzung, die nach einem Limit neu sta
 - [x] 4.4 Verfahrens-Erklärer und Historiker (in Background, Glossar-Vorschläge mit Primärquelle)
 - [x] 4.5 Watchlist-Datei per Code (FT 5), Feedback-Issues einlesen (FT 8)
 - [x] 4.6 Wochenausgabe (FT 10): Lauf-Art „weekly“ + Deep-Dive in App und Anleitung
-- [ ] 4.7 Volllauf testen, messen, dokumentieren
+- [x] 4.7 Volllauf testen, messen, dokumentieren (Ausgabe 2026-10-18 live, `docs/08-zweiter-lauf.md`)
 
 ## Offen für Andreas
 - FEC/GovInfo-Schlüssel: wird angehängt, aber als ungültig abgelehnt (API_KEY_INVALID) → Schlüssel neu kopieren bzw. Freischalt-Mail prüfen
