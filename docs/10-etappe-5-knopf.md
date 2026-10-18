@@ -46,6 +46,7 @@ App: liest status.json über die GitHub API alle 30 s → Ring des Emblems füll
 | GitHub API liefert `status.json` vom Branch mit CORS-Freigabe (`Access-Control-Allow-Origin: *`) | ✅ |
 | App im Browser (Chromium, GitHub-Antworten simuliert): Einstellungsdialog, Start (`workflow_dispatch` mit `kind`), Fortschritt Stufe 3 (Ring 3/6), „Published …“, „New edition ready“, Fehlerfall mit Notiz | ✅ |
 | `latest.json` wird gebaut und vom Service Worker nicht zwischengespeichert | ✅ |
+| Workflow auf GitHub gestartet (18.10.2026, ohne Secrets) | ✅ Sperre-Schritt läuft, bricht wie vorgesehen mit „Secrets … are not set“ ab |
 | Workflow gegen die echte Routine | **noch nicht** – braucht Schritte 1–3 von Andreas |
 
 ## Grenzen und Risiken
