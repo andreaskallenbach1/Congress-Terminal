@@ -1,0 +1,93 @@
+# Starts a briefing run: the "Update now" and "Weekly edition" buttons in the web app call this workflow
+# (workflow_dispatch through the GitHub API with Andreas' own token). The workflow fires the Claude routine through its
+# API trigger; the routine runs the pipeline (.claude/skills/briefing-run) and commits the edition to main.
+#
+# Secrets (repository settings → Secrets and variables → Actions):
+#   ROUTINE_FIRE_URL    the routine's API trigger URL (https://api.anthropic.com/v1/claude_code/routines/trig_…/fire)
+#   ROUTINE_FIRE_TOKEN  the routine's API trigger token (shown once on claude.ai when it is generated)
+# Never print either value. Each fire starts a new session that draws on the Claude subscription, so a second
+# request while a run is still going is refused here instead of starting a second, parallel run.
+name: Briefing run
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: Edition
+        type: choice
+        options: [daily, weekly]
+        default: daily
+
+permissions:
+  contents: write          # only to write status.json on the run-status branch
+
+concurrency:
+  group: briefing-run
+  cancel-in-progress: false
+
+jobs:
+  fire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Refuse if a run is already in progress
+        id: guard
+        run: |
+          if git fetch -q origin run-status 2>/dev/null; then
+            git show FETCH_HEAD:status.json > /tmp/status.json
+            python3 - <<'PY'
+          import datetime as dt, json, os
+          s = json.load(open("/tmp/status.json"))
+          age = (dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(s["updatedAt"].replace("Z", "+00:00"))).total_seconds() / 60
+          busy = s.get("state") == "running" and age < 90     # a run silent for 90 minutes is treated as dead
+          print(f"last status: stage {s.get('stage')} {s.get('state')}, {age:.0f} min ago")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"busy={'true' if busy else 'false'}\n")
+          PY
+          else
+            echo "busy=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fire the Claude routine
+        if: steps.guard.outputs.busy != 'true'
+        env:
+          ROUTINE_FIRE_URL: ${{ secrets.ROUTINE_FIRE_URL }}
+          ROUTINE_FIRE_TOKEN: ${{ secrets.ROUTINE_FIRE_TOKEN }}
+          KIND: ${{ inputs.kind }}
+        run: |
+          if [ -z "$ROUTINE_FIRE_URL" ] || [ -z "$ROUTINE_FIRE_TOKEN" ]; then
+            echo "::error::Secrets ROUTINE_FIRE_URL and ROUTINE_FIRE_TOKEN are not set (see docs/10-etappe-5-knopf.md)."
+            exit 1
+          fi
+          requested=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          code=$(curl -sS -o /tmp/fire.json -w '%{http_code}' -X POST "$ROUTINE_FIRE_URL" \
+            -H "Authorization: Bearer $ROUTINE_FIRE_TOKEN" \
+            -H "anthropic-version: 2023-06-01" \
+            -H "anthropic-beta: experimental-cc-routine-2026-04-01" \
+            -H "Content-Type: application/json" \
+            -d "{\"text\": \"kind=$KIND requested=$requested via=update-button\"}")
+          # The response holds the session link; it is not printed because workflow logs of a public repository are public.
+          echo "routine answered HTTP $code"
+          if [ "$code" != "200" ]; then
+            python3 -c "import json; print('error:', json.load(open('/tmp/fire.json')).get('error', {}).get('type'))" || true
+            exit 1
+          fi
+
+      - name: Show the request in the app (stage 0)
+        if: steps.guard.outputs.busy != 'true'
+        env:
+          KIND: ${{ inputs.kind }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          day=$(TZ=Europe/Berlin date +%F)
+          python3 pipeline/status.py "$day-$KIND" 0 --kind "$KIND" --note "Requested from the app"
+
+      - name: Report a refused request
+        if: steps.guard.outputs.busy == 'true'
+        run: |
+          echo "::warning::A run is already in progress; no second run was started."

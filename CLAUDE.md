@@ -56,7 +56,7 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 | 1 | Quellen und Agenten-Architektur | **abgeschlossen** (66 Quellen getestet, Architektur v2 freigegeben) |
 | 2 | Design des Dashboards: Aufbau, Optik, Interaktion | **abgeschlossen** (Runde 6 „Federal Program“ freigegeben, 17.10.2026) |
 | 3 | Kritische Prüfung in mehreren Iterationen (Design, Architektur, Risiken) | **abgeschlossen** (Prüfdokument mit Nachtrag „Knopfdruck“, 17.10.2026) |
-| 4 | Bau: Web-App, Pipeline, Skills, Routine mit Knopf, GitHub Pages | **läuft** (Start 17.10.2026). Etappen 1–4 fertig; Messlauf mit voller Pipeline 18.10.2026 bestanden, zweite Ausgabe live (`docs/08-zweiter-lauf.md`, ~2,1 Mio. Subagent-Tokens, im Pro-Limit); offen: Etappe 5 Knopf |
+| 4 | Bau: Web-App, Pipeline, Skills, Routine mit Knopf, GitHub Pages | **läuft** (Start 17.10.2026). Etappen 1–4 fertig; Messlauf mit voller Pipeline 18.10.2026 bestanden, zweite Ausgabe live (`docs/08-zweiter-lauf.md`, ~2,1 Mio. Subagent-Tokens, im Pro-Limit); Etappe 5 Knopf gebaut (18.10.2026, `docs/10-etappe-5-knopf.md`), offen: Einrichtung der Routine durch Andreas und erster Lauf über den Knopf |
 | 5 | Betrieb: erste Woche messen (Qualität, Verbrauch), nachschärfen | offen |
 
 Keine Phase überspringen. Vor Phase 4 muss Andreas Design und Prüfergebnis freigegeben haben.

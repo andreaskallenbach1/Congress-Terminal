@@ -1,6 +1,6 @@
 // Offline support: the last edition you opened stays readable without a connection.
 // Pages are fetched network-first (a new edition always wins), static assets cache-first.
-const CACHE = 'ct-v1';
+const CACHE = 'ct-v2';
 const BASE = '/Congress-Terminal/';
 const SHELL = [BASE, `${BASE}manifest.webmanifest`, `${BASE}icons/icon-192.png`];
 
@@ -19,6 +19,9 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+
+  // The edition marker must always come from the network (the "Update now" display polls it).
+  if (new URL(req.url).pathname.endsWith('/latest.json')) return;
 
   if (req.mode === 'navigate') {
     event.respondWith(

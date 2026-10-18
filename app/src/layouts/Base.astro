@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Seal from '../components/Seal.astro';
+import RunControl from '../components/RunControl.astro';
 import { latestEdition, formatEditionDate, formatBerlinTime } from '../lib/editions';
 
 interface Props { title?: string; current?: string; sections?: { key: string; label: string; href: string }[] }
@@ -48,13 +49,16 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
       <div class="masthead-seal"><Seal size={116} /></div>
       <div class="nameplate">
         <a href={base} class="nameplate-title">The Congress Terminal</a>
-        <p class="dateline">
+        <p class="dateline" data-edition-id={edition?.id}>
           {edition
             ? <>{formatEditionDate(edition.compiledAt)}. {edition.kind === 'weekly' ? 'Weekly edition' : 'Daily edition'}, compiled at {formatBerlinTime(edition.compiledAt)}</>
             : <>No edition published yet</>}
         </p>
       </div>
-      <p class="motto">The daily briefing on the United States Congress, at home and abroad</p>
+      <div class="masthead-side">
+        <p class="motto">The daily briefing on the United States Congress, at home and abroad</p>
+        <RunControl />
+      </div>
     </div>
     <div class="rule-heavy"></div>
     <div class="rule-light"></div>
@@ -146,7 +150,8 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
     letter-spacing: -0.01em; color: var(--ink); text-decoration: none;
   }
   .dateline { font-size: 15px; color: var(--ink-soft); margin: 10px 0 0; font-variant-numeric: tabular-nums; }
-  .motto { justify-self: end; max-width: 230px; margin: 0; font-size: 15px; line-height: 1.4; text-align: right; color: var(--ink-soft); }
+  .masthead-side { justify-self: end; display: grid; justify-items: end; gap: 10px; }
+  .motto { max-width: 230px; margin: 0; font-size: 15px; line-height: 1.4; text-align: right; color: var(--ink-soft); }
   .rule-heavy { margin-top: 14px; border-top: 3px solid var(--rule-strong); }
   .rule-light { margin-top: 2px; border-top: 1px solid var(--rule-strong); }
 
@@ -178,6 +183,7 @@ const pageTitle = title ? `${title} · The Congress Terminal` : 'The Congress Te
     .masthead-seal :global(svg) { width: 64px; height: 64px; }
     .nameplate { text-align: left; }
     .motto { display: none; }
+    .masthead-side { grid-column: 1 / -1; justify-self: start; justify-items: start; }
     .sections-inner { gap: 20px; }
   }
 </style>

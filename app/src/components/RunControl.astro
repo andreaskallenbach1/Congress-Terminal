@@ -1,0 +1,199 @@
+---
+// "Update now" and "Weekly edition" (CLAUDE.md 3, "Automatik"). A click starts the GitHub workflow "Briefing run"
+// (workflow_dispatch) with a token that lives only in this browser; the workflow fires the Claude routine. Progress
+// comes from status.json on the branch run-status (written by pipeline/status.py) and fills the ring of the seal
+// in six stages. When the run is done, the app waits until the new edition is live and offers to reload.
+const base = import.meta.env.BASE_URL;
+---
+<div class="run" data-base={base}>
+  <div class="run-buttons">
+    <button type="button" class="run-btn" data-kind="daily">Update now</button>
+    <button type="button" class="run-btn secondary" data-kind="weekly">Weekly edition</button>
+    <button type="button" class="run-settings" aria-label="Set up the update buttons" title="Set up">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <p class="run-line" role="status" aria-live="polite" hidden></p>
+
+  <dialog class="run-dialog" aria-labelledby="run-dialog-title">
+    <form method="dialog">
+      <h2 id="run-dialog-title">Set up the update buttons</h2>
+      <p>The buttons start the briefing run through GitHub. They need a fine-grained GitHub token for the repository
+        <strong>andreaskallenbach1/Congress-Terminal</strong> only, with the permissions <strong>Actions: read and write</strong>
+        and <strong>Contents: read</strong>.</p>
+      <p>The token is stored only in this browser on this device. It is never part of the site or the repository.</p>
+      <label>GitHub token <input type="password" name="token" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+      <p class="run-dialog-state"></p>
+      <div class="run-dialog-actions">
+        <button value="save" class="run-btn">Save</button>
+        <button value="remove" class="run-btn secondary">Remove token</button>
+        <button value="cancel" class="run-btn secondary">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+</div>
+
+<script is:inline>
+(() => {
+  const root = document.querySelector('.run');
+  if (!root) return;
+  const REPO = 'andreaskallenbach1/Congress-Terminal';
+  const API = `https://api.github.com/repos/${REPO}`;
+  const base = root.dataset.base;
+  const line = root.querySelector('.run-line');
+  const buttons = [...root.querySelectorAll('.run-btn[data-kind]')];
+  const dialog = root.querySelector('.run-dialog');
+  const ring = document.querySelector('.seal-progress');
+  const store = {
+    get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} },
+  };
+  const token = () => store.get('ct-gh-token');
+  const headers = () => ({ Accept: 'application/vnd.github+json', Authorization: `Bearer ${token()}`, 'X-GitHub-Api-Version': '2022-11-28' });
+  let timer = null;
+
+  const say = (text, busy = false) => {
+    line.hidden = !text;
+    line.textContent = '';
+    if (text instanceof Node) line.append(text); else line.textContent = text || '';
+    buttons.forEach((b) => { b.disabled = busy; });
+  };
+  const fill = (stage) => {
+    if (!ring) return;
+    ring.style.strokeDasharray = `${Math.max(0, Math.min(6, stage))} 6`;
+    ring.classList.toggle('active', stage > 0 && stage < 6);
+  };
+
+  async function readStatus() {
+    const r = await fetch(`${API}/contents/status.json?ref=run-status`, {
+      headers: { ...headers(), Accept: 'application/vnd.github.raw+json' }, cache: 'no-store',
+    });
+    if (r.status === 404) return null;
+    if (!r.ok) throw new Error(`GitHub answered ${r.status}`);
+    return r.json();
+  }
+  async function liveEdition() {
+    const r = await fetch(`${base}latest.json?t=${Date.now()}`, { cache: 'no-store' });
+    return r.ok ? (await r.json()).id : null;
+  }
+
+  function reloadButton() {
+    const frag = document.createDocumentFragment();
+    frag.append('New edition ready. ');
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'run-link'; b.textContent = 'Show it';
+    b.addEventListener('click', () => location.reload());
+    frag.append(b);
+    return frag;
+  }
+
+  async function poll() {
+    clearTimeout(timer);
+    const requested = Number(store.get('ct-run-requested') || 0);
+    try {
+      const s = await readStatus();
+      const fresh = s && Date.parse(s.updatedAt) >= requested - 60000;
+      if (!s || !fresh) {
+        if (requested && Date.now() - requested > 5 * 60000) {
+          store.set('ct-run-requested', null);
+          const a = document.createElement('a');
+          a.href = `https://github.com/${REPO}/actions/workflows/run.yml`; a.textContent = 'the workflow on GitHub';
+          const frag = document.createDocumentFragment();
+          frag.append('No run has started. See ', a, '.');
+          fill(0); say(frag); return;
+        }
+        if (requested) { say('Starting the run…', true); timer = setTimeout(poll, 15000); }
+        return;
+      }
+      const age = (Date.now() - Date.parse(s.updatedAt)) / 60000;
+      if (s.state === 'running' && age < 90) {
+        fill(s.stage);
+        say(`${s.kind === 'weekly' ? 'Weekly edition' : 'Update'} running: stage ${s.stage} of 6, ${s.label}.`, true);
+        timer = setTimeout(poll, 30000);
+      } else if (s.state === 'done') {
+        fill(6);
+        const live = await liveEdition();
+        if (live === s.runId) {
+          store.set('ct-run-requested', null);
+          const current = document.querySelector('[data-edition-id]')?.dataset.editionId;
+          if (current !== s.runId) say(reloadButton()); else { fill(0); say(''); }
+        } else {
+          say('Published. The new edition appears on the site in about two minutes.', true);
+          timer = setTimeout(poll, 30000);
+        }
+      } else if (s.state === 'failed') {
+        store.set('ct-run-requested', null);
+        fill(0);
+        say(`The run stopped at stage ${s.stage} (${s.label}). Nothing was published; the last edition stays.${s.note ? ' ' + s.note : ''}`);
+      } else {
+        fill(0); say('');                                // a run silent for 90 minutes counts as ended
+      }
+    } catch (e) {
+      say(`Progress unavailable: ${e.message}.`);
+    }
+  }
+
+  async function start(kind) {
+    if (!token()) { openSettings(); return; }
+    say('Starting the run…', true);
+    try {
+      const r = await fetch(`${API}/actions/workflows/run.yml/dispatches`, {
+        method: 'POST', headers: { ...headers(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref: 'main', inputs: { kind } }),
+      });
+      if (r.status !== 204) {
+        say(r.status === 401 || r.status === 403 || r.status === 404
+          ? `GitHub refused the request (HTTP ${r.status}). Check the token in the settings.`
+          : `GitHub answered HTTP ${r.status}. Try again later.`);
+        return;
+      }
+      store.set('ct-run-requested', String(Date.now()));
+      timer = setTimeout(poll, 15000);
+    } catch (e) {
+      say(`Could not reach GitHub: ${e.message}.`);
+    }
+  }
+
+  function openSettings() {
+    dialog.querySelector('input').value = '';
+    dialog.querySelector('.run-dialog-state').textContent = token() ? 'A token is saved in this browser.' : 'No token saved yet.';
+    dialog.showModal();
+  }
+  dialog.addEventListener('close', () => {
+    const v = dialog.querySelector('input').value.trim();
+    if (dialog.returnValue === 'save' && v) { store.set('ct-gh-token', v); say('Token saved. The buttons are ready.'); }
+    if (dialog.returnValue === 'remove') { store.set('ct-gh-token', null); say('Token removed from this browser.'); }
+  });
+
+  buttons.forEach((b) => b.addEventListener('click', () => start(b.dataset.kind)));
+  root.querySelector('.run-settings').addEventListener('click', openSettings);
+  if (token()) poll();                                  // continue showing a run that is under way
+})();
+</script>
+
+<style>
+  .run { display: grid; justify-items: end; gap: 8px; }
+  .run-buttons { display: flex; gap: 8px; align-items: center; }
+  .run-btn {
+    font: inherit; font-size: 14px; padding: 7px 12px; border: 1px solid var(--ink); border-radius: 2px;
+    background: var(--ink); color: var(--paper); cursor: pointer; white-space: nowrap;
+  }
+  .run-btn.secondary { background: transparent; color: var(--ink); border-color: var(--rule-strong); }
+  .run-btn:disabled { opacity: .45; cursor: default; }
+  .run-btn:focus-visible, .run-settings:focus-visible, .run-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .run-settings { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--rule-strong); border-radius: 2px; background: transparent; color: var(--ink); cursor: pointer; }
+  .run-line { margin: 0; max-width: 300px; font-size: 13px; line-height: 1.4; text-align: right; color: var(--ink-soft); }
+  .run-line :global(a), .run-link { font: inherit; color: var(--accent-deep); text-decoration: underline; background: none; border: 0; padding: 0; cursor: pointer; }
+  .run-dialog { max-width: 460px; border: 1px solid var(--rule-strong); border-radius: 2px; padding: 22px; background: var(--paper); color: var(--ink); }
+  .run-dialog::backdrop { background: rgb(0 0 0 / .35); }
+  .run-dialog h2 { margin: 0 0 10px; font-size: 20px; }
+  .run-dialog p { font-size: 15px; line-height: 1.5; }
+  .run-dialog label { display: grid; gap: 6px; font-size: 14px; }
+  .run-dialog input { font: inherit; padding: 8px; border: 1px solid var(--rule-strong); border-radius: 2px; background: var(--paper); color: var(--ink); }
+  .run-dialog-state { color: var(--ink-soft); font-size: 13px !important; }
+  .run-dialog-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  @media (max-width: 760px) {
+    .run { justify-items: start; }
+    .run-line { text-align: left; }
+  }
+</style>
