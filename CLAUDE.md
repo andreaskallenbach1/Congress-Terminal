@@ -56,7 +56,7 @@ Morgen automatisch eine Pipeline aus Agenten und Gegenagenten.
 | 1 | Quellen und Agenten-Architektur | **abgeschlossen** (66 Quellen getestet, Architektur v2 freigegeben) |
 | 2 | Design des Dashboards: Aufbau, Optik, Interaktion | **abgeschlossen** (Runde 6 „Federal Program“ freigegeben, 17.10.2026) |
 | 3 | Kritische Prüfung in mehreren Iterationen (Design, Architektur, Risiken) | **abgeschlossen** (Prüfdokument mit Nachtrag „Knopfdruck“, 17.10.2026) |
-| 4 | Bau: Web-App, Pipeline, Skills, Routine mit Knopf, GitHub Pages | **läuft** (Start 17.10.2026). Etappen 1–3 fertig, erste Ausgabe live; 3b Sparmaßnahmen und 4 volle Pipeline gebaut (18.10.2026, `docs/07-…`); offen: Messlauf, Etappe 5 Knopf |
+| 4 | Bau: Web-App, Pipeline, Skills, Routine mit Knopf, GitHub Pages | **läuft** (Start 17.10.2026). Etappen 1–4 fertig; Messlauf mit voller Pipeline 18.10.2026 bestanden, zweite Ausgabe live (`docs/08-zweiter-lauf.md`, ~2,1 Mio. Subagent-Tokens, im Pro-Limit); offen: Etappe 5 Knopf |
 | 5 | Betrieb: erste Woche messen (Qualität, Verbrauch), nachschärfen | offen |
 
 Keine Phase überspringen. Vor Phase 4 muss Andreas Design und Prüfergebnis freigegeben haben.
@@ -250,6 +250,7 @@ Ein Arbeitsschritt ist erst fertig, wenn:
 
 - YouTube-Kanäle der Ausschüsse (SFRC, HFAC, SASC, HASC) finden; bis dahin Videos über Ausschuss-Websites
 - Washington Post war beim Test nicht erreichbar (Serverfehler) – erneut prüfen
+- YouTube-Feeds (C-SPAN, Speaker, Senate Democrats) liefern seit 18.10.2026 404 → neue Feed-Adressen finden; Federal-Register-API antwortete am 18.10.2026 mit 403 (GovInfo funktioniert)
 - Verbrauch eines Laufs im Abo messen – erster Lauf 17.10.2026: Pro-Sitzungslimit in Stufe 4 erreicht (`docs/05-erster-lauf.md`); Sparmaßnahmen umgesetzt (Redakteure mittleres Modell außer Leitartikel, Seiten-Speicher, Faktenkarten, Code-Vorprüfung, Code-Zusammenbau, Türsteher auf Schlagzeilen), Messung im nächsten Volllauf
 - FEC/GovInfo-Schlüssel (api.data.gov) als Network secret hinterlegt, wird aber als ungültig abgelehnt (18.10.2026) – Andreas prüft den Wert
 - Federal Register: Volltexte über GovInfo (amtliche GPO-Ausgabe), nicht über federalregister.gov
