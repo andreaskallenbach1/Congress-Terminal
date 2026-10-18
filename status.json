@@ -1,0 +1,10 @@
+{
+ "runId": "test-status",
+ "kind": "daily",
+ "stage": 1,
+ "label": "Collect",
+ "state": "running",
+ "note": "status branch test",
+ "startedAt": "2026-10-18T15:40:26Z",
+ "updatedAt": "2026-10-18T15:40:26Z"
+}
