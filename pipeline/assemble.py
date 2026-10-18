@@ -71,12 +71,15 @@ def main() -> None:
     reading = round(sum(s["readingMinutes"] for s in stories) + watch_minutes + (2 if notable else 0), 1)
 
     now = dt.datetime.now(dt.timezone(dt.timedelta(hours=2)))
+    existing = ROOT / "briefings" / f"{run_id}.json"
+    previous_compiled = json.loads(existing.read_text())["compiledAt"] if existing.exists() else None
     edition = {
         "schemaVersion": 1,
         "id": run_id,
         "kind": kind,
         "date": run_id[:10],
-        "compiledAt": now.isoformat(timespec="seconds"),
+        # a re-assembled edition (correction of the same run) keeps its original compile time
+        "compiledAt": previous_compiled or now.isoformat(timespec="seconds"),
         "readingMinutes": reading,
         # the app labels symbolic images itself, so a label in the editor's caption would appear twice
         **({"hero": {**editor["hero"], "caption": re.sub(r"\s*\(symbolic image\)\.?\s*$", "", editor["hero"]["caption"], flags=re.I)}}
