@@ -152,14 +152,14 @@ Schema: Projektbild v2. Stufen:
 |---|---|---|
 | 0 Vorbereitung | Code | Feeds und APIs laden, Vortags-Briefing, Watchlist, Feedback-Issues; Vorfilter auf Kongressbezug |
 | 0 Türsteher | kleines Modell | Sortiert Meldungen ohne Kongress- oder Machtbezug früh aus |
-| 1 Sammeln | 8 Agenten parallel | Floor & Votes · Legislation · Committees · Foreign Policy · Midterms · News-Scan · Video-Scout · **Executive & Courts** (Weißes Haus, Ministerien, Gerichte – wenn Kongressbezug oder sehr bedeutend); jeder mit präzisem Auftrag |
+| 1 Sammeln | 1 Agent für 8 Bereiche (seit 18.10.2026, spart ~500 Tsd. Tokens) | Floor & Votes · Legislation · Committees · Foreign Policy · Midterms · News-Scan · Video-Scout · **Executive & Courts** (Weißes Haus, Ministerien, Gerichte – wenn Kongressbezug oder sehr bedeutend) |
 | 1 Faktenkarten | kleines Modell | Lange Quellen einmal in Karten zerlegen (Aussage, wörtliches Zitat, Link); spätere Agenten arbeiten nur damit |
 | 2 Bündeln | Code + Story-Builder | Dubletten entfernen, Storys bilden, mit Vortag und Watchlist verknüpfen |
 | 3a Relevanz | Relevanz-Agent | Rangliste nach Rubrik (5.2) mit Begründung |
 | 3b Gegenrelevanz | Gegenagent | Greift die Auswahl an, sucht fehlende Storys – in einem **anderen Quellenpool** als 3a |
 | 3c Entscheidung | Schiedsrichter | Entscheidet endgültig, Dissens wird protokolliert und im Dashboard aufklappbar |
 | 4 Schreiben | Redakteur je Säule | Story-Format; jede Aussage als Claim mit Beleg-Zitat; Kern- vs. Nebenaussage |
-| 4 Fachleute | Historiker · Verfahrens-Erklärer · Abgeordneten-Profile | Präzedenzfälle; Verfahren erklären und Glossar speisen; Porträt, Ausschüsse, Abstimmungen, Voteview-Werte |
+| 4 Fachleute | Historiker + Verfahrens-Erklärer (ein Agent) · Abgeordneten-Profile (Code) | Präzedenzfälle; Verfahren erklären und Glossar speisen; Porträt, Ausschüsse, Abstimmungen, Voteview-Werte |
 | 5a Prüfer A | Agent | Claim für Claim gegen die Quelle |
 | 5b Prüfer B | Agent, **anderes Modell**, blind | Sieht A's Urteil nicht; leitet Prüffragen aus der Aussage ab und beantwortet sie nur aus Primärquellen (FT 1) |
 | 5c Neutralität | Agent | Parteiische Sprache, einseitiges Framing |
@@ -174,7 +174,8 @@ Schema: Projektbild v2. Stufen:
   Nachsuche · R3 Faktenfehler → eine Überarbeitung, dann beide Prüfer erneut · R4 Neutralität → eine
   Überarbeitung · R5 Maschinen-Check → eine Korrektur. Danach greift die feste Regel.
 - **Entscheidungsregel Faktenprüfung:** beide bestätigen → `verified`/`multiple reports` · einer nicht → R3 ·
-  keiner → gestrichen. Fällt eine **Kernaussage**, fällt die Story (FT 2).
+  keiner → gestrichen. Fällt eine **Kernaussage**, fällt die Story (FT 2). Kernaussagen brauchen mindestens
+  `multiple reports` (Entscheidung 18.10.2026); sonst wird die Story eine zugeschriebene Kurzmeldung in Also Notable.
 - **Scheitert der Lauf**, bleibt das letzte gültige Briefing sichtbar, mit Hinweis auf den Stand. Nie ein
   halbfertiges Briefing veröffentlichen. Fehler werden protokolliert.
 - **Agenten schreiben nur Briefing-Dateien**, nichts anderes im Repository.
@@ -200,43 +201,26 @@ Gewicht Kern/Neben, Herkunft „Code“ bei harten Fakten). Das genaue Schema wi
 
 ---
 
-## 9. Technik und Werkzeuge
+## 9. Technik und Werkzeuge (Kurzfassung; Details, Konnektoren-Tests, Skills, Web-App-Funktionen: `docs/00-projektstand.md`)
 
-- **Web-App:** statische PWA, gehostet über GitHub Pages aus diesem Repository; installierbar über Edge/Chrome.
-- **Daten:** Briefings als Dateien im Repository (ein Briefing pro Tag + Archiv).
-- **Läufe** schreiben Briefings fest auf `main`; eine GitHub Action baut und veröffentlicht die Seite. Der Routine-Endpunkt erlaubt keine Browser-Aufrufe (CORS-Vorabfrage → 405), daher der Weg über GitHub.
-- **Phase-3-Maßnahmen (17.10.2026):** 40 Minuten sind Obergrenze; im Lauf nur GitHub plus die Recherche-Konnektoren (Tabelle unten); Statusdatei je Lauf; Kernaussagen (8–12 je Story) doppelt prüfen; Abrufe drosseln und zwischenspeichern; stufenweise bauen und testen, Betrieb mit voller Pipeline.
+- **Web-App:** statische PWA (Astro) auf GitHub Pages; Briefings als Dateien in `briefings/`, ein Briefing pro Ausgabe.
+- **Läufe** schreiben Briefings fest auf `main`; eine GitHub Action baut und veröffentlicht die Seite. Ablauf: Skill
+  `.claude/skills/briefing-run/`. Der Routine-Endpunkt erlaubt keine Browser-Aufrufe (CORS → 405), daher der Weg über GitHub.
 - **Git:** Entwicklung auf dem zugewiesenen `claude/…`-Branch; keine Pull Requests ohne Andreas' Auftrag.
 - **Quellentest:** `./scripts/check_sources.sh` vor Änderungen an der Pipeline und bei Verdacht auf Ausfälle.
-- **Design-Skills im Repository** (`.claude/skills/`, geprüft, Lizenzen beigelegt): `impeccable` (Apache-2.0, Design-Prozess und Detektor gegen KI-Standardoptik), `frontend-design` (Anthropic), `ui-ux-pro-max` (MIT, Paletten- und Schriftdatenbank). Produktwahrheit für das Design: `PRODUCT.md`.
-- **Skills und Plugins** (nur geprüfte Herkunft, z. B. Anthropic-Verzeichnis):
-  `frontend-design` (Oberfläche), `webapp-testing` (Playwright-Tests, Chromium ist vorinstalliert),
-  Design-Plugin mit `design-critique` und `accessibility-review` (Phase 3), `skill-creator` (eigene Skills
-  für Rubrik, Faktenprüfung, Story-Format), `dataviz` (Diagramme), `deep-research` (Vorbild für Sammler).
-  Keine Skills aus ungeprüften Sammelportalen.
-- **Verbrauch und Token-Sparen (Pro-Abo):** 25 Rollen. Hebel: Code statt KI für Fleißarbeit · Modell je Aufgabe (klein: Türsteher, Faktenkarten, Sammler, Verfahren · mittel: Story-Builder, Relevanz, Gegenagent, Historiker, Prüfer B, Neutralität · groß: Schiedsrichter, Redakteure, Prüfer A, Chefredaktion) · Türsteher · Faktenkarten · nur das Neue · Regeln als Skills. **Keine** gebündelte Prüfung: jede Kernaussage wird einzeln geprüft (Andreas' Entscheidung).
-- **Web-App-Funktionen (zusätzlich):** Vorlesen je Story und ganze Ausgabe (Stimme, Stand 17.10.2026: Favoriten **Google Chirp 3 HD „Iapetus“ und „Algenib“**, en-US; im Gratiskontingent von 1 Mio. Zeichen/Monat, Code stoppt bei 950.000 Zeichen, Erzeugung per API-Schlüssel in der GitHub Action, keine Claude-Tokens. Browser-Stimmen und Kokoro getestet und abgelehnt. Umsetzung später, blockiert den Bau nicht); Seiten Members und Committees; Benachrichtigung bei fertigem Update (kleiner Code, keine Tokens; Variante noch offen); Archiv speichert Storys einzeln, gruppiert nach Ausgabe; Suche clientseitig (Pagefind).
-- **Konnektoren (Entscheidung 17.10.2026, getestet 17.10.2026):** Andreas verbindet sie unter claude.ai/customize/connectors; wirksam erst in einer neu gestarteten Sitzung bzw. im Lauf, wenn sie in der Routine ausgewählt sind. Praxistest:
-  | Konnektor | Test | Rolle im Lauf |
-  |---|---|---|
-  | Parallel Search | ✅ liefert aktuelle Treffer inkl. CRS, Congress.gov, Abgeordneten-Pressemitteilungen | Sammler, Nachsuche (R2) |
-  | Tavily | ✅ Nachrichten der letzten Woche mit Datum | Gegenagent 3b (eigener Quellenpool) |
-  | CourtListener | ✅ Urteile bis 15.10.2026 | Executive & Courts |
-  | USAFacts | ✅ 24 Behördenquellen, u. a. Congress.gov, FEC, Treasury, USAspending | Zahlen für Haushalt/Midterms, nur mit `_citation` |
-  | Firecrawl | ✅ erreichbar; Seiten-Zusammenfassung war unbrauchbar und aus dem Cache → nur Markdown-Abruf mit `maxAge: 0` nutzen | Volltexte langer Primärquellen (Faktenkarten) |
-  | Gov Relations | ✅ Lobbying-Meldungen je Gesetz (LDA-Daten) – von Andreas zusätzlich verbunden | Hintergrund „wer lobbyiert“ |
-  | Unsplash | ✅ Fotosuche funktioniert (nachverbunden 17.10.2026) | Ersatzbilder |
-  Konnektoren liefern Orientierung und Rohmaterial; Fakten weiterhin nur aus Primärquellen (Abschnitt 6). Keine Konnektoren mit persönlichen Daten (Gmail, Kalender, Drive, Gamma …) im Lauf.
+- **Verbrauch (Pro-Abo):** Code statt KI für Fleißarbeit · Modell je Aufgabe (klein/mittel/groß, siehe Skill) · jeder
+  Agentenstart kostet ~70–80 Tsd. Tokens (gemessen 18.10.2026) → Rollen ohne Unabhängigkeitsbedarf bündeln, Prüfer A/B
+  nie. **Keine** gebündelte Prüfung: jede Kernaussage wird einzeln geprüft (Andreas' Entscheidung).
+- **Konnektoren im Lauf:** Parallel Search (Sammler, Nachsuche) · Tavily (Gegenagent) · CourtListener (Gerichte) ·
+  USAFacts (Zahlen, nur mit `_citation`) · Firecrawl (nur Markdown mit `maxAge: 0`) · Gov Relations (Lobbying) ·
+  Unsplash (Bilder). Sie liefern Orientierung, Fakten nur aus Primärquellen (Abschnitt 6). Keine Konnektoren mit
+  persönlichen Daten (Gmail, Kalender, Drive, Gamma …) im Lauf.
+- **Design-Skills** im Repository (`impeccable`, `frontend-design`, `ui-ux-pro-max`); Produktwahrheit: `PRODUCT.md`.
 
-## 10. Projektdokumente
+## 10. Projektdokumente und offene Punkte
 
-- Design-Leinwand (Runden 1–6, maßgeblich: Runde 6 „Federal Program, Feinschliff“ und „Sources“): https://claude.ai/artifact/YWnrQiqgwwCvrWXq7vCYh9
-- Phase 3 – Kritische Prüfung (Befunde, Risikomatrix, Maßnahmen): https://claude.ai/code/artifact/1d03596c-3b3d-4af4-aedb-016de20be5c1
-- **Gesamtbild v3 (aktueller Stand, maßgeblich):** https://claude.ai/code/artifact/4b7c08a1-9c52-4214-bcba-0fceb432797d
-- Projektbild v2 (Vorgänger, mit Rückschleifen und Quellenstatus): https://claude.ai/code/artifact/aceb575b-e2b3-4556-8ca1-9444a4d9e085
-- Architektur & Feintuning v1 (Entscheidungsgrundlage): https://claude.ai/code/artifact/aa180f36-b7f0-473c-9946-088917b173ef
-- `docs/01-quellen-und-architektur.md` – erster Quellenkatalog (teilweise überholt durch Projektbild v2)
-- `scripts/check_sources.sh` – Praxistest aller Quellen
+Links zu Design-Leinwand, Prüfdokument, Gesamtbild v3 und allen Bau-Dokumenten sowie die Liste der offenen Punkte:
+`docs/00-projektstand.md`. Bau- und Laufprotokolle: `docs/02-…` bis `docs/08-…`.
 
 ## 11. Definition of Done
 
@@ -245,14 +229,3 @@ Ein Arbeitsschritt ist erst fertig, wenn:
 - Risiken und Grenzen benannt sind,
 - Entscheidungen dokumentiert sind,
 - Andreas an Phasengrenzen freigegeben hat.
-
-## 12. Offene Punkte
-
-- YouTube-Kanäle der Ausschüsse (SFRC, HFAC, SASC, HASC) finden; bis dahin Videos über Ausschuss-Websites
-- Washington Post war beim Test nicht erreichbar (Serverfehler) – erneut prüfen
-- YouTube-Feeds (C-SPAN, Speaker, Senate Democrats) liefern seit 18.10.2026 404 → neue Feed-Adressen finden; Federal-Register-API antwortete am 18.10.2026 mit 403 (GovInfo funktioniert)
-- Verbrauch eines Laufs im Abo messen – erster Lauf 17.10.2026: Pro-Sitzungslimit in Stufe 4 erreicht (`docs/05-erster-lauf.md`); Sparmaßnahmen umgesetzt (Redakteure mittleres Modell außer Leitartikel, Seiten-Speicher, Faktenkarten, Code-Vorprüfung, Code-Zusammenbau, Türsteher auf Schlagzeilen), Messung im nächsten Volllauf
-- FEC/GovInfo-Schlüssel (api.data.gov) als Network secret hinterlegt, wird aber als ungültig abgelehnt (18.10.2026) – Andreas prüft den Wert
-- Federal Register: Volltexte über GovInfo (amtliche GPO-Ausgabe), nicht über federalregister.gov
-- Federal Register sperrte am 17.10.2026 nach mehreren Volltext-Abrufen diese IP („Your IP address has been blocked“): Abrufe drosseln, Volltexte nur einzeln und zwischengespeichert holen
-- Design (17.10.2026): „Federal Program“; Kopf = rundes Siegel mit Plenarsaal-Emblem neben zentriertem Caslon-Namen „The Congress Terminal“ (`design/brand/`); Reihenfolge unter dem Leitartikel: Floor & Committees, Midterms (mit Karte), Foreign Policy Desk (mit Karte). Endgültige Freigabe durch Andreas steht aus.
