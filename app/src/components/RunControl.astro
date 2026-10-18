@@ -106,11 +106,12 @@ const base = import.meta.env.BASE_URL;
         return;
       }
       const age = (Date.now() - Date.parse(s.updatedAt)) / 60000;
+      const asked = requested && fresh;               // a run this browser started and is waiting for
       if (s.state === 'running' && age < 90) {
         fill(s.stage);
         say(`${s.kind === 'weekly' ? 'Weekly edition' : 'Update'} running: stage ${s.stage} of 6, ${s.label}.`, true);
         timer = setTimeout(poll, 30000);
-      } else if (s.state === 'done') {
+      } else if (s.state === 'done' && (asked || age < 30)) {
         fill(6);
         const live = await liveEdition();
         if (live === s.runId) {
@@ -121,12 +122,13 @@ const base = import.meta.env.BASE_URL;
           say('Published. The new edition appears on the site in about two minutes.', true);
           timer = setTimeout(poll, 30000);
         }
-      } else if (s.state === 'failed') {
+      } else if (s.state === 'failed' && (asked || age < 360)) {
         store.set('ct-run-requested', null);
         fill(0);
         say(`The run stopped at stage ${s.stage} (${s.label}). Nothing was published; the last edition stays.${s.note ? ' ' + s.note : ''}`);
       } else {
-        fill(0); say('');                                // a run silent for 90 minutes counts as ended
+        store.set('ct-run-requested', null);             // old status, or a run silent for 90 minutes: nothing to show
+        fill(0); say('');
       }
     } catch (e) {
       say(`Progress unavailable: ${e.message}.`);
