@@ -21,3 +21,11 @@ const read = <T>(file: string, fallback: T): T => {
 
 export const memberProfiles = new Map(read<MemberProfile[]>('members.json', []).map((m) => [m.bioguideId, m]));
 export const committees = read<Committee[]>('committees.json', []);
+
+export interface WatchedBill {
+  number: string; title: string; congressGovUrl: string;
+  stages: { key: string; label: string; date?: string; done: boolean; setback: boolean }[];
+  latestAction: { date: string; text: string } | null; story: string; edition: string;
+}
+// Watchlist (FT 5), refreshed from the Congress.gov API on every run (pipeline/watchlist.py).
+export const watchlist = read<WatchedBill[]>('watchlist.json', []);

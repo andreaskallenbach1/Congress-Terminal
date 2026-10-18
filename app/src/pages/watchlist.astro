@@ -3,21 +3,23 @@ import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import EmptyState from '../components/EmptyState.astro';
 import BillProgress from '../components/BillProgress.astro';
-import { watchedBills, storyUrl, formatEditionDate } from '../lib/editions';
-const bills = await watchedBills();
+import { watchlist } from '../lib/reference';
+import { formatDay } from '../lib/editions';
 const base = import.meta.env.BASE_URL;
+const sorted = [...watchlist].sort((a, b) => (b.latestAction?.date ?? '').localeCompare(a.latestAction?.date ?? ''));
 ---
 <Base title="Watchlist" current="watchlist">
-  {bills.length === 0 ? (
+  {sorted.length === 0 ? (
     <EmptyState title="Watchlist"><p>Bills the briefing follows, each with its progress from introduction through committee, floor, the other chamber and the President. The list fills once an edition covers a bill.</p></EmptyState>
   ) : (
     <>
-      <PageHead title="Watchlist" intro="Every bill the briefing has covered, in its most recent known state." />
+      <PageHead title="Watchlist" intro="Every bill the briefing has covered. Progress is refreshed from the Congress.gov API with every edition; steps outside Congress, such as an executive waiver, come from the story." />
       <ul class="bills" data-pagefind-body>
-        {bills.map(({ bill, story, edition }) => (
+        {sorted.map((b) => (
           <li>
-            <BillProgress bill={bill} />
-            <p class="last">Last covered {formatEditionDate(edition.compiledAt)}: <a href={storyUrl(base, story)}>{story.headline}</a></p>
+            <BillProgress bill={b} />
+            {b.latestAction && <p class="last">Latest action, {formatDay(b.latestAction.date, { month: 'long', day: 'numeric', year: 'numeric' })}: {b.latestAction.text}</p>}
+            <p class="last">Covered in: <a href={`${base}stories/${b.story}/`}>the briefing's story</a></p>
           </li>
         ))}
       </ul>
@@ -27,5 +29,5 @@ const base = import.meta.env.BASE_URL;
 <style>
   .bills { list-style: none; margin: 0; padding: 0; max-width: 900px; display: grid; }
   .bills li { padding: 22px 0; border-top: 1px solid var(--rule); }
-  .last { margin: 12px 0 0; font-size: 15px; color: var(--ink-soft); }
+  .last { margin: 10px 0 0; font-size: 15px; color: var(--ink-soft); }
 </style>

@@ -1,0 +1,241 @@
+[
+ {
+  "number": "H.R. 5334",
+  "title": "Lindsey O. Graham Sanctioning Russia and Iran Act of 2026",
+  "congressGovUrl": "https://www.congress.gov/bill/119th-congress/house-bill/5334",
+  "stages": [
+   {
+    "key": "introduced",
+    "label": "Introduced",
+    "date": "2025-09-11",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "committee",
+    "label": "Reported by House committee",
+    "date": "2026-04-09",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-house",
+    "label": "Passed House",
+    "date": "2026-04-27",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-senate",
+    "label": "Passed Senate",
+    "date": "2026-08-07",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "to-president",
+    "label": "Presented to President",
+    "date": "2026-09-17",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "signed",
+    "label": "Became law",
+    "date": "2026-09-18",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "waived",
+    "label": "Tariffs and most sanctions waived by executive order",
+    "date": "2026-10-16",
+    "done": true,
+    "setback": true
+   }
+  ],
+  "latestAction": {
+   "date": "2026-09-18",
+   "text": "Became Public Law No: 119-111."
+  },
+  "story": "russia-sanctions-waiver",
+  "edition": "2026-10-17-daily"
+ },
+ {
+  "number": "H.R. 6500",
+  "title": "Continuing Appropriations and Extensions Act, 2027",
+  "congressGovUrl": "https://www.congress.gov/bill/119th-congress/house-bill/6500",
+  "stages": [
+   {
+    "key": "introduced",
+    "label": "Introduced",
+    "date": "2025-12-09",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "committee",
+    "label": "Reported by House committee",
+    "date": "2025-12-30",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-house",
+    "label": "Passed House",
+    "date": "2026-01-12",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-senate",
+    "label": "Passed Senate",
+    "date": "2026-08-08",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "to-president",
+    "label": "Presented to President",
+    "date": "2026-09-02",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "signed",
+    "label": "Became law",
+    "date": "2026-09-02",
+    "done": true,
+    "setback": false
+   }
+  ],
+  "latestAction": {
+   "date": "2026-09-02",
+   "text": "Became Public Law No: 119-103."
+  },
+  "story": "lame-duck-dec11-agenda",
+  "edition": "2026-10-17-daily"
+ },
+ {
+  "number": "H.R. 8800",
+  "title": "National Defense Authorization Act for Fiscal Year 2027",
+  "congressGovUrl": "https://www.congress.gov/bill/119th-congress/house-bill/8800",
+  "stages": [
+   {
+    "key": "introduced",
+    "label": "Introduced",
+    "date": "2026-05-13",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "committee",
+    "label": "Reported by House committee",
+    "date": "2026-06-15",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-house",
+    "label": "Passed House",
+    "date": "2026-07-22",
+    "done": true,
+    "setback": false
+   }
+  ],
+  "latestAction": {
+   "date": "2026-09-14",
+   "text": "Received in the Senate."
+  },
+  "story": "ndaa-fy2027-stalled",
+  "edition": "2026-10-17-daily"
+ },
+ {
+  "number": "H.R. 1744",
+  "title": "United States Commission on International Religious Freedom Reauthorization Act of 2026",
+  "congressGovUrl": "https://www.congress.gov/bill/119th-congress/house-bill/1744",
+  "stages": [
+   {
+    "key": "introduced",
+    "label": "Introduced",
+    "date": "2025-02-27",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-house",
+    "label": "Passed House",
+    "date": "2026-06-08",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-senate",
+    "label": "Passed Senate",
+    "date": "2026-09-29",
+    "done": true,
+    "setback": false
+   }
+  ],
+  "latestAction": {
+   "date": "2026-10-14",
+   "text": "Message on Senate action sent to the House."
+  },
+  "story": "recess-week-record",
+  "edition": "2026-10-17-daily"
+ },
+ {
+  "number": "H.Con.Res. 89",
+  "title": "Directing the President, pursuant to section 5(c) of the War Powers Resolution, to remove United States Armed Forces from hostilities with Iran.",
+  "congressGovUrl": "https://www.congress.gov/bill/119th-congress/house-concurrent-resolution/89",
+  "stages": [
+   {
+    "key": "introduced",
+    "label": "Introduced",
+    "date": "2026-04-23",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "passed-house",
+    "label": "Passed House",
+    "date": "2026-07-23",
+    "done": true,
+    "setback": false
+   },
+   {
+    "key": "other",
+    "label": "Failed in Senate",
+    "date": "2026-09-24",
+    "done": true,
+    "setback": true
+   }
+  ],
+  "latestAction": {
+   "date": "2026-09-24",
+   "text": "Failed of passage in Senate by Yea-Nay Vote. 49 - 50. Record Vote Number: 244."
+  },
+  "story": "iran-war-powers-and-purse",
+  "edition": "2026-10-17-daily"
+ },
+ {
+  "number": "S.J.Res. 221",
+  "title": "A joint resolution providing for congressional disapproval of the agreement for civilian nuclear cooperation between the United States and the Kingdom of Saudi Arabia pursuant to section 123 of the Atomic Energy Act of 1954.",
+  "congressGovUrl": "https://www.congress.gov/bill/119th-congress/senate-joint-resolution/221",
+  "stages": [
+   {
+    "key": "introduced",
+    "label": "Introduced in Senate",
+    "date": "2026-10-15",
+    "done": true,
+    "setback": false
+   }
+  ],
+  "latestAction": {
+   "date": "2026-10-15",
+   "text": "Under authority of the order of the Senate of September 30, 2026, ordered read twice and referred to the Committee on Foreign Relations."
+  },
+  "story": "saudi-nuclear-agreement-resolution",
+  "edition": "2026-10-17-daily"
+ }
+]
