@@ -28,7 +28,9 @@ added, rejected = [], []
 for p in json.loads(src.read_text()):
     host = urlparse(p["url"]).netloc
     ok_host = any(host == d.lstrip(".") or host.endswith(d) for d in OFFICIAL)
-    if p["term"].lower() in have or not ok_host or pages.find(p["url"], p["definition"]) != "FOUND":
+    d = p["definition"].strip()
+    sentence = d[:1].isupper() and d.endswith((".", ")")) and len(d.split()) >= 8   # a full sentence, not a fragment
+    if p["term"].lower() in have or not ok_host or not sentence or pages.find(p["url"], d) != "FOUND":
         rejected.append(p["term"])
         continue
     glossary.append({"term": p["term"].lower(), "definition": pages.cased_quote(p["url"], p["definition"]),
