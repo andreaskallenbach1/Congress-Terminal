@@ -34,6 +34,8 @@ CONGRESS, SESSION, YEAR = 119, 2, 2026
 PACE = {"www.federalregister.gov": 4.0, "www.govinfo.gov": 2.0, "api.congress.gov": 0.6, "news.google.com": 1.5}
 _last_hit: dict[str, float] = {}
 log: list[str] = []
+failed: list[str] = []   # sources still unavailable after the second attempt (shown in the edition's "today" notes)
+RETRY_PAUSE = 45         # seconds; YouTube feeds and the Federal Register API fail briefly now and then (18.10.2026)
 
 
 def note(msg: str) -> None:
@@ -268,7 +270,14 @@ def collect_arms_sales(since: dt.datetime) -> list[dict]:
         "per_page": 50,
         "fields[]": ["title", "publication_date", "html_url", "document_number", "abstract"],
     }, doseq=True)
-    data = get_json(f"https://www.federalregister.gov/api/v1/documents.json?{q}")
+    url = f"https://www.federalregister.gov/api/v1/documents.json?{q}"
+    data = get_json(url)
+    if data is None:
+        note(f"retrying Federal Register API in {RETRY_PAUSE} s")
+        time.sleep(RETRY_PAUSE)
+        data = get_json(url)
+        if data is None:
+            failed.append("federalregister.gov")
     out = [{
         "title": d.get("title"),
         "date": d.get("publication_date"),
@@ -380,38 +389,57 @@ def _date(s: str) -> dt.datetime | None:
 
 
 def collect_feeds(since: dt.datetime) -> list[dict]:
+    """All feeds; feeds that fail get one more try after a pause."""
+    out = []
+    retry = []
+    for feed in FEEDS:
+        raw = get(feed[3])
+        if not raw:
+            retry.append(feed)
+            continue
+        out += _feed_items(feed, raw, since)
+    if retry:
+        note(f"retrying {len(retry)} feeds in {RETRY_PAUSE} s")
+        time.sleep(RETRY_PAUSE)
+        for feed in retry:
+            raw = get(feed[3])
+            if raw:
+                out += _feed_items(feed, raw, since)
+            else:
+                failed.append(feed[1])
+    return out
+
+
+def _feed_items(feed: tuple, raw: bytes, since: dt.datetime) -> list[dict]:
     atom = "{http://www.w3.org/2005/Atom}"
     rdf = "{http://purl.org/rss/1.0/}"
     dc = "{http://purl.org/dc/elements/1.1/}"
+    fid, name, tier, _ = feed
     out = []
-    for fid, name, tier, url in FEEDS:
-        raw = get(url)
-        if not raw:
+    try:
+        root = ET.fromstring(raw)
+    except ET.ParseError:
+        note(f"feed parse error {fid}")
+        return out
+    items = list(root.iter("item")) + list(root.iter(f"{rdf}item")) + list(root.iter(f"{atom}entry"))
+    kept = 0
+    for it in items:
+        title = _text(it, "title", f"{rdf}title", f"{atom}title")
+        link = _text(it, "link", f"{rdf}link")
+        if not link:
+            le = it.find(f"{atom}link")
+            link = le.get("href") if le is not None else ""
+        when = _date(_text(it, "pubDate", f"{dc}date", f"{atom}published", f"{atom}updated"))
+        summary = re.sub(r"<[^>]+>", " ", _text(it, "description", f"{rdf}description", f"{atom}summary", "{http://search.yahoo.com/mrss/}group"))
+        summary = " ".join(summary.split())[:400]
+        if when and when < since:
             continue
-        try:
-            root = ET.fromstring(raw)
-        except ET.ParseError:
-            note(f"feed parse error {fid}")
+        if tier not in ("video", "primary") and not RELEVANT.search(f"{title} {summary}"):
             continue
-        items = list(root.iter("item")) + list(root.iter(f"{rdf}item")) + list(root.iter(f"{atom}entry"))
-        kept = 0
-        for it in items:
-            title = _text(it, "title", f"{rdf}title", f"{atom}title")
-            link = _text(it, "link", f"{rdf}link")
-            if not link:
-                le = it.find(f"{atom}link")
-                link = le.get("href") if le is not None else ""
-            when = _date(_text(it, "pubDate", f"{dc}date", f"{atom}published", f"{atom}updated"))
-            summary = re.sub(r"<[^>]+>", " ", _text(it, "description", f"{rdf}description", f"{atom}summary", "{http://search.yahoo.com/mrss/}group"))
-            summary = " ".join(summary.split())[:400]
-            if when and when < since:
-                continue
-            if tier not in ("video", "primary") and not RELEVANT.search(f"{title} {summary}"):
-                continue
-            out.append({"feed": fid, "outlet": name, "tier": tier, "title": title, "url": link,
-                        "published": iso(when) if when else None, "summary": summary})
-            kept += 1
-        note(f"feed {fid}: {kept} of {len(items)} items kept")
+        out.append({"feed": fid, "outlet": name, "tier": tier, "title": title, "url": link,
+                    "published": iso(when) if when else None, "summary": summary})
+        kept += 1
+    note(f"feed {fid}: {kept} of {len(items)} items kept")
     return out
 
 
@@ -479,6 +507,7 @@ def main() -> None:
         "committeeMeetings": collect_committee_meetings(since, now + dt.timedelta(days=7)),
         "armsSales": collect_arms_sales(since),
         "feedItems": collect_feeds(since),
+        "failedSources": failed,
         "log": log,
     }
     (run_dir / "inputs.json").write_text(json.dumps(inputs, indent=1, ensure_ascii=False))

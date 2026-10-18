@@ -64,6 +64,10 @@ def main() -> None:
     watch_minutes = sum(c.get("minutes", 2) for c in editor.get("watch", []))
     clips = [{k: v for k, v in c.items() if k != "minutes"} for c in editor.get("watch", [])]
     notable = editor.get("notable", [])
+    # Stories demoted by the fixed rule (apply_verdicts.py) keep an attributed one-liner unless the editor wrote one.
+    demoted = json.loads((run / "demoted.json").read_text()) if (run / "demoted.json").exists() else []
+    notable += [{"headline": d["headline"], "sentence": d["dek"], "outlet": d["outlet"], "url": d["url"]}
+                for d in demoted if d.get("url") and not any(n["url"] == d["url"] for n in notable)]
     reading = round(sum(s["readingMinutes"] for s in stories) + watch_minutes + (2 if notable else 0), 1)
 
     now = dt.datetime.now(dt.timezone(dt.timedelta(hours=2)))

@@ -46,7 +46,9 @@ A wire story republished by several outlets counts once. Link to the previous ed
    per pick → `relevance.json`.
 2. **Counter-relevance** (sonnet): sees only the chosen ids (not the reasons), attacks the selection and searches a
    **different pool** (Tavily, Congress.gov API, Federal Register API at most 2 requests) → `counter.json`.
-3. **Arbiter** (opus): final list within the budget of CLAUDE.md 5.3, verifies key facts against primary sources,
+3. Code: `python3 pipeline/prefetch.py <run-id> --candidates` → `reach.json` (which candidate links answer).
+   **Arbiter** (opus): final list within the budget of CLAUDE.md 5.3, plans only with sources marked "ok" in
+   `reach.json` (or primary APIs), verifies key facts against primary sources,
    records accepted/rejected objections (`dissent` is shown to the reader), writes a brief per story →
    `selection.json`. One loop at most (R1/R2).
 4. Code: count objections for "How this edition was made" (`process-facts.json`: sourcesChecked, itemsCollected,
@@ -65,24 +67,29 @@ A wire story republished by several outlets counts once. Link to the previous ed
    `writer-brief.md`. Start them one or two at a time.
 4. Code: `python3 pipeline/merge_drafts.py <run-id>` then `python3 pipeline/precheck.py <run-id>` (quotes exist,
    statuses lowered where evidence is too weak, words/reading time/story status computed).
-5. **Checker A** (opus) and **checker B** (sonnet, blind on core claims only; build the blind file with
-   story/claim/text/status of the core claims), brief `checker-brief.md`. Then
-   `python3 pipeline/apply_verdicts.py <run-id>` → `revise.json`. Checker B also gets `data/members.json`
-   (Congress.gov member data) as the primary source for member names.
+5. Code: `python3 pipeline/packets.py <run-id>` → `packet-checkA.json` (claim, its sentences, each quote with the
+   surrounding page text). **Checker A** (opus) works from the packet; **checker B** (sonnet, blind on core claims only;
+   build the blind file with story/claim/text/status of the core claims; `data/members.json` is its source for member
+   names), brief `checker-brief.md`. Both in parallel. Then `python3 pipeline/apply_verdicts.py <run-id>` →
+   `revise.json` (rejected claims and core claims that are only "unconfirmed").
 6. **R3** (opus, one revision of every claim in `revise.json`, edits `edition-draft.json`, log `revised.json`), then
-   precheck again, then A (`checkA-recheck.json`) and B (blind, revised core claims, `checkB-recheck.json`) re-check only
-   the revised claims; `apply_verdicts.py` again (re-check verdicts replace the first ones). Fixed rule afterwards: a core claim not confirmed by both → the story is dropped (may appear as an
-   attributed one-line notable item). Never re-weight a claim to save a story.
-7. **Experts** (after the writers, before the checkers; their claims are checked like all others):
-   Output of each expert: `expert-<historian|procedure>.json` = {"stories": {storyId: {"background": [paragraph],
-   "claims": [...]}}, "sources": [...]}, claim ids prefixed `h`/`p`; then code `python3 pipeline/merge_experts.py <run-id>`
-   and precheck again. Experts run in parallel.
-   - **Procedure explainer** (haiku): where a story turns on a procedure (cloture, CR, joint resolution of disapproval,
+   precheck again; `recheck-ids.json` = revised claims; `python3 pipeline/packets.py <run-id> --ids recheck-ids.json`;
+   A (`checkA-recheck.json`) and B (blind, revised core claims, `checkB-recheck.json`) re-check only the revised claims;
+   then `apply_verdicts.py` again — now the **fixed rule runs in code**: a story whose core claim is not confirmed by
+   both, or is still only "unconfirmed" (Andreas' decision 18.10.2026: core claims need at least "multiple"), leaves
+   the draft and is listed in `demoted.json` (assemble turns it into an attributed Also Notable line from its dek unless
+   the editor writes one); a minor claim still rejected is removed with its sentence. Never re-weight a claim to save
+   a story.
+7. **Experts — one agent (sonnet)** covering both roles (Andreas' decision 18.10.2026: saves one agent start); after the
+   writers, before the checkers; their claims are checked like all others. It writes `expert-historian.json` and
+   `expert-procedure.json` = {"stories": {storyId: {"background": [paragraph], "claims": [...]}}, "sources": [...]},
+   claim ids prefixed `h`/`p`; then code `python3 pipeline/merge_experts.py <run-id>` and precheck again.
+   - **Procedure explainer** part: where a story turns on a procedure (cloture, CR, joint resolution of disapproval,
      War Powers Resolution, discharge petition, reconciliation …), adds one `background` paragraph built from CRS or
      senate.gov/house.gov cards, and proposes missing glossary terms in `glossary-add.json` = [{term, definition
      (verbatim official text), source, url}]. Code: `python3 pipeline/glossary_add.py <run-id>` accepts only verbatim
      definitions from official domains.
-   - **Historian** (sonnet; lead and top stories only): one `background` paragraph on precedents ("the last time …"),
+   - **Historian** part (lead and top stories only): one `background` paragraph on precedents ("the last time …"),
      every statement as a minor claim with a quote from a primary or CRS source; no precedent without a source.
    - **Member profiles**: code (`pipeline/reference.py`: committees, roles, DW-NOMINATE) — no agent.
 8. **Neutrality** (sonnet, R4): wording only, facts/claims/markers untouched.
@@ -93,7 +100,7 @@ The editor writes only `run/<run-id>/editor.json`:
 `{"ranks": {storyId: rank}, "votes": ["senate:256", ...], "floorSummary": "...", "overnight": [...],
 "notable": [{headline, sentence, outlet, url}], "watch": [{title, channel, date, url, startSeconds, why, minutes}],
 "hero": {src, alt, credit, license, sourceUrl, relation, caption}}`.
-Rules: order by consequence; votes only from `inputs.json` keys; overnight/notable/why are one neutral sentence each;
+Rules: order by consequence; stories in `demoted.json` may get a better one-line notable item (attributed, neutral); votes only from `inputs.json` keys; overnight/notable/why are one neutral sentence each;
 title image per CLAUDE.md 3 "Titelbild" (Unsplash connector or a licensed Capitol image; caption says what is shown,
 never an implied event; verify the URL answers). Then code: `python3 pipeline/assemble.py <run-id>` → `briefings/<run-id>.json`.
 

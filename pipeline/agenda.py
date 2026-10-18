@@ -44,8 +44,8 @@ def main() -> None:
     today = []
     if not inputs.get("senateVotes") and not inputs.get("houseVotes"):
         today.append("Neither chamber held a roll-call vote since the last edition.")
-    failed = [line for line in inputs.get("log", []) if line.startswith(("HTTP 4", "HTTP 5", "ERR"))]
-    today += [note for host, note in FAILED_PRIMARY.items() if any(host in line for line in failed)]
+    failed = inputs.get("failedSources", [])          # only sources that also failed the second attempt
+    today += [note for host, note in FAILED_PRIMARY.items() if host in failed]
 
     out = {"stories": [], "sources": [], "dropped": [], "agenda": sorted(agenda.values(), key=lambda a: a["date"]), "today": today}
     (run / "draft-agenda.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))

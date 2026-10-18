@@ -82,6 +82,8 @@ def main() -> int:
             # 3. both checkers on core claims
             if c["weight"] == "core" and not (c.get("checkA") == "confirmed" and c.get("checkB") == "confirmed"):
                 problem(cid, "core claim not confirmed by both fact-checkers: the story must be dropped or fixed")
+            if c["weight"] == "core" and c["status"] == "unconfirmed" and st["pillar"] != "notable":
+                problem(cid, "core claim only unconfirmed (needs a primary source or two independent outlets): story must become an Also Notable item")
             # 2. quotes found in source
             outlets = set()
             for e in c["evidence"]:
