@@ -49,12 +49,15 @@ A wire story republished by several outlets counts once. Link to the previous ed
 3. **Arbiter** (opus): final list within the budget of CLAUDE.md 5.3, verifies key facts against primary sources,
    records accepted/rejected objections (`dissent` is shown to the reader), writes a brief per story →
    `selection.json`. One loop at most (R1/R2).
-4. Code: count objections for "How this edition was made" (`process-facts.json`).
+4. Code: count objections for "How this edition was made" (`process-facts.json`: sourcesChecked, itemsCollected,
+   claimsChecked, objections = counter objections + missing stories, objectionsAccepted).
+5. If no floor story was chosen: code `python3 pipeline/agenda.py <run-id>` → `draft-agenda.json` (calendar from the
+   previous edition and committee meetings, "today" notes on missing votes and failed primary sources).
 
 ## Stage 4 · Write and check
 
 1. Code: `python3 pipeline/prefetch.py <run-id>` (fetches every source of the chosen stories once).
-2. **Fact cards** (haiku, one agent per pillar): read the pages of their stories via `python3 pipeline/pages.py URL`
+2. **Fact cards** (haiku, **one agent for all stories** — every agent start costs ~70–80k tokens): read the pages of their stories via `python3 pipeline/pages.py URL`
    and write `cards-<story>.json` = [{id, statement, quote (verbatim, 8–40 words), url, outlet, tier}], 15–40 cards per
    long story, primary sources first. Code: `python3 pipeline/cards_check.py <run-id>` keeps only cards whose quote is
    in the source.
@@ -64,11 +67,16 @@ A wire story republished by several outlets counts once. Link to the previous ed
    statuses lowered where evidence is too weak, words/reading time/story status computed).
 5. **Checker A** (opus) and **checker B** (sonnet, blind on core claims only; build the blind file with
    story/claim/text/status of the core claims), brief `checker-brief.md`. Then
-   `python3 pipeline/apply_verdicts.py <run-id>` → `revise.json`.
-6. **R3** (opus, one revision of every claim in `revise.json`), then precheck again, then A and B re-check only the
-   revised claims. Fixed rule afterwards: a core claim not confirmed by both → the story is dropped (may appear as an
+   `python3 pipeline/apply_verdicts.py <run-id>` → `revise.json`. Checker B also gets `data/members.json`
+   (Congress.gov member data) as the primary source for member names.
+6. **R3** (opus, one revision of every claim in `revise.json`, edits `edition-draft.json`, log `revised.json`), then
+   precheck again, then A (`checkA-recheck.json`) and B (blind, revised core claims, `checkB-recheck.json`) re-check only
+   the revised claims; `apply_verdicts.py` again (re-check verdicts replace the first ones). Fixed rule afterwards: a core claim not confirmed by both → the story is dropped (may appear as an
    attributed one-line notable item). Never re-weight a claim to save a story.
 7. **Experts** (after the writers, before the checkers; their claims are checked like all others):
+   Output of each expert: `expert-<historian|procedure>.json` = {"stories": {storyId: {"background": [paragraph],
+   "claims": [...]}}, "sources": [...]}, claim ids prefixed `h`/`p`; then code `python3 pipeline/merge_experts.py <run-id>`
+   and precheck again. Experts run in parallel.
    - **Procedure explainer** (haiku): where a story turns on a procedure (cloture, CR, joint resolution of disapproval,
      War Powers Resolution, discharge petition, reconciliation …), adds one `background` paragraph built from CRS or
      senate.gov/house.gov cards, and proposes missing glossary terms in `glossary-add.json` = [{term, definition
@@ -100,8 +108,9 @@ and the code-maintained files in `data/` to `main` with the message `Edition <ru
 
 ## Collectors (stage 1, after the gatekeeper)
 
-Eight small agents (haiku), started together, each with **at most 5 searches or page reads** and **at most 8 leads**, and
-only for what the feeds and APIs did not already bring (they read `inputs-gated.json` first). Output
+**One small agent (haiku) covers all eight areas** (measured 18.10.2026: each agent start costs ~70–80k tokens, eight
+separate collectors would cost ~500k more for the same leads), with at most **12 searches or page reads** in total and
+**at most 8 leads per area**, only for what the feeds and APIs did not already bring (it reads `inputs-gated.json` first). Output
 `leads-<area>.json` = [{title, url, outlet, tier, why}]; then code `python3 pipeline/leads.py <run-id>`.
 
 | Area | Pool | Looks for |
@@ -134,3 +143,12 @@ copied from earlier editions keep their verdicts and evidence. `python3 pipeline
 - Federal Register full texts come from GovInfo (official GPO edition, from the publication day); never fetch
   federalregister.gov full texts (it blocks the IP). Amendment notices can carry several values.
 - Forecasters (Cook, Sabato, Inside Elections) are primary only for their own ratings, and the claim must name them.
+
+## Lessons from the second run (18.10.2026, `docs/08-zweiter-lauf.md`)
+
+- About 2.1M subagent tokens for 73 claims, within the Pro limit; each agent start costs ~70–80k tokens, so bundle roles
+  that need no independence (collectors, fact cards), never the two checkers.
+- PDFs (letters on member sites, CRS reports) are read through the page store (`pdftotext`).
+- A checker's verdict that rests on a wrong premise about a hard fact (member name from Congress.gov) is corrected by
+  pointing the checker to the primary record, never by overriding the verdict; record it in the run report.
+- Quiet days give short editions; do not pad.
