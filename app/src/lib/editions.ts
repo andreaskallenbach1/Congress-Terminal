@@ -46,6 +46,7 @@ export const PILLARS = {
   midterms: 'Midterms 2026',
   floor: 'Floor and committees',
   notable: 'Also notable',
+  deep: 'Deep dive',
 } as const;
 
 export const STATUS_LABEL = {

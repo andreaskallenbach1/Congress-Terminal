@@ -12,11 +12,11 @@ Wird nach jedem Schritt aktualisiert. Eine Sitzung, die nach einem Limit neu sta
 
 ## Etappe 4 – volle Pipeline (Rollen einzeln, jeweils gemessen)
 - [x] 4.1 Türsteher (klein) nur auf Titeln (vorgezogen, da größter Hebel beim Bündeln)
-- [ ] 4.2 Sammler-Agenten (klein, begrenzte Suchen) inkl. Executive & Courts (CourtListener)
+- [x] 4.2 Sammler-Agenten (klein, begrenzte Suchen) inkl. Executive & Courts (CourtListener)
 - [x] 4.3 Abgeordneten-Profile per Code (Ausschüsse, Voteview) + Committees-Seite
-- [ ] 4.4 Verfahrens-Erklärer und Historiker (in Background, Glossar-Vorschläge mit Primärquelle)
+- [x] 4.4 Verfahrens-Erklärer und Historiker (in Background, Glossar-Vorschläge mit Primärquelle)
 - [x] 4.5 Watchlist-Datei per Code (FT 5), Feedback-Issues einlesen (FT 8)
-- [ ] 4.6 Wochenausgabe (FT 10): Lauf-Art „weekly“ + Deep-Dive in App und Anleitung
+- [x] 4.6 Wochenausgabe (FT 10): Lauf-Art „weekly“ + Deep-Dive in App und Anleitung
 - [ ] 4.7 Volllauf testen, messen, dokumentieren
 
 ## Offen für Andreas

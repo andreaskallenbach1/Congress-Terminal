@@ -67,7 +67,7 @@ const race = z.object({
 
 const story = z.object({
   id: z.string(),                         // stable across editions for follow-ups
-  pillar: z.enum(['top', 'foreign', 'midterms', 'floor', 'notable']),
+  pillar: z.enum(['top', 'foreign', 'midterms', 'floor', 'notable', 'deep']),
   continuing: z.boolean().default(false), // follow-up of an earlier story
   headline: z.string(),
   dek: z.string(),                        // one-sentence summary under the headline

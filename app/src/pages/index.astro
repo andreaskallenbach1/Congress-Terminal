@@ -21,11 +21,14 @@ const top = byPillar('top');
 const foreign = byPillar('foreign');
 const midterms = byPillar('midterms');
 const floorStories = byPillar('floor');
+const deep = byPillar('deep');                       // weekly edition only (FT 10)
+const weekly = edition?.kind === 'weekly';
 const [lead, ...moreTop] = top;
 const minutes = (list: { readingMinutes: number }[]) => list.reduce((a, s) => a + s.readingMinutes, 0);
 
 const toc = edition ? [
-  { href: '#top', label: 'Top stories', minutes: minutes(top) },
+  { href: '#deep', label: 'Deep dive', minutes: minutes(deep) },
+  { href: '#top', label: weekly ? 'The week in review' : 'Top stories', minutes: minutes(top) },
   { href: '#foreign', label: 'Foreign Policy Desk', minutes: minutes(foreign) },
   { href: '#midterms', label: 'Midterms 2026', minutes: minutes(midterms) },
   { href: '#floor', label: 'Floor and committees', minutes: minutes(floorStories) + edition.floor.votes.length },
@@ -62,12 +65,19 @@ const committeeAhead = edition?.agenda.filter((a) => a.kind === 'hearing' || a.k
       <div class="front">
         <Toc items={toc} total={edition.readingMinutes} />
         <div class="lead" id="top">
-          <SectionBar id="top-bar" title="Top stories" meta={`${top.length} ${top.length === 1 ? 'story' : 'stories'}`} />
+          <SectionBar id="top-bar" title={weekly ? 'The week in review' : 'Top stories'} meta={`${top.length} ${top.length === 1 ? 'story' : 'stories'}`} />
           {lead && <StoryFull story={lead} edition={edition} />}
           {moreTop.length > 0 && <div class="more">{moreTop.map((s) => <StoryCard story={s} edition={edition} />)}</div>}
         </div>
         <Rail edition={edition} />
       </div>
+
+      {deep.length > 0 && (
+        <section aria-labelledby="deep-h" class="deep">
+          <SectionBar title="Deep dive" id="deep" />
+          <div class="sec">{deep.map((s) => <StoryFull story={s} edition={edition} />)}</div>
+        </section>
+      )}
 
       <div class="pair">
         <section aria-labelledby="floor-h">

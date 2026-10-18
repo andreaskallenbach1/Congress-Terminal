@@ -68,7 +68,16 @@ A wire story republished by several outlets counts once. Link to the previous ed
 6. **R3** (opus, one revision of every claim in `revise.json`), then precheck again, then A and B re-check only the
    revised claims. Fixed rule afterwards: a core claim not confirmed by both → the story is dropped (may appear as an
    attributed one-line notable item). Never re-weight a claim to save a story.
-7. **Neutrality** (sonnet, R4): wording only, facts/claims/markers untouched.
+7. **Experts** (after the writers, before the checkers; their claims are checked like all others):
+   - **Procedure explainer** (haiku): where a story turns on a procedure (cloture, CR, joint resolution of disapproval,
+     War Powers Resolution, discharge petition, reconciliation …), adds one `background` paragraph built from CRS or
+     senate.gov/house.gov cards, and proposes missing glossary terms in `glossary-add.json` = [{term, definition
+     (verbatim official text), source, url}]. Code: `python3 pipeline/glossary_add.py <run-id>` accepts only verbatim
+     definitions from official domains.
+   - **Historian** (sonnet; lead and top stories only): one `background` paragraph on precedents ("the last time …"),
+     every statement as a minor claim with a quote from a primary or CRS source; no precedent without a source.
+   - **Member profiles**: code (`pipeline/reference.py`: committees, roles, DW-NOMINATE) — no agent.
+8. **Neutrality** (sonnet, R4): wording only, facts/claims/markers untouched.
 
 ## Stage 5 · Edit (opus, judgement only)
 
@@ -89,9 +98,34 @@ cd app && npm ci && npm run build
 Both must pass; one correction (R5), else delete the edition file and stop. Commit only `briefings/<run-id>.json`
 and the code-maintained files in `data/` to `main` with the message `Edition <run-id>`, push.
 
-## Collectors
+## Collectors (stage 1, after the gatekeeper)
 
-(Added in phase 4 step 2.)
+Eight small agents (haiku), started together, each with **at most 5 searches or page reads** and **at most 8 leads**, and
+only for what the feeds and APIs did not already bring (they read `inputs-gated.json` first). Output
+`leads-<area>.json` = [{title, url, outlet, tier, why}]; then code `python3 pipeline/leads.py <run-id>`.
+
+| Area | Pool | Looks for |
+|---|---|---|
+| floor | senate.gov / clerk.house.gov schedules, Senate Press Gallery | votes and floor plans not yet in the feeds |
+| legislation | Congress.gov API (bills, amendments, reports, sorted by updateDate desc) | consequential bills that moved |
+| committees | committee sites (SFRC, HFAC, SASC, HASC, Intelligence, Appropriations, Judiciary), docs.house.gov | hearings, markups, subpoenas, letters |
+| foreign | State Department, Federal Register via GovInfo, Just Security, Lawfare | sanctions, war powers, arms sales, CODELs, letters to foreign governments |
+| midterms | Ballotpedia, FEC API, Cook/Sabato headlines | rating changes, money, races that shifted |
+| news | Parallel Search | important stories the feeds missed (two independent outlets at least) |
+| video | C-SPAN, Speaker and Senate YouTube feeds | 1–3 clips; start time only from chapter marks or descriptions, else 0 |
+| executive-courts | whitehouse.gov presidential actions, CourtListener | executive orders, vetoes, rulings that involve Congress or are very significant |
+
+Andreas' feedback (`feedback.json`) is read by relevance (rubric dimension 7) and the arbiter (error reports: verify
+against primary sources; if the report holds, the edition carries "Correction: …" as a notable item).
+
+## Weekly edition (FT 10, button "Weekly edition", any day)
+
+Run id `<date>-weekly`, kind `weekly`. Material: the editions of the last 7 days (`briefings/`) plus a normal stage 1
+collection since the last edition. Content: "The week in review" (pillar top, 6–8 stories that follow each development
+through the week, built from the earlier stories' checked claims plus what is new) and **one deep dive** (pillar
+`deep`, 1,500–2,500 words, on the week's most consequential development or a procedure it exposed; historian and
+procedure explainer contribute). Everything else as in the daily run; new claims are checked by both checkers, claims
+copied from earlier editions keep their verdicts and evidence. `python3 pipeline/assemble.py <run-id> --kind weekly`.
 
 ## Lessons from the first run (17.10.2026, `docs/05-erster-lauf.md`)
 
