@@ -14,6 +14,7 @@ import hashlib
 import html
 import json
 import re
+import subprocess
 import sys
 import unicodedata
 from pathlib import Path
@@ -33,6 +34,9 @@ def _chars(t: str) -> str:
 
 
 def clean(raw: bytes) -> str:
+    if raw[:5] == b"%PDF-":  # letters and reports on member and committee sites are often PDFs
+        out = subprocess.run(["pdftotext", "-layout", "-", "-"], input=raw, capture_output=True, timeout=60)
+        return _chars(out.stdout.decode("utf-8", errors="ignore"))
     t = raw.decode("utf-8", errors="ignore")
     t = re.sub(r"(?is)<(script|style|noscript)[^>]*>.*?</\1>", " ", t)
     return _chars(re.sub(r"<[^>]+>", " ", t))
