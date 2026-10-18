@@ -45,8 +45,8 @@ Schritte mitgeladen. Was der Lauf nicht braucht, steht hier. Inhalt unverändert
 
 - YouTube-Kanäle der Ausschüsse (SFRC, HFAC, SASC, HASC) finden; bis dahin Videos über Ausschuss-Websites
 - Washington Post war beim Test nicht erreichbar (Serverfehler) – erneut prüfen
-- YouTube-Feeds (C-SPAN, Speaker, Senate Democrats) liefern seit 18.10.2026 404 → neue Feed-Adressen finden; Federal-Register-API antwortete am 18.10.2026 mit 403 (GovInfo funktioniert)
-- Verbrauch eines Laufs im Abo messen – erster Lauf 17.10.2026: Pro-Sitzungslimit in Stufe 4 erreicht (`docs/05-erster-lauf.md`); Sparmaßnahmen umgesetzt (Redakteure mittleres Modell außer Leitartikel, Seiten-Speicher, Faktenkarten, Code-Vorprüfung, Code-Zusammenbau, Türsteher auf Schlagzeilen), Messung im nächsten Volllauf
+- YouTube-Feeds und Federal-Register-API fielen am 18.10.2026 um 06:00 UTC kurz aus (404/403), um 15:20 UTC liefen alle wieder → kein Adressproblem; `collect.py` versucht ausgefallene Quellen jetzt nach 45 s ein zweites Mal
+- Verbrauch eines Laufs im Abo messen – erster Lauf 17.10.2026: Pro-Sitzungslimit in Stufe 4 erreicht (`docs/05-erster-lauf.md`); Sparmaßnahmen umgesetzt (Redakteure mittleres Modell außer Leitartikel, Seiten-Speicher, Faktenkarten, Code-Vorprüfung, Code-Zusammenbau, Türsteher auf Schlagzeilen), gemessen im zweiten Lauf (`docs/08-zweiter-lauf.md`), Optimierungen danach in `docs/09-optimierung-nach-lauf-2.md`
 - FEC/GovInfo-Schlüssel (api.data.gov) als Network secret hinterlegt, wird aber als ungültig abgelehnt (18.10.2026) – Andreas prüft den Wert
 - Federal Register: Volltexte über GovInfo (amtliche GPO-Ausgabe), nicht über federalregister.gov
 - Federal Register sperrte am 17.10.2026 nach mehreren Volltext-Abrufen diese IP („Your IP address has been blocked“): Abrufe drosseln, Volltexte nur einzeln und zwischengespeichert holen
