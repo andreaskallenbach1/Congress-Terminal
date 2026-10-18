@@ -12,11 +12,14 @@ from pathlib import Path
 run = Path(__file__).resolve().parent.parent / "run" / sys.argv[1]
 draft = json.loads((run / "edition-draft.json").read_text())
 verdicts_a, verdicts_b = {}, {}
-for f in run.glob("checkA-*.json"):
+# After R3, checkA-recheck.json / checkB-recheck.json hold the second verdicts on revised claims; they are read last
+# and replace the first verdicts.
+for f in sorted(run.glob("checkA-*.json"), key=lambda f: f.name == "checkA-recheck.json"):
     for v in json.loads(f.read_text()):
         verdicts_a[(v["story"], v["claim"])] = v
-for v in json.loads((run / "checkB.json").read_text()):
-    verdicts_b[(v["story"], v["claim"])] = v
+for f in [run / "checkB.json", run / "checkB-recheck.json"]:
+    for v in json.loads(f.read_text()) if f.exists() else []:
+        verdicts_b[(v["story"], v["claim"])] = v
 
 revise, remove = [], []
 for st in draft["stories"]:
