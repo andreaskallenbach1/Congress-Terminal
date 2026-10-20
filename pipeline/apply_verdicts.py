@@ -67,11 +67,11 @@ for st in list(draft["stories"]):
 
 
 def drop_claim(st: dict, cid: str) -> None:
-    """Remove a claim and every sentence that carries its marker (a sentence ends with its marker or markers)."""
+    """Remove a claim and every sentence that carries its marker (a sentence ends with its markers; consecutive markers belong to the same sentence)."""
     st["claims"] = [c for c in st["claims"] if c["id"] != cid]
     for part in ("whatsNew", "whyItMatters", "whatsNext", "background"):
         if st.get(part):
-            paras = [" ".join(x for x in re.split(r"(?<=\]\])\s+", p) if f"[[{cid}]]" not in x) for p in st[part]]
+            paras = [" ".join(x for x in re.split(r"(?<=\]\])\s+(?!\[\[)", p) if f"[[{cid}]]" not in x) for p in st[part]]
             st[part] = [p for p in paras if p.strip()]
 
 

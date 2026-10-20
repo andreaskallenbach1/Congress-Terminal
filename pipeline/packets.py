@@ -35,7 +35,7 @@ def sentences_with(marker: str, story: dict) -> list[str]:
     out = []
     for part in ("whatsNew", "whyItMatters", "whatsNext", "background"):
         for para in story.get(part) or []:
-            for s in re.split(r"(?<=\]\])\s+", para):          # a sentence ends with its marker(s)
+            for s in re.split(r"(?<=\]\])\s+(?!\[\[)", para):          # a sentence ends with its marker(s); consecutive markers stay with it
                 if f"[[{marker}]]" in s:
                     out.append(f"{part}: {s.strip()}")
     return out
