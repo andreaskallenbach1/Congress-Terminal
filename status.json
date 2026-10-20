@@ -1,10 +1,10 @@
 {
- "runId": "2026-10-18-daily",
+ "runId": "2026-10-20-daily",
  "kind": "daily",
- "stage": 6,
- "label": "Publish",
- "state": "done",
- "note": "Edition published",
- "startedAt": "2026-10-18T15:44:01Z",
- "updatedAt": "2026-10-18T15:44:01Z"
+ "stage": 1,
+ "label": "Collect",
+ "state": "running",
+ "note": "Test run from the development session",
+ "startedAt": "2026-10-20T10:52:55Z",
+ "updatedAt": "2026-10-20T10:52:55Z"
 }
