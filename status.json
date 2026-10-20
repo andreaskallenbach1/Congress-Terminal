@@ -1,10 +1,10 @@
 {
  "runId": "2026-10-20-daily",
  "kind": "daily",
- "stage": 3,
- "label": "Select",
+ "stage": 4,
+ "label": "Write and check",
  "state": "running",
  "note": "",
  "startedAt": "2026-10-20T10:52:55Z",
- "updatedAt": "2026-10-20T10:59:48Z"
+ "updatedAt": "2026-10-20T11:07:29Z"
 }
