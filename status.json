@@ -1,10 +1,10 @@
 {
  "runId": "2026-10-20-daily",
  "kind": "daily",
- "stage": 2,
- "label": "Bundle",
+ "stage": 3,
+ "label": "Select",
  "state": "running",
  "note": "",
  "startedAt": "2026-10-20T10:52:55Z",
- "updatedAt": "2026-10-20T10:57:06Z"
+ "updatedAt": "2026-10-20T10:59:48Z"
 }
