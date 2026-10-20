@@ -1,10 +1,10 @@
 {
  "runId": "2026-10-20-daily",
  "kind": "daily",
- "stage": 1,
- "label": "Collect",
+ "stage": 2,
+ "label": "Bundle",
  "state": "running",
- "note": "Test run from the development session",
+ "note": "",
  "startedAt": "2026-10-20T10:52:55Z",
- "updatedAt": "2026-10-20T10:52:55Z"
+ "updatedAt": "2026-10-20T10:57:06Z"
 }
