@@ -71,7 +71,7 @@ A wire story republished by several outlets counts once. Link to the previous ed
    and write `cards-<story>.json` = [{id, statement, quote (verbatim, 8–40 words), url, outlet, tier}], 15–40 cards per
    long story, primary sources first. Code: `python3 pipeline/cards_check.py <run-id>` keeps only cards whose quote is
    in the source.
-3. **Writers** (one per pillar; **sonnet**, the lead story **opus** — Andreas' decision 18.10.2026), brief
+3. **Writers** (one per pillar, small pillars may share one agent; **sonnet**, the lead story **opus** — Andreas' decision 18.10.2026), brief
    `writer-brief.md`. Start them one or two at a time.
 4. Code: `python3 pipeline/merge_drafts.py <run-id>` then `python3 pipeline/precheck.py <run-id>` (quotes exist,
    statuses lowered where evidence is too weak, words/reading time/story status computed).
@@ -82,13 +82,15 @@ A wire story republished by several outlets counts once. Link to the previous ed
    `revise.json` (rejected claims and core claims that are only "unconfirmed").
 6. **R3** (opus, one revision of every claim in `revise.json`, edits `edition-draft.json`, log `revised.json`), then
    precheck again; `recheck-ids.json` = revised claims; `python3 pipeline/packets.py <run-id> --ids recheck-ids.json`;
-   A (`checkA-recheck.json`) and B (blind, revised core claims, `checkB-recheck.json`) re-check only the revised claims;
+   A (`checkA-recheck.json`) and B (blind, `checkB-recheck.json`) re-check only the revised claims — B only the core
+   claims whose text R3 changed (an unchanged text is the same blind input; measured 20.10.2026);
    then `apply_verdicts.py` again — now the **fixed rule runs in code**: a story whose core claim is not confirmed by
    both, or is still only "unconfirmed" (Andreas' decision 18.10.2026: core claims need at least "multiple"), leaves
    the draft and is listed in `demoted.json` (assemble turns it into an attributed Also Notable line from its dek unless
    the editor writes one); a minor claim still rejected is removed with its sentence. Never re-weight a claim to save
    a story.
-7. **Experts — one agent (sonnet)** covering both roles (Andreas' decision 18.10.2026: saves one agent start); after the
+7. **Experts — one agent (sonnet)**, only for new stories or new procedures (a follow-up whose precedent and procedure
+   were explained in an earlier edition gets none), covering both roles (Andreas' decision 18.10.2026: saves one agent start); after the
    writers, before the checkers; their claims are checked like all others. It writes `expert-historian.json` and
    `expert-procedure.json` = {"stories": {storyId: {"background": [paragraph], "claims": [...]}}, "sources": [...]},
    claim ids prefixed `h`/`p`; then code `python3 pipeline/merge_experts.py <run-id>` and precheck again.
